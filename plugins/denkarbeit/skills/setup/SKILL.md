@@ -59,6 +59,8 @@ Workspace-Pfad finden: aus der CLAUDE.md (Baustein 1 verankert ihn). Fehlt die C
 
 5. **Ausweis (Pflicht, nie weglassen).** Tabelle aller Bausteine mit genau einem Status je Zeile: **✓** konfiguriert · **○** offen (optional) · **–** bewusst übersprungen · **✗** fehlt (Pflicht). Dazu die Plugin-Version (aus der plugin.json des Plugins, falls als Plugin installiert). Ohne diese Tabelle gilt der Lauf als nicht geprüft. Im Check-Modus zusätzlich: Spec-Pointer in der CLAUDE.md verifizieren (Pfad existiert?) — bei totem Pointer neu verankern.
 
+6. **Skill-Inventar (nur Check-Modus, informativ — kein Baustein).** Alle installierten Skills mechanisch erheben und mit Quelle listen: persönliche (`~/.claude/skills/`), projektlokale (`.claude/skills/` im Arbeitsbaum), Plugin-Skills (installierte Plugins samt Version). Dazu ausschließlich mechanische Befunde: **Namens-Kollisionen/Trigger-Überlappungen** zwischen Skills · **tote Symlinks** · **Skill-Referenzen auf nicht existierende Pfade**. Die Arbeitsweise fremder Skills wird nicht bewertet — Befunde benennen nur, was mechanisch bricht oder kollidiert.
+
 ## Harte Gates
 
 - Messen vor Handeln; Ausweis-Tabelle ist Pflicht.
