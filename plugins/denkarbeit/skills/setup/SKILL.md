@@ -1,11 +1,11 @@
 ---
 name: setup
-description: Kursbegleiter — geführtes Ersteinrichten des Denkarbeit-Setups (Umgebung, CLAUDE.md, L1-Kontext, Sprachanker, CI) und Gesamtcheck. Triggers on /setup, „Setup starten", „richte mein Setup ein", „hab ich alles konfiguriert?".
+description: Der Begleiter — geführtes Ersteinrichten des Denkarbeit-Setups (Umgebung, CLAUDE.md, L1-Kontext, Sprachanker, CI) und Gesamtcheck. Triggers on /setup, „Setup starten", „richte mein Setup ein", „hab ich alles konfiguriert?".
 ---
 
 ## Zweck
 
-Der Kursbegleiter richtet das Denkarbeit-Setup ein und prüft es. Ein Mechanismus, zwei Aufrufe:
+Der Begleiter richtet das Denkarbeit-Setup ein und prüft es — für Kurs-Trainees wie für Gewerbe-Kunden (dort ist die Check-Tabelle zugleich das Abnahme-Dokument). Ein Mechanismus, zwei Aufrufe:
 
 - `/setup` — geführtes Einrichten: erst messen, dann fehlende Bausteine im Dialog schließen.
 - `/setup check` — nur messen und ausweisen, nichts verändern.
