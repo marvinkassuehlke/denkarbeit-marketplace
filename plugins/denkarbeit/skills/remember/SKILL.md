@@ -146,25 +146,25 @@ Die Datei beginnt mit einem Header, gefolgt von YAML-Einträgen. Neueste Einträ
 
 ```yaml
 - date: 2026-03-18
-  event: Andrea signalisiert Budget und neue Projektideen
+  event: Sandra signalisiert Budget und neue Projektideen
   body: |
-    Andrea teilt via Maja mit: PPT Builder als Use Case, Budget
-    freigeräumt für mehr LLM-Projekte, Termin mit Jakob Wössner
+    Sandra teilt im Jour fixe mit: PPT Builder als Use Case, Budget
+    freigeräumt für mehr LLM-Projekte, Termin mit Jonas Wendt
     (Group Data & AI) wird eingestellt. Strategisch wichtig:
-    Andrea öffnet proaktiv die Governance-Tür. Bisher liefen alle
+    Sandra öffnet proaktiv die Governance-Tür. Bisher liefen alle
     Projekte bewusst unter IT-Radar — das ändert sich jetzt.
   artifacts:
-    - /Weleda/drafts/ppt_builder_concept.md
+    - /Herbanea/drafts/ppt_builder_concept.md
 
 - date: 2026-03-16
-  event: POC Report Blue Gentian aus echten Daten gebaut
+  event: POC Report Lavendel-Linie aus echten Daten gebaut
   body: |
     Interaktiven HTML-Report aus Excel-Daten generiert. Wird ohne
     CIP-Branding übergeben — soll wirken wie fertiger Analyst-Output,
     nicht wie Pipeline-Demo. Zeigt was CIP kann, ohne "Pipeline"
     zu sagen.
   artifacts:
-    - /Weleda/consumer_insights_pipeline/example_charts/poc_report_blue_gentian.html
+    - /Herbanea/consumer_insights_pipeline/example_charts/poc_report_lavendel.html
 `` `
 ```
 
@@ -195,7 +195,7 @@ updated: 2026-03-18
 
 ## Wie es dazu kam
 
-CIP entstand als Zufallsfund im Effizienz-Projekt: Monika (Consumer Insights)
+CIP entstand als Zufallsfund im Effizienz-Projekt: Petra (Consumer Insights)
 beschrieb ihren manuellen Auswertungsprozess — 2-3 Tage pro Studie, 90-Slide-Decks,
 kein Signifikanztest. Der Automatisierungshebel war offensichtlich.
 
@@ -207,7 +207,7 @@ CIP-Branding übergeben, um Pipeline-Diskussion zu vermeiden bevor der Wert sich
 
 ## Was wir gelernt haben
 
-Consumer Insights ist eine der datenintensivsten Funktionen bei Weleda, läuft aber
+Consumer Insights ist eine der datenintensivsten Funktionen bei Herbanea, läuft aber
 komplett manuell. Das Team ist offen für Automatisierung, hat aber keine IT-Anbindung
 und keinen eigenen Tech-Zugang.
 ```
@@ -223,13 +223,13 @@ updated: 2026-03-18
 
 ## Zusammenarbeit
 
-Seit Spätherbst 2025 über Maja. Andrea (CDO) wurde Test-Kundin für denkarbeit OS,
-daraus entwickelte sich die Consulting-Beziehung. Andrea führt ohne direktes Mandat
+Seit Spätherbst 2025 über eine Empfehlung. Sandra (CDO) wurde früh Test-Kundin,
+daraus entwickelte sich die Consulting-Beziehung. Sandra führt ohne direktes Mandat
 (75% Dotted-Line) — Kommunikation ist ihr wichtigstes Steuerungsinstrument.
 
 ## Projekte
 
-**Effizienz-Projekt (10k, aktiv):** KI-Coaching für Andreas 6 Direct Reports.
+**Effizienz-Projekt (10k, aktiv):** KI-Coaching für Sandras 6 Direct Reports.
 Use Cases aus Breakout Sessions waren weniger reif als dargestellt — echte Use Cases
 werden über Einzelinterviews identifiziert.
 
@@ -237,14 +237,14 @@ werden über Einzelinterviews identifiziert.
 Zufallsfund aus dem Effizienz-Projekt. Adressiert blinden Fleck — datenintensivste
 Funktion, komplett manuell.
 
-**trAIlblazer (on hold):** Weledas IT baut eigene Lösung. Proposal liegt fertig vor,
+**AI-Kompass (on hold):** Herbaneas IT baut eigene Lösung. Proposal liegt fertig vor,
 ist aktuell nicht platzierbar.
 
 ## Was wir über sie wissen
 
-Andrea denkt in Amazon Leadership Principles. "Boring Basics first" — nicht mit
+Sandra denkt in Amazon Leadership Principles. "Boring Basics first" — nicht mit
 KI-Visionen einsteigen. Budget ist freigeräumt, Governance-Tür zu IT öffnet sich
-(Termin mit Jakob Wössner). Momentum ist da.
+(Termin mit Jonas Wendt). Momentum ist da.
 ```
 
 ## Harte Gates

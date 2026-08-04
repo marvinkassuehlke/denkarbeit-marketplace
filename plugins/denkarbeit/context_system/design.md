@@ -1,6 +1,6 @@
 ---
 created: 2026-06-15
-updated: 2026-07-27
+updated: 2026-08-04
 ---
 
 # Kontext-System — Design
@@ -34,7 +34,7 @@ L4  {Arbeitspaket}/context.md      TEILSTÜCK      — rein hierarchischer Split
 - **Primärvokabular sind die semantischen Namen** (Stakeholder → Projekt → Arbeitspaket). Die **L-Nummern sind internes Spec-Kürzel** — sie laufen in Spec und Skills mit, werden aber nicht in die Didaktik exportiert (Kurs-Videos, Slides, Sprechskripte kennen nur die Namen).
 - **Zählweise:** Gezählt werden die Ebenen *unter* dem Workspace-Root — drei. Der Root (Ich, L1) ist Träger, keine Stufe. „Dreistufig" (Kurs-Sprech) und „vier Ebenen L1–L4" (Spec-Sprech) bezeichnen dieselbe Struktur.
 - **„Stakeholder"** bleibt der kanonische Name der ersten Unterebene; die Ebene ist benannt nach ihrem häufigsten Bewohner. Definition im Kurs-Sprech (Oberbegriff „Domäne"): *für wen oder was du arbeitest — Arbeitgeber, Kunde oder eigener Bereich.*
-- **Ebene ≠ Pfadtiefe.** Die Tiefe ist die Default-Kodierung der Ebene, keine Semantik: Zwischenordner (Programm-Ebenen, Sammlungen, Verwaltungs-Ordner wie `inaktiv/`) verschieben die Tiefe, nicht die Ebene — `/inaktiv/Weleda` ist genauso L2 wie `/Weleda`. **Erkennungskette** (für alle Skills verbindlich): (1) semantische Ansprache des Users · (2) Artefakt-Bestand — Ebenen-Träger ist der Ordner, der die Standardartefakte trägt oder tragen sollte (`context.md`, ggf. `memory.md`/`log.md`); reine Sammelordner sind **ebenen-transparent** und bekommen nie eigene Kontext-Artefakte · (3) Pfadtiefe als Default. Im Zweifel nachfragen.
+- **Ebene ≠ Pfadtiefe.** Die Tiefe ist die Default-Kodierung der Ebene, keine Semantik: Zwischenordner (Programm-Ebenen, Sammlungen, Verwaltungs-Ordner wie `inaktiv/`) verschieben die Tiefe, nicht die Ebene — `/inaktiv/Altkunde` ist genauso L2 wie `/Altkunde`. **Erkennungskette** (für alle Skills verbindlich): (1) semantische Ansprache des Users · (2) Artefakt-Bestand — Ebenen-Träger ist der Ordner, der die Standardartefakte trägt oder tragen sollte (`context.md`, ggf. `memory.md`/`log.md`); reine Sammelordner sind **ebenen-transparent** und bekommen nie eigene Kontext-Artefakte · (3) Pfadtiefe als Default. Im Zweifel nachfragen.
 
 ## 2. context.md — Backbone
 
@@ -61,7 +61,7 @@ L4  {Arbeitspaket}/context.md      TEILSTÜCK      — rein hierarchischer Split
 ### Personen-Erfassung (löst den Fünf-Muster-Wildwuchs)
 
 - **Organisation = Ordner (L2).** Personen = Einträge im Steckbrief der Ebene, auf der die Beziehung lebt.
-- Org-weite Person (z.B. Andrea bei Weleda) → **L2**. Projekt-spezifischer Kontakt → **L3** (mit Rückverweis auf L2, falls dort ebenfalls geführt).
+- Org-weite Person (z.B. die CDO des Kunden) → **L2**. Projekt-spezifischer Kontakt → **L3** (mit Rückverweis auf L2, falls dort ebenfalls geführt).
 - **Ein Feld-Muster für alle:** `Name · Rolle/Funktion · Kontakt (optional) · Hinweis (optional)`. Der Hinweis trägt nur echte sachliche Information (Zuständigkeit, Entscheidungsmacht, Kommunikationsweg) — **kein** Psychogramm.
 
 ### Disziplin-Schnitt
@@ -78,7 +78,7 @@ L4  {Arbeitspaket}/context.md      TEILSTÜCK      — rein hierarchischer Split
 
 ### Größen-Heuristik (weiche Regel)
 
-Eine `context.md` jenseits **~20 KB** (Faustregel, justierbar; Empirie 07/2026: gesundes Feld endet bei ~20 KB, der entgleiste Referenzfall lag bei 40 KB) ist ein Prüfsignal, kein Urteil — meist ist dann etwas als „Kontext" festgehalten, was ein anderes Artefakt sein will. Diagnose-Fächer: eingesickerte Chronologien/Urteile (→ Disziplin-Schnitt, memory/log) · Register-Fall (→ operatives Register, §5) · eigenständiger Fach-Block (→ Fach-Artefakt + Pointer, Muster `bewerbungsformate.md`) · legitim groß (→ belassen). **Hart messen, weich handeln:** Gemessen wird mechanisch im `remember`-Bottom-up-Schritt; bei Überschreitung wird der Befund vorgelegt, nie autonom umgebaut. Geduldete Genre-Fremdkörper (Dossiers wie `johan`, `babymama`, `tsenso`) und Register-Artefakte sind ausgenommen.
+Eine `context.md` jenseits **~20 KB** (Faustregel, justierbar; Empirie 07/2026: gesundes Feld endet bei ~20 KB, der entgleiste Referenzfall lag bei 40 KB) ist ein Prüfsignal, kein Urteil — meist ist dann etwas als „Kontext" festgehalten, was ein anderes Artefakt sein will. Diagnose-Fächer: eingesickerte Chronologien/Urteile (→ Disziplin-Schnitt, memory/log) · Register-Fall (→ operatives Register, §5) · eigenständiger Fach-Block (→ Fach-Artefakt + Pointer, Muster `bewerbungsformate.md`) · legitim groß (→ belassen). **Hart messen, weich handeln:** Gemessen wird mechanisch im `remember`-Bottom-up-Schritt; bei Überschreitung wird der Befund vorgelegt, nie autonom umgebaut. Geduldete Genre-Fremdkörper (private Personen- und Themen-Dossiers) und Register-Artefakte sind ausgenommen.
 
 **Auslagerungs-Protokoll (Vollzug des Falls „Fach-Block"):** Bestätigt der User den Befund, ist der Vollzug `contextify`-Arbeit (context.md-Pflege) — im selben Durchlauf, egal aus welchem Skill der Befund kam; ein Befund ohne definierten Vollzugsweg verpufft im Chat. Regeln:
 1. **Verlustfreier Schnitt** — der Block wandert vollständig in ein Fach-Artefakt neben der `context.md` derselben Ebene (Frontmatter, H1, ein Framing-Satz); beim Umzug wird nicht mitverdichtet — Verdichtung wäre ein eigener, sichtbarer Schritt.
@@ -97,7 +97,7 @@ Die heutige Formel „context = Zustände / memory = Übergänge" leckt, weil si
 - **State komponiert abwärts** (context): Fakten verengen sich von L1 → L4.
 - **Judgment integriert aufwärts** (memory): Urteile entstehen aus dem Zusammenführen *über* Projekte hinweg und kristallisieren eine Ebene höher. Sie bauen *nicht* additiv aufeinander auf wie context — sie verschmelzen.
 
-Empirie (Weleda): Die „Strategische Positionierung" der Stakeholder-`memory.md` verwebt KI-Effizienz + AI-levers + Platform-vs-Coding + Rollen-Diskussion + Budgetkürzung zu *einem* Narrativ; das Effectiveness-Mandat starb an einer Group-Digital-Budgetkürzung (Stakeholder-Fakt killt Projekt); das L3a/L3b-Framework „trägt über Weleda hinaus". Das Urteil lebt an den Nähten *zwischen* Projekten — Projekt-Silos zerschnitten genau dieses Bindegewebe.
+Empirie (Referenz-Implementierung, Beratungs-Workspace): Die „Strategische Positionierung" der Stakeholder-`memory.md` verwebt fünf Projekt- und Themenstränge zu *einem* Narrativ; ein Mandat starb an einer Budgetkürzung auf Konzernebene (Stakeholder-Fakt killt Projekt); ein im Projekt entstandenes Framework „trägt über den Kunden hinaus". Das Urteil lebt an den Nähten *zwischen* Projekten — Projekt-Silos zerschnitten genau dieses Bindegewebe.
 
 ### temp.md — das flüchtige Arbeitsblatt
 
@@ -115,7 +115,7 @@ Viertes Standard-Muster neben den drei Wissensartefakten — bewusst **kein** Wi
 - **`memory.md` + `log.md`: per Default auf Stakeholder-Ebene (L2).** Projekt-Ebene (L3) ist eine **Earn-it-Ausnahme** (Kriterien s. §6). log und memory splitten **gemeinsam** — dieselbe Integrations-Grenze.
 - L1 trägt allenfalls eine schlanke memory; L4 nie.
 
-Begründung aus den Daten: Weledas per-Projekt-`log.md` (KI-Effizienz, CIP, trAIlblazer) sind winzig (538 B – 1,5 KB) und eingefroren am 21.03., während Stakeholder-`memory.md` (14 KB) und `log.md` (11 KB) bis 10.05. leben. Die Schwerkraft zieht nach oben — und das ist gesund.
+Begründung aus den Daten: Die per-Projekt-`log.md` der Referenz-Implementierung (drei Projekte) sind winzig (538 B – 1,5 KB) und früh eingefroren, während Stakeholder-`memory.md` (14 KB) und `log.md` (11 KB) monatelang weiterleben. Die Schwerkraft zieht nach oben — und das ist gesund.
 
 **Tokenökonomie:** Der Spar-Einwand gegen große Stakeholder-memory ist real, aber (a) das „irrelevante" Drittel ist oft der strategische Rahmen für das aktuelle Projekt, und (b) die Lösung bei echtem Überlauf ist **Sektionierung + Verdichtung innerhalb** der Stakeholder-memory (nach Thema), nicht Datei-Fragmentierung nach Projekt.
 
@@ -188,17 +188,3 @@ Kern (Drei-Stufen-Verdichtung, Bottom-up-Abgleich) bleibt; vier Ergänzungen:
 - **Sicherheits-Prinzipien:** Plan-dann-Bestätigen (nie blind); `mv` statt `rm`, löschen nur autorisiert, Zweifel → `archive/`; Varianten flaggen statt entscheiden; **Pointer-Reconcile ist Pflicht** (Moves erzeugen eine Pointer-Kaskade in context/memory/log).
 - **Repos & Symlinks:** `.git`-Verzeichnisse und Symlinks werden im Inventar mechanisch erhoben (Mess-Pflicht), der Befund — auch „keine" — im Dispositions-Plan ausgewiesen. Ein Repo ist eine **atomare Einheit**: als Ganzes klassifizieren (i.d.R. Bestandteil eines Projekts), nie intern umsortieren — kein `mv` hinein oder heraus, kein `archive/` im Repo, keine Löschungen; die innere Struktur gehört dem Repo (eigene Konventionen, `git mv`, Commits). Kontext-Artefakte leben per Default außerhalb des Repos auf der Ebenen-Wurzel; Ausnahme ist das Master-Muster (Repo hält den Master, der Workspace Symlinks — Vorbild Kurs-Repo). Symlink-Ziele nie verschieben (bricht den Link) → flaggen. Ändert der Kontext-Schritt doch eine Datei innerhalb eines Repos (z.B. Pointer-Reconcile), wird der entstandene dirty Zustand im Bestätigungsblock ausgewiesen; das Committen bleibt beim User.
 - **Arbeitsteilung:** `cleanup` fasst memory/log nur *strukturell* an (Split-Ebene, verkümmerte Logs nach Autorisierung); die inhaltliche Verdichtung bleibt `remember`.
-
-## 9. Stand der Umsetzung & Restpunkte
-
-**Umgesetzt (Stand 2026-06-16):**
-- `CLAUDE.md` geschlankt (imperativ + Pointer); Infra → `~/.claude/reference/infra.md`; Session-Start liest L1; imperativer Block entdoppelt.
-- L1-`context.md` (Persona) angelegt.
-- `contextify` schema-aware umgebaut · `remember` erweitert (Task-Closure, Split-Kriterien, L2-Default) · `cleanup` neu.
-- Volumen-Schwelle für den Split: ~15 KB Faustregel (in `remember` fixiert, justierbar).
-- **Referenz-Implementierung `/Weleda`** vollständig durchgezogen: L2 + 6 L3-Contexts, Dateien aufgeräumt, Pointer reconciled.
-
-**Restpunkte:**
-- Migration der übrigen Bestands-`context.md`: kein Massen-Retrofit — via `cleanup`/`contextify`, sobald ein Bereich ohnehin angefasst wird. Genre-Fremdkörper (`johan`, `babymama`, `tsenso`) bleiben geduldete Dossier-Ausnahmen.
-- Weleda-Flags (User-Entscheidung): ROOT-VARIANTEN in `Weleda/archive/` prüfen · `ai-levers/`-Zuschnitt bestätigen.
-- Schulungs-Delivery: `cleanup` + `contextify` + Spec + `template_context.md` als Bündel ausliefern.

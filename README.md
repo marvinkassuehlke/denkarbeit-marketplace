@@ -9,8 +9,8 @@ Ein Prompt an Claude Code genügt:
 > Installiere bitte das Denkarbeit-Plugin: führe `claude plugin marketplace add <QUELLE>` aus und danach `claude plugin install denkarbeit@denkarbeit`. Starte anschließend das Setup mit /denkarbeit:setup
 
 `<QUELLE>` ist der Marketplace-Ort:
+- produktiv: `marvinkassuehlke/denkarbeit-marketplace` (GitHub)
 - lokaler Test: `/Users/Shared/denkarbeit-marketplace`
-- produktiv: das GitHub-Repo (`owner/repo`)
 
 Alternativ interaktiv in Claude Code: `/plugin marketplace add <QUELLE>` → `/plugin install denkarbeit@denkarbeit` → ggf. `/reload-plugins`.
 
