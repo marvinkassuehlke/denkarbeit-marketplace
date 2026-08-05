@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Der Begleiter — geführtes Ersteinrichten des Denkarbeit-Setups (Umgebung, CLAUDE.md, L1-Kontext, Sprachanker, CI) und Gesamtcheck. Triggers on /setup, „Setup starten", „richte mein Setup ein", „hab ich alles konfiguriert?".
+description: Der Begleiter — geführtes Ersteinrichten des Denkarbeit-Setups (Umgebung, CLAUDE.md, L1-Kontext, Sprachanker, CI, Systeme & Secrets) und Gesamtcheck. Triggers on /setup, „Setup starten", „richte mein Setup ein", „hab ich alles konfiguriert?".
 ---
 
 ## Zweck
@@ -28,6 +28,7 @@ Die Spezifikation des Kontext-Systems liegt unter `../../context_system/design.m
 | 3 | Sprachanker | `{workspace}/sprache.md` existiert (der Default zählt) | Pflicht — Default garantiert |
 | 4 | CI / Gestaltung | `{workspace}/brand.yaml` existiert | Optional |
 | 5 | Bestand | Workspace war beim Start nicht leer: Ordner/Dateien ohne Ebenen-Logik? | Situativ |
+| 6 | Systeme & Secrets | Nutzer arbeitet gegen APIs/CLIs/MCP-Server: `infra.md` der betroffenen Ebene existiert · ein Vault ist benannt (Passwort-Manager-CLI oder OS-Schlüsselbund) · CLAUDE.md trägt den Secrets-Block | Situativ — Pflicht, sobald zutreffend |
 
 Workspace-Pfad finden: aus der CLAUDE.md (Baustein 1 verankert ihn). Fehlt die CLAUDE.md, den User fragen bzw. bei Neueinrichtung `~/workspace` vorschlagen.
 
@@ -55,6 +56,12 @@ Workspace-Pfad finden: aus der CLAUDE.md (Baustein 1 verankert ihn). Fehlt die C
 
    **B5 — Bestand.** War der Workspace nicht leer: Befund erheben (Ordnerzahl, lose Dateien, erkennbare Ebenen-Träger — Erkennungskette Spec §1; Repos/Symlinks mechanisch: `find -name .git`, `find -type l`) und **an `/cleanup` übergeben** — der hat Plan-Gate und Safety-Gates. Der Begleiter räumt nie selbst auf (keine Duplikation der cleanup-Logik).
 
+   **B6 — Systeme & Secrets (situativ; der Gewerbe-Regelfall).** Eine Interview-Frage: „Wird dein Claude mit Systemen arbeiten — APIs, Datenbanken, eigene Dienste, MCP-Server?" Wenn nein: kein Baustein, kein Skip-Vermerk. Wenn ja:
+   1. **Vault klären** (Staffel, kein Tool-Zwang): vorhandener Passwort-Manager mit CLI (1Password `op` · Bitwarden `bw` · KeePassXC `keepassxc-cli`) → sonst der **OS-Schlüsselbund** (macOS Keychain via `security` · Windows Credential Manager/DPAPI via PowerShell) — der ist immer da und ist der Default-Fallback. Eine Klartext-Datei ist **kein** Fallback. Laufzeit-Muster einmal zeigen: Secret aus dem Vault in die Umgebung der Session laden, nie in eine Datei.
+   2. **`infra.md`-Gerüst anlegen** — auf der Ebene, zu der das System gehört (Dienst-Infra; Spec §3), mit den Sektionen *System & Zugang* (Verweis-Muster: Vault + Eintragsname + Zugriffs-Kommando — nie der Wert), *Eigenheiten*, *Fehlerbilder & Fixes*. Maschinen-Infra (Tools, MCP-Konfig) → `~/.claude/infra.md`.
+   3. **Secrets-Block der CLAUDE.md** verifizieren (Baustein 1 legt ihn aus dem Template an; bei Alt-Installationen fehlt er → ergänzen vorschlagen).
+   Liegen bereits Zugriffs-Praktiken in flüchtigen Notizen (Scratchpad, temp.md, Chat-Verläufe), werden sie in die `infra.md` **geerntet** — das ist der häufigste Alt-Fall.
+
 4. **Skips festhalten.** Jeden bewusst übersprungenen Baustein als Zeile in L1 „Offene Punkte" vermerken.
 
 5. **Ausweis (Pflicht, nie weglassen).** Tabelle aller Bausteine mit genau einem Status je Zeile: **✓** konfiguriert · **○** offen (optional) · **–** bewusst übersprungen · **✗** fehlt (Pflicht). Dazu die Plugin-Version (aus der plugin.json des Plugins, falls als Plugin installiert). Ohne diese Tabelle gilt der Lauf als nicht geprüft. Im Check-Modus zusätzlich: Spec-Pointer in der CLAUDE.md verifizieren (Pfad existiert?) — bei totem Pointer neu verankern.
@@ -64,7 +71,8 @@ Workspace-Pfad finden: aus der CLAUDE.md (Baustein 1 verankert ihn). Fehlt die C
 ## Harte Gates
 
 - Messen vor Handeln; Ausweis-Tabelle ist Pflicht.
-- Bestehende Dateien (CLAUDE.md, context.md, sprache.md, brand.yaml) nie überschreiben — ergänzen oder flaggen.
+- **Secrets nie erfragen, nie entgegennehmen, nie notieren.** Der Begleiter richtet den Ort ein (Vault, Verweis-Muster, infra.md) — den Wert legt der Nutzer selbst im Vault ab; wird trotzdem ein Wert in den Chat eingefügt, wird er nirgends persistiert und der Nutzer auf Rotation hingewiesen.
+- Bestehende Dateien (CLAUDE.md, context.md, sprache.md, brand.yaml, infra.md) nie überschreiben — ergänzen oder flaggen.
 - Kein Aufräumen im Bestand — an `/cleanup` delegieren.
 - Interview kurz, keine Use-Case-Findung, kein Psychogramm (Personen-Regeln der Spec gelten).
 - Skips in L1 „Offene Punkte" festhalten.

@@ -29,6 +29,22 @@ Fehlende Dateien sind kein Fehler.
 
 Jedes Prosa-Markdown, das im Workspace erzeugt oder bearbeitet wird, trägt YAML-Frontmatter mit `created`/`updated` (ISO-Datum, `updated` bei jeder Bearbeitung hochsetzen). Gilt nicht für Code-Dateien und `log.md`.
 
+## Werkzeug- & Zugriffs-Wissen (infra.md)
+
+Wie Systeme bedient werden, ist eigenes Wissen neben der Arbeit: APIs, CLIs, MCP-Server, Zugriffs-Wege, Eigenheiten, Fehlerbilder samt Fix. Es lebt in `infra.md` — nicht im Chat, nicht in Wegwerf-Notizen:
+
+- **Dienst-Infra** (das System einer Firma/Domäne, z.B. deren ERP-API oder ein eigener Bot): `infra.md` neben der `context.md` der Ebene, zu der das System gehört.
+- **Maschinen-Infra** (dieser Rechner: installierte Tools, MCP-Konfiguration, Pfade): `~/.claude/infra.md` — sie gehört zum Rechner, nicht zum Workspace.
+- Vor Arbeit gegen ein bekanntes System: dessen `infra.md` lesen (on-demand, nicht vorladen). Eine neue, verifizierte Erkenntnis über ein System: sofort dort nachtragen.
+- Abgrenzung: `context.md` hält den Zustand der **Arbeit**, `infra.md` die Bedienung der **Werkzeuge**.
+
+## Secrets
+
+- Schlüssel, Tokens und Passwörter haben genau einen Ort: den **Vault** — ein Passwort-Manager mit CLI (z.B. 1Password, Bitwarden, KeePassXC), sonst der Schlüsselbund des Betriebssystems (macOS Keychain · Windows Credential Manager/DPAPI).
+- In Dateien, Repos und `infra.md` steht nur der **Verweis**: Vault, Eintragsname, Zugriffs-Kommando — nie der Wert.
+- Zur Nutzung wird ein Secret aus dem Vault in die Umgebung der laufenden Session geladen, nicht in Dateien geschrieben.
+- Keine Klartext-`.env` im Workspace · nichts Geheimes in context/memory/log · nie einen Secret-Wert in den Chat einfügen oder in Antworten wiedergeben.
+
 ## Verhalten
 
 - Dateien erstellen und ändern: einfach machen. **Löschen: immer erst fragen.**

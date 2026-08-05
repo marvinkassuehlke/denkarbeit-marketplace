@@ -109,6 +109,14 @@ Viertes Standard-Muster neben den drei Wissensartefakten — bewusst **kein** Wi
 - **Skills lassen es liegen:** `cleanup` archiviert, verschiebt oder benennt `temp.md` nie um; offensichtlich Erntenswertes wird als Content-Punkt vorgelegt. Frontmatter wie üblich (`updated` zeigt die Frische des Inhalts).
 - **Namens-Konvergenz:** genau `temp.md`; Abweichler (`input_temp.md` u.ä.) werden opportunistisch beim Anfassen umbenannt — kein Massen-Retrofit.
 
+### infra.md — die Betriebs-Referenz (benanntes Fach-Artefakt, seit 05.08.)
+
+Kein fünftes Standard-Artefakt, sondern das **benannte Muster** für einen wiederkehrenden Fach-Block: Wissen über die *Bedienung von Systemen* — APIs, CLIs, MCP-Server, Zugriffs-Wege, Eigenheiten, Fehlerbilder samt Fix. Die Abgrenzung trägt das Genre: `context.md` hält den Zustand der **Arbeit**, `infra.md` die Bedienung der **Werkzeuge**; Übergänge und Urteile bleiben in `memory.md`. Ohne benannten Ort weicht dieses Wissen erfahrungsgemäß in Flüchtiges aus (Chat, Scratch-Notizen) — genau das Wissen, das Betriebs-Stabilität tragen soll.
+
+- **Zwei Sorten, zwei Orte:** *Dienst-Infra* (das System einer Domäne — deren ERP-API, ein eigener Bot) → `infra.md` neben der `context.md` der Ebene, zu der das System gehört. *Maschinen-Infra* (der Rechner: Tools, MCP-Konfiguration, Pfade) → `~/.claude/infra.md`, außerhalb des Workspace — sie gehört zum Gerät und wandert nicht über Sync mit.
+- **Lese-/Schreib-Disziplin:** on-demand lesen (nicht im Session-Start vorladen); verifizierte neue Erkenntnis sofort nachtragen. Entsteht nur, wo tatsächlich gegen Systeme gearbeitet wird — kein präventives Anlegen auf jeder Ebene.
+- **Secrets-Grenze (hart):** Schlüssel, Tokens, Passwörter stehen **nie** in `infra.md` oder anderen Workspace-Dateien. Ihr einziger Ort ist ein Vault — Passwort-Manager mit CLI, sonst der OS-Schlüsselbund (macOS Keychain · Windows Credential Manager/DPAPI). `infra.md` hält den *Verweis*: Vault, Eintragsname, Zugriffs-Kommando. Zur Laufzeit wird aus dem Vault in die Session-Umgebung geladen, nicht in Dateien materialisiert; eine Klartext-`.env` im Workspace ist kein legitimer Fallback.
+
 ## 4. Artefakt-Verteilung über die Ebenen
 
 - **`context.md`: auf jeder Ebene (L1–L4).** Additiv.
