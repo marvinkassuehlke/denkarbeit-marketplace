@@ -44,7 +44,7 @@ Parse die Usereingabe und bestimme den Modus:
 
 1. **Kontext bestimmen.** Ermittle aus dem Workspace-Pfad den Stakeholder (und ggf. das Projekt). Die Ebene erkennst du semantisch, nicht an der Pfadtiefe: Sammel-/Zwischenordner (z.B. `inaktiv/`) verschieben die Tiefe, nicht die Ebene — Ebenen-Träger ist der Ordner, der die Standardartefakte trägt (Erkennungskette: `design.md` §1). `log.md`/`memory.md` liegen per Default auf Stakeholder-Ebene (L2); nur bei bestehendem Split auf Projekt-Ebene. Wenn nicht eindeutig: frage nach.
 
-2. **`log.md` lokalisieren.** Suche die `log.md` auf Stakeholder-Ebene (bzw. Projekt-Ebene, falls dort gesplittet). Wenn sie nicht existiert: frage den User ob du sie anlegen sollst (kein Auto-Create).
+2. **`log.md` lokalisieren — Split-Probe ist Pflicht.** Prüfe mechanisch (`ls`), ob auf der Projekt-Ebene des Session-Themas eigene `log.md`/`memory.md` existieren. Existieren sie → das Projekt ist gesplittet, dort wird geschrieben; sonst Stakeholder-Ebene (L2). Nicht aus dem Bestand schließen: Dass ältere projektbezogene Einträge in L2 liegen, ist kein Beleg für L2 — es kann Drift sein. Der geprüfte Pfad-Befund ist Pflichtbestandteil des Bestätigungsblocks; eine Lokalisierung ohne Probe hat nicht stattgefunden. Existiert nirgends eine `log.md`: frage den User, ob du sie anlegen sollst (kein Auto-Create).
 
 3. **Session-Kontext auswerten.** Lies den bisherigen Gesprächsverlauf der aktuellen Session. Identifiziere:
    - Was ist passiert? (Events, Entscheidungen, Ergebnisse)
@@ -53,7 +53,7 @@ Parse die Usereingabe und bestimme den Modus:
    - Welche Urteile oder Einschätzungen wurden getroffen?
    - Welche Artefakte wurden erzeugt?
 
-4. **Eintrag schreiben.** Hänge einen neuen Eintrag im Log-Format an `log.md` an. Ein `/remember`-Aufruf erzeugt genau einen Eintrag — auch wenn die Session mehrere Themen berührt hat. Fasse zusammen, splitte nicht.
+4. **Eintrag schreiben.** Hänge einen neuen Eintrag im Log-Format an `log.md` an. Ein `/remember`-Aufruf erzeugt genau einen Eintrag — auch wenn die Session mehrere Themen berührt hat. Fasse zusammen, splitte nicht. **Ausnahme Misch-Session bei Split:** Berührt die Session ein gesplittetes Projekt UND Stakeholder-Themen, entstehen zwei getrennte Einträge — der projektspezifische Teil ins Projekt-Log, der Rest nach L2 (nie den ganzen Misch-Eintrag auf eine Ebene zwingen).
 
 5. **Task-Closure.** Wurde in der Session ein offener Punkt aus `context.md` §„Offene Punkte" erledigt:
    1. Entferne ihn aus `context.md` (das Arbeits-Scaffolding ist verbraucht — kein Verlust).
@@ -135,7 +135,7 @@ Prüfpunkt im Bottom-up-Schritt. Ein Projekt bekommt eigene `memory.md`/`log.md`
 2. **Severabilität:** Die Projekt-Einträge zeigen nach innen — kein ständiges Referenzieren von Schwester-Projekten oder Stakeholder-weiten Fakten. Sonst: kein Split.
 3. **Eigenleben:** genug eigene Historie für eine sinnvolle separate Verdichtung. Keine präventiven Splits frischer Projekte.
 
-Protokoll: Default = nicht splitten (Aufschieben billig, Zusammenführen teuer, ein verfrühter Split zerschneidet das Bindegewebe). Klarer Fall (alle drei deutlich, keine Quer-Referenzen) → autonom ausführen + im Bestätigungsblock melden. Grenzfall → vorlegen. `log` und `memory` splitten gemeinsam.
+Protokoll: Default = nicht splitten (Aufschieben billig, Zusammenführen teuer, ein verfrühter Split zerschneidet das Bindegewebe). Klarer Fall (alle drei deutlich, keine Quer-Referenzen) → autonom ausführen + im Bestätigungsblock melden. Grenzfall → vorlegen. `log` und `memory` splitten gemeinsam. **Der Vollzug hinterlässt einen Marker:** In den Kopf des L2-Logs gehört eine Zeile „*Split-Hinweis: `{Projekt}` führt eigenes Log + Memory (Split TT.MM.) — Projekt-Einträge gehören dorthin.*“ — der Split darf nie nur Dateisystem-Zustand sein, sonst schreiben spätere Sessions daran vorbei.
 
 ## Log-Format (`log.md`)
 
