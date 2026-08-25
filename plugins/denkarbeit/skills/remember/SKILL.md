@@ -82,7 +82,7 @@ Parse die Usereingabe und bestimme den Modus:
    - **context.md veraltet:** Offensichtlich falsche Fakten (besetzte Rollen als offen markiert, falscher Projektstatus, überholte Strukturen) → direkt fixen, dabei das Backbone respektieren (Steckbrief / Warum / Lage / Richtung / Offene Punkte). Fälschlich in `context.md` stehende Übergänge/Urteile nach `memory.md` verschieben.
    - **Split:** Prüfe, ob ein Projekt eigene `memory.md`/`log.md` verdient (siehe „## Split").
    - **temp-Erinnerung:** Führt die Ebene eine `temp.md` mit ungeerntetem Inhalt (`updated` jünger als der jüngste Log-Eintrag), im Bestätigungsblock daran erinnern — geerntet wird im Dialog, nicht vom Skill.
-   - **context.md zu groß:** > ~20 KB (Faustregel, justierbar) → **nicht autonom umbauen**, sondern diagnostizieren und dem User als Befund vorlegen: (a) eingesickerte Chronologien/Urteile → memory/log, (b) Register-Fall (abgeschlossen, aber betrieblich referenzpflichtig, z.B. Dedup) → eigenes Register-Artefakt neben der context.md, (c) eigenständiger Fach-Block → Fach-Artefakt + Pointer, (d) legitim groß → belassen. Geduldete Genre-Fremdkörper (Dossiers) und Register-Artefakte sind ausgenommen. **Bestätigt der User eine Auslagerung (Fall b/c), läuft der Vollzug im selben Durchlauf nach dem Auslagerungs-Protokoll** (Spec §2: verlustfreier Schnitt, Pointer-Rückstand mit einem Satz Substanz, Ausweis) — nicht als vertagte Empfehlung enden lassen. Spezifikation: `design.md` §2 Größen-Heuristik — Pfad aus der globalen CLAUDE.md (Referenzen); Fallback `../../context_system/design.md` vom Skill-Basisverzeichnis.
+   - **context.md zu groß:** > ~20 KB (Faustregel, justierbar) → **nicht autonom umbauen**, sondern diagnostizieren und dem User als Befund vorlegen: (a) eingesickerte Chronologien/Urteile → memory/log, (b) Register-Fall (abgeschlossen, aber betrieblich referenzpflichtig, z.B. Dedup) → eigenes Register-Artefakt neben der context.md, (c) eigenständiger Fach-Block → Fach-Artefakt + Pointer, (d) legitim groß → belassen. Geduldete Genre-Fremdkörper (Dossiers) und Register-Artefakte sind ausgenommen. **Bestätigt der User eine Auslagerung (Fall b/c), läuft der Vollzug im selben Durchlauf nach dem Auslagerungs-Protokoll** (Spec §2: verlustfreier Schnitt, Pointer-Rückstand mit einem Satz Substanz, Ausweis) — nicht als vertagte Empfehlung enden lassen. Spezifikation: `design.md` §2 Größen-Heuristik — Pfad aus der globalen CLAUDE.md (Referenzen); Fallback: vom Skill-Verzeichnis aufwärts nach `context_system/design.md` suchen.
 
    **Handeln:** Wenn Signale vorliegen, handle autonom — nicht fragen, sondern tun:
    - Memory verdichten/aktualisieren (Log → Memory, L2) — dabei **verschmelzen statt anhängen**: in bestehende thematische Abschnitte integrieren, keine neuen datierten Abschnitte stapeln. Sieht die memory aus wie ein zweites Log (chronologische Anhänge), ist die Konsolidierung der Abschnitte fällig
@@ -235,18 +235,16 @@ Seit Spätherbst 2025 über eine Empfehlung. Sandra (CDO) wurde früh Test-Kundi
 daraus entwickelte sich die Consulting-Beziehung. Sandra führt ohne direktes Mandat
 (75% Dotted-Line) — Kommunikation ist ihr wichtigstes Steuerungsinstrument.
 
-## Projekte
+## Was die Projekte gelehrt haben
 
-**Effizienz-Projekt (10k, aktiv):** KI-Coaching für Sandras 6 Direct Reports.
-Use Cases aus Breakout Sessions waren weniger reif als dargestellt — echte Use Cases
-werden über Einzelinterviews identifiziert.
+Die Use Cases aus den Breakout Sessions waren weniger reif als dargestellt; belastbar
+wurden sie erst über Einzelinterviews. Der Insights-Strang entstand als Zufallsfund
+daneben und adressiert einen blinden Fleck: die datenintensivste Funktion des Hauses
+läuft komplett manuell. Der Kompass-Vorschlag scheiterte nicht inhaltlich, sondern an
+einer parallelen Eigenentwicklung der IT — er bleibt gültig, ist aber nicht platzierbar.
 
-**CIP (12-15k, Concept):** Automatisierte Consumer-Insights-Pipeline. Entstand als
-Zufallsfund aus dem Effizienz-Projekt. Adressiert blinden Fleck — datenintensivste
-Funktion, komplett manuell.
-
-**AI-Kompass (on hold):** Herbaneas IT baut eigene Lösung. Proposal liegt fertig vor,
-ist aktuell nicht platzierbar.
+*(Projektnamen, Budgets und Status stehen in der `context.md` — memory trägt das Warum,
+keine Statusliste.)*
 
 ## Was wir über sie wissen
 
@@ -257,7 +255,7 @@ KI-Visionen einsteigen. Budget ist freigeräumt, Governance-Tür zu IT öffnet s
 
 ## Harte Gates
 
-- **Kein Auto-Create.** Dateien und Ordner nur auf explizite Anweisung anlegen.
+- **Kein Auto-Create neuer Genres.** Fehlt eine `log.md`, `infra.md` oder ein Register: fragen, nicht anlegen. Ausgenommen ist der Vollzug einer im Workflow geregelten Entscheidung (Split nach §6, erstmalige memory-Befüllung ab 5 Einträgen) — dort wird gehandelt und im Bestätigungsblock ausgewiesen.
 - **Kein Task-Tracking in memory.** Keine TODOs, keine offenen Punkte, keine Checklisten. (Tasks und ihr aktueller Stand leben in `context.md` §Offene Punkte.)
 - **Kein Status-Tracking in memory.** Zustände gehören in `context.md`, nicht in Memory.
 - **Keine Erfindung.** Nur festhalten, was in der Session tatsächlich passiert oder besprochen wurde.

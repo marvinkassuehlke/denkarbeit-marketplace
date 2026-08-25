@@ -14,7 +14,7 @@ Der Begleiter richtet das Denkarbeit-Setup ein und prüft es — für Kurs-Train
 
 **Scope-Linie:** Der Begleiter endet bei „System steht leer und korrekt konfiguriert". Die erste Domäne anlegen und befüllen ist Kursinhalt, nicht Setup.
 
-Die Spezifikation des Kontext-Systems liegt unter `../../context_system/design.md` relativ zum Skill-Basisverzeichnis (mit `template_context.md` daneben); existiert bereits eine globale CLAUDE.md mit Referenzen-Sektion, gilt deren Spec-Pfad. Die Templates dieses Skills liegen unter `templates/` relativ zum Skill-Basisverzeichnis.
+Die Spezifikation des Kontext-Systems liegt als `context_system/design.md` in der Plugin- bzw. Repo-Wurzel oberhalb von `skills/`, mit `template_context.md` daneben (vom Skill-Verzeichnis aufwärts suchen); existiert bereits eine globale CLAUDE.md mit Referenzen-Sektion, gilt deren Spec-Pfad. Die Templates dieses Skills liegen unter `templates/` relativ zum Skill-Basisverzeichnis.
 
 ## Bausteine & Messung
 
@@ -22,15 +22,15 @@ Die Spezifikation des Kontext-Systems liegt unter `../../context_system/design.m
 
 | # | Baustein | Messung | Status |
 |---|---|---|---|
-| 0 | Umgebung | `git --version` läuft · Workspace-Ordner existiert · `{workspace}/.obsidian/` vorhanden (Vault zeigt auf den Workspace) | Pflicht |
-| 1 | CLAUDE.md | `~/.claude/CLAUDE.md` existiert und enthält Workspace-Konvention + Session-Start-Regel + Pointer auf Spec und Sprachanker | Pflicht |
+| 0 | Umgebung | `git --version` läuft · Workspace-Ordner existiert | Pflicht · Obsidian-Vault (`{workspace}/.obsidian/`) empfohlen, nicht erforderlich |
+| 1 | CLAUDE.md | `~/.claude/CLAUDE.md` existiert und enthält Workspace-Konvention + Session-Start-Regel + Sprachregeln + Spec-Pointer | Pflicht |
 | 2 | L1-Kontext | `{workspace}/context.md` existiert mit Backbone-Kopf (Steckbrief, Motivation) | Pflicht |
 | 3 | Sprache | Sprachregeln in der CLAUDE.md vorhanden (Baustein 1); `{workspace}/language.md` **optional**, nur mit geeignetem Referenzmaterial | Pflicht (Regeln) · optional (Referenz) |
 | 4 | CI / Gestaltung | `{workspace}/brand.yaml` existiert | Optional |
 | 5 | Bestand | Workspace war beim Start nicht leer: Ordner/Dateien ohne Ebenen-Logik? | Situativ |
 | 6 | Systeme & Secrets | Nutzer arbeitet gegen APIs/CLIs/MCP-Server: `infra.md` der betroffenen Ebene existiert · ein Vault ist benannt (Passwort-Manager-CLI oder OS-Schlüsselbund) · CLAUDE.md trägt den Secrets-Block | Situativ — Pflicht, sobald zutreffend |
 
-Workspace-Pfad finden: aus der CLAUDE.md (Baustein 1 verankert ihn). Fehlt die CLAUDE.md, den User fragen bzw. bei Neueinrichtung `~/workspace` vorschlagen.
+Workspace-Pfad finden: aus der CLAUDE.md (Baustein 1 verankert ihn). Fehlt sie **oder trägt sie keinen Workspace-Anker** (der Regelfall bei bestehender Fremd-Konfiguration): den User fragen, bei Neueinrichtung `~/workspace` vorschlagen. Alle Skills arbeiten danach gegen diesen Anker; `{workspace}` in den Skills meint immer ihn, nie einen festen Pfad.
 
 ## Workflow
 

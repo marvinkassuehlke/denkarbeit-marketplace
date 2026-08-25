@@ -22,7 +22,6 @@ Alternativ interaktiv in Claude Code: `/plugin marketplace add <QUELLE>` → `/p
 | `denkarbeit:contextify` | `context.md` einer Ebene anlegen/pflegen (Backbone-konform) |
 | `denkarbeit:remember` | Session-Wissen persistieren: `log.md`-Eintrag, Verdichtung in `memory.md` |
 | `denkarbeit:cleanup` | Gewachsenen Workspace-Bereich in die Kontext-Logik überführen |
-| `denkarbeit:protocol` | Meeting-Transkript → teilbares Protokoll |
 | `denkarbeit:research` | Web-Recherche → strukturiertes Wissensdokument (`research.md`) |
 
 Die Spezifikation des Kontext-Systems liegt plugin-intern unter `plugins/denkarbeit/context_system/`.

@@ -20,7 +20,7 @@ updated: JJJJ-MM-TT
 
 ## Lage
 <!-- Der Wissenskörper: Fakten, Org, Markt, Technik, Beziehungsstand. Frei untergliederbar (eigene ##/### nach Bedarf).
-  Sicherheitsgrade [BELEGT]/[ANNAHME]/[WEB]/[PITCH] nutzen; Widersprüche mit einem Widerspruch-Marker-Kommentar kennzeichnen. -->
+  Sicherheitsgrade [BELEGT]/[ANNAHME] nutzen; Widersprüche mit einem Widerspruch-Marker-Kommentar kennzeichnen. -->
 
 ## Richtung
 <!-- Zielbild / woran gearbeitet wird — als Zustand, nicht als To-do-Liste. Optional. -->

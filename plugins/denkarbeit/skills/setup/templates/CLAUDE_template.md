@@ -13,8 +13,9 @@ Der Workspace (`{{WORKSPACE}}`) folgt der Kontext-Hierarchie: **Ich** (L1) → *
 
 - `context.md` — was jetzt gilt (Zustand), gepflegt via `/contextify`. Auf jeder Ebene.
 - `memory.md` — Übergänge und Urteile (das Warum), gepflegt via `/remember`. Default auf Domänen-Ebene (L2).
-- `log.md` — Ereignisstrom, append-only (nie editieren; `/remember` verdichtet ältere Einträge in die memory.md).
+- `log.md` — Ereignisstrom im YAML-Format (`- date:` je Eintrag, **neueste oben**). Einziger Schreiber ist `/remember`; Sessions editieren nie direkt. Default auf Domänen-Ebene (L2).
 - `temp.md` — flüchtiges Arbeitsblatt (Zwischenablage, Dialog-Arbeitsfläche), ad hoc auf jeder Ebene; Inhalt wird überschrieben, Erhaltenswertes vorher in ein dauerhaftes Artefakt ernten. Nie Pointer-Ziel.
+- `infra.md` — Betriebs-Referenz der Ebene: Bedienung von Systemen und Werkzeugen (siehe unten). On-demand lesen, nie vorladen.
 
 ### Session-Start
 
@@ -22,8 +23,9 @@ Beim Arbeiten im Workspace ohne Rückfrage lesen:
 
 0. Immer: `{{WORKSPACE}}/context.md` (L1)
 1. Bei CWD unter einer Domäne: deren `context.md` und `memory.md` (nächster Ebenen-Träger im Pfad, Sammelordner überspringen)
-2. Bei Projekt-Unterordner zusätzlich dessen `context.md`
-3. Die letzten 3 Einträge aus dem zuständigen `log.md` (nicht die ganze Datei)
+2. Bei Projekt-Unterordner zusätzlich dessen `context.md` — und, falls das Projekt gesplittet ist (führt eigene `memory.md`/`log.md`), auch dessen `memory.md`
+3. Die letzten 3 Einträge aus dem zuständigen `log.md` (nicht die ganze Datei) — zuständig ist die tiefste Ebene auf dem Pfad, die ein eigenes `log.md` führt. Log-Einträge sind YAML (`- date:`), **neueste oben**: nie vom Dateiende lesen
+4. Pfad-Scan: ein `ls` je Ebenen-Träger auf dem CWD-Pfad (deckt Schritt 2 und 3). Dabei registrieren, welche `infra.md` existieren — nicht vorladen, on-demand lesen
 
 Fehlende Dateien sind kein Fehler.
 

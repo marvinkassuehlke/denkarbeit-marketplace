@@ -5,7 +5,7 @@ description: Use when creating or maintaining a `context.md` — the workspace s
 
 ## Zweck
 
-Lege die `context.md` einer Workspace-Ebene an oder pflege sie — gegen das feste Backbone des Kontext-Systems. **Spec-Auflösung** (gilt für alle Verweise auf `design.md`/`template_context.md` in diesem Skill): der in der globalen CLAUDE.md verankerte Pfad (Sektion Referenzen bzw. Workspace-Konvention); Fallback `../../context_system/design.md` relativ zum Skill-Basisverzeichnis. Inputs sind beliebig (Calls, PDFs, Notizen, Briefings, Inline-Text); das *Ziel* ist immer eine schema-konforme `context.md` an einem `/workspace`-Pfad. Nicht kürzen — in die Idealform der jeweiligen Ebene überführen: semantische Kompression mit Strukturierung. Jeder Token verdient seinen Platz, aber Telegrammstil ist kein Ideal — vollständige, knappe Sätze schlagen reine Stichworte.
+Lege die `context.md` einer Workspace-Ebene an oder pflege sie — gegen das feste Backbone des Kontext-Systems. **Spec-Auflösung** (gilt für alle Verweise auf `design.md`/`template_context.md` in diesem Skill): der in der globalen CLAUDE.md verankerte Pfad (Sektion Referenzen bzw. Workspace-Konvention); Fallback: vom Skill-Verzeichnis aufwärts nach `context_system/design.md` suchen (liegt in der Plugin- bzw. Repo-Wurzel oberhalb von `skills/`). Inputs sind beliebig (Calls, PDFs, Notizen, Briefings, Inline-Text); das *Ziel* ist immer eine schema-konforme `context.md` an einem `/workspace`-Pfad. Nicht kürzen — in die Idealform der jeweiligen Ebene überführen: semantische Kompression mit Strukturierung. Jeder Token verdient seinen Platz, aber Telegrammstil ist kein Ideal — vollständige, knappe Sätze schlagen reine Stichworte.
 
 `context.md` hält **was jetzt gilt** (Zustand). Übergänge, Urteile, Chronologien gehören nicht hierher (siehe Disziplin-Schnitt) — dafür sind `memory.md`/`log.md` da (`/remember`).
 
@@ -43,7 +43,7 @@ Die Pfadtiefe ist Heuristik, keine Semantik: Zwischenordner (Programm-Ebenen, Sa
 
 4. **Modus bestimmen:**
    - **Neu** — keine Datei am Zielpfad → erzeuge gegen das Backbone von Grund auf.
-   - **Erweitern** — bestehende Datei + neue Inputs → zusammenführen, Backbone wahren. Neue Information aktualisiert überlappende Sektionen, genuin Neues bekommt seinen Platz in der passenden Backbone-Sektion (Substanz unter „Lage"). Konflikte werden als Widerspruch markiert (Prinzip 3). Bestehender Log wird beibehalten, neuer Eintrag angehängt.
+   - **Erweitern** — bestehende Datei + neue Inputs → zusammenführen, Backbone wahren. Neue Information aktualisiert überlappende Sektionen, genuin Neues bekommt seinen Platz in der passenden Backbone-Sektion (Substanz unter „Lage"). Konflikte werden als Widerspruch markiert (Prinzip 3).
    - **Re-Run** — bestehende Datei, keine neuen Inputs → erneut gegen das Backbone formen. Der User muss die Rahmung mitgeben oder explizit „gleiche Rahmung" sagen — rate nicht.
 
 5. **Inputs lesen.** Alle referenzierten Dateien und Inline-Texte einlesen.
@@ -81,7 +81,7 @@ Diese Prinzipien sind das *Wie* der Befüllung des Backbones — sie ersetzen di
 
 ## Output-Format
 
-Reines Markdown. Top-Level die fünf Backbone-Sektionen mit `##`, Substruktur (vor allem unter „Lage") mit `###`, maximal 3 Ebenen tief. **YAML-Frontmatter** (`created`/`updated`) gehört an den Dateianfang — `context.md` fällt unter die Dokument-Frontmatter-Konvention. HTML-Kommentare sind erlaubt für Meta-Annotationen (Log, Widerspruch-Marker). Korrekte deutsche Umlaute verwenden (ä, ö, ü, ß) — niemals ae, oe, ue, ss als Ersatz.
+Reines Markdown. Top-Level die fünf Backbone-Sektionen mit `##`, Substruktur (vor allem unter „Lage") mit `###`, maximal 3 Ebenen tief. **YAML-Frontmatter** (`created`/`updated`) gehört an den Dateianfang — `context.md` fällt unter die Dokument-Frontmatter-Konvention. HTML-Kommentare sind erlaubt für Meta-Annotationen (Widerspruch-Marker, offene Fragen). Korrekte deutsche Umlaute verwenden (ä, ö, ü, ß) — niemals ae, oe, ue, ss als Ersatz.
 
 Wenn ein Fakt oder KPI in mehreren Quellen identisch vorkommt, steht er genau einmal im Output — an der thematisch passenden Stelle. Nicht pro Quelle wiederholen, nicht in mehreren Sektionen duplizieren.
 
