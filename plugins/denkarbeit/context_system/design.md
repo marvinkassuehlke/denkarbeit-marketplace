@@ -1,198 +1,178 @@
 ---
 created: 2026-06-15
-updated: 2026-08-04
+updated: 2026-08-25
 ---
 
 # Kontext-System — Design
 
-Kanonische Spezifikation des Kontext-Systems im `/workspace`: die drei Standardartefakte (`context.md` / `memory.md` / `log.md`), ihre Hierarchie, ihr Zusammenspiel und die Konsequenzen für `CLAUDE.md` und die Skills `contextify` / `cleanup` / `remember`. Dieses Dokument ist die Single Source of Truth — `CLAUDE.md` und die Skills verweisen hierher, statt die Konvention zu duplizieren.
+Kanonische Spezifikation des Kontext-Systems im `/workspace`: die Standardartefakte (`context.md` / `memory.md` / `log.md` / `temp.md` / `infra.md`), ihre Hierarchie, ihr Zusammenspiel und die Konsequenzen für `CLAUDE.md` und die Skills `contextify` / `cleanup` / `remember`. **SSOT-Modell:** Diese Spec trägt das Modell — Genres, Orte, Kreisläufe, Kriterien. Die Skills tragen die Ausführung und dürfen Kernregeln bewusst spiegeln, damit sie eigenständig lauffähig sind; gespiegelte Passagen tragen einen Vermerk (`Master: design.md §X`), und Änderungen laufen zuerst hier, dann im Skill nach. Formatkonventionen (Log-/Memory-Form) sind hier normativ definiert (§3) — der Skill führt sie aus.
 
 ## Zweck & Geltung
 
-Das System war gewachsen, nicht spezifiziert: 19 `context.md` mit fünf verschiedenen Personen-Erfassungs-Mustern, leckender Rollentrennung (Chronologien und Urteile in `context.md`), `contextify` ohne Schema-Bewusstsein. Es funktioniert gut — dies ist Optimierung, kein Rebuild. Ziel: Wildwuchs auf oberster Ebene beseitigen, ohne die Tiefe zu verengen.
+Das System war gewachsen, nicht spezifiziert; es funktioniert gut — dies ist Optimierung, kein Rebuild. Leitprinzip: **`context.md` ist und bleibt die *eine* Wissensdatei pro Ordner.** Kein Zerlegen in `stakeholder.md` / `objective.md` o.ä. Die Grundstruktur ist bewusst weit abstrahiert, damit „alles reinpasst"; dass Einzelfälle das Konstrukt strapazieren, ist akzeptiert.
 
-Leitprinzip: **`context.md` ist und bleibt die *eine* Wissensdatei pro Ordner.** Kein Zerlegen in `stakeholder.md` / `objective.md` o.ä. Die Grundstruktur ist bewusst weit abstrahiert, damit „alles reinpasst"; dass Einzelfälle das Konstrukt strapazieren, ist akzeptiert.
+**Enforcement-Doktrin** (gilt für jede Regel dieser Spec): *Eine Regel, deren Bedingung der Normallauf nicht misst, existiert nicht.* Mess-Pflicht (mechanisch erheben, nicht schätzen) + Ausweis-Pflicht (Ergebnis als Pflichtzeile im Output) + harte Gates nur, wo groß immer falsch ist. Jedes Artefakt-Genre braucht einen definierten **Lese-Moment**, **Schreib-Moment** und **Hygiene-Moment** — ein Genre ohne alle drei verwaist (Empirie: `infra.md` 08/2026). Maschinelle Härtung (Hooks) darf diese Momente **härten, nie tragen**: Das System muss rein prompt-basiert funktionieren, weil nicht jede Harness Hooks kennt (Cowork).
 
-## 1. Architektur — rekursive context-Hierarchie
+## 1. Architektur — rekursive Hierarchie, Rollen statt Tiefen
 
-Ein Artefakttyp, vier Ebenen, semantisch klar:
+Die Regeln hängen an drei **Rollen**, nicht an Pfadtiefen:
 
 ```
-L1  /workspace/context.md          ICH            — wer bin ich, was tue ich
-L2  {Stakeholder}/context.md       DIE ANDEREN    — wer ist das Gegenüber (oder eigener Bereich)
-L3  {Projekt}/context.md           WAS MIT IHNEN  — was tue ich mit/für sie
-L4  {Arbeitspaket}/context.md      TEILSTÜCK      — rein hierarchischer Split, wenn L3 zu groß
+Wurzel   /workspace/context.md      ICH             — wer bin ich, was tue ich
+Anker    {Domäne}/context.md        DIE ANDEREN     — Gegenüber oder eigener Bereich;
+                                                      Default-Heimat von log.md + memory.md
+Knoten   {…}/context.md             ARBEITSGEGENSTAND — Projekt, Arbeitspaket, beliebig tief;
+                                                      context.md ja, log/memory nur per Split (§6)
 ```
 
-- **L2 ist nicht zwingend „extern".** Auch eigene Domänen sind L2: `strgaGmbH/` (das Unternehmen als ein Bereich), `dev/` (Coding), `trading/` (eigenes Nebenprojekt). „Stakeholder" meint Gegenüber *oder* eigener Bereich.
-- **L1 bleibt schlank.** Identität + Domänen-Orientierung (welche *Typen* von Domänen es gibt) + „Motivation" auf höchster Ebene. **Keine gepflegte Domänen-Aufzählung** — die lebt in den L2-Ordnern; L1 verweist dorthin und dupliziert nicht (insb. nicht `strgaGmbH/`).
-- **L4 ist optional und rein strukturell** — Überlauf-Ventil, wenn ein L3-Projekt zu groß wird. Das Schema *erlaubt* L4, *erzwingt* es nie.
+- **Das Normalbild sind drei benannte Ebenen** — Ich → Stakeholder → Projekt („dreistufig" im Kurs-Sprech). Mehr Tiefe ist erlaubt und **ändert keine Regel**: Ein Knoten unter einem Knoten ist wieder ein Knoten. Wer fünf Ebenen einzieht, bekommt fünf `context.md`-Knoten — die Split-Kriterien halten log/memory automatisch knapp. Die historischen L-Kürzel (L1=Wurzel, L2=Anker, L3/L4=Knoten) bleiben als Kurzschreibweise zulässig.
+- **Anker ist nicht zwingend „extern".** Auch eigene Domänen sind Anker: `strgaGmbH/` (das Unternehmen), `trading/`, `johan/`. „Stakeholder" bleibt der kanonische Name (benannt nach dem häufigsten Bewohner); Kurs-Definition: *für wen oder was du arbeitest — Arbeitgeber, Kunde oder eigener Bereich.*
+- **Die Wurzel bleibt schlank.** Identität + Domänen-Orientierung (welche *Typen* es gibt) + Motivation auf höchster Ebene. **Keine gepflegte Domänen-Aufzählung** und keine duplizierten Anker-Fakten — die Wurzel verweist (insb. nicht `strgaGmbH/` spiegeln).
 - **State komponiert abwärts:** Jede Ebene erbt den Kontext der Elternebene und verengt ihn. Jede `context.md` ist eigenständig lesbar.
 
-### Begriffs- und Zählkonvention
+### Rollen-Erkennung
 
-- **Primärvokabular sind die semantischen Namen** (Stakeholder → Projekt → Arbeitspaket). Die **L-Nummern sind internes Spec-Kürzel** — sie laufen in Spec und Skills mit, werden aber nicht in die Didaktik exportiert (Kurs-Videos, Slides, Sprechskripte kennen nur die Namen).
-- **Zählweise:** Gezählt werden die Ebenen *unter* dem Workspace-Root — drei. Der Root (Ich, L1) ist Träger, keine Stufe. „Dreistufig" (Kurs-Sprech) und „vier Ebenen L1–L4" (Spec-Sprech) bezeichnen dieselbe Struktur.
-- **„Stakeholder"** bleibt der kanonische Name der ersten Unterebene; die Ebene ist benannt nach ihrem häufigsten Bewohner. Definition im Kurs-Sprech (Oberbegriff „Domäne"): *für wen oder was du arbeitest — Arbeitgeber, Kunde oder eigener Bereich.*
-- **Ebene ≠ Pfadtiefe.** Die Tiefe ist die Default-Kodierung der Ebene, keine Semantik: Zwischenordner (Programm-Ebenen, Sammlungen, Verwaltungs-Ordner wie `inaktiv/`) verschieben die Tiefe, nicht die Ebene — `/inaktiv/Altkunde` ist genauso L2 wie `/Altkunde`. **Erkennungskette** (für alle Skills verbindlich): (1) semantische Ansprache des Users · (2) Artefakt-Bestand — Ebenen-Träger ist der Ordner, der die Standardartefakte trägt oder tragen sollte (`context.md`, ggf. `memory.md`/`log.md`); reine Sammelordner sind **ebenen-transparent** und bekommen nie eigene Kontext-Artefakte · (3) Pfadtiefe als Default. Im Zweifel nachfragen.
+- **Rolle ≠ Pfadtiefe.** Die Tiefe ist Default-Kodierung, keine Semantik. Sammel- und Zwischenordner sind **ebenen-transparent** und bekommen nie eigene Kontext-Artefakte — das gilt für thematische Zwischenordner (Programm-Ebenen) wie für Verwaltungs-Sammelordner am Root (`inaktiv/`, `Archiv/` — beide Vokabeln existieren, beide gleichbehandeln): `/Archiv/Altkunde` ist genauso Anker wie `/Altkunde`. Davon zu unterscheiden ist das ebenen-lokale **`archive/`** (cleanup-Ablage für ersetzte Dateien innerhalb einer Ebene) — es ist keine Ebene, sondern ein Ordner-Genre.
+- **Erkennungskette** (für alle Skills verbindlich): (1) semantische Ansprache des Users · (2) Artefakt-Bestand — Rollen-Träger ist der Ordner, der die Standardartefakte trägt oder tragen sollte · (3) Pfadtiefe als Default. Im Zweifel nachfragen.
+- **Träger = Repo:** Ist der Rollen-Träger selbst ein Git-Repo (der Ordner enthält `.git`), leben die Kontext-Artefakte trotzdem in seiner Wurzel — die Repo-Eigenschaft ändert die Rolle nicht; ob sie committet werden, entscheidet der User (ggf. `.gitignore`). Das Master-Muster (Repo hält den Master, der Workspace Symlinks) bleibt der Sonderfall für geteilte Artefakte.
 
 ## 2. context.md — Backbone
 
-**Fixer Kopf, freie Tiefe.** Die Wildwuchs-Ursache war nie die inhaltliche Vielfalt unter den Überschriften — sie war der uneinheitliche *oberste* Aufbau. Lösung: Top-Level wird fix, die Substruktur bleibt frei.
+**Fixer Kopf, freie Tiefe.** Top-Level ist fix, die Substruktur bleibt frei.
 
 | # | Sektion | Frage | Inhalt | Stabilität |
 |---|---|---|---|---|
-| — | **Kopf / Steckbrief** | Was/wer ist das? | 1 Framing-Satz unter der H1 + `Stand: JJJJ-MM-TT`. Dann ebenen-spezifische Felder (s.u.) | hoch |
-| 1 | **Motivation** | Warum existiert das für mich, was ist mein Einsatz? | Motivation, Einsatz, Verortung — als *Kontext/Orientierung*, nicht als Verhaltenssteuerung, kein Psychogramm | hoch |
-| 2 | **Lage** | Wie steht es? | Der Wissenskörper. **Frei untergliederbar** — hier wohnen Org-Bäume, Marktbilder, Tech-Stacks, Beziehungsstände | lebendig |
-| 3 | **Richtung** | Wohin? | Zielbild, woran gearbeitet wird — als *Zustand*, nicht als To-do-Liste | lebendig |
-| 4 | **Offene Punkte** | Was ist unerledigt? | Offene Tasks **und** offene Fragen / Wissenslücken — das PMO-Hauptbuch der ungelösten Dinge | lebendig |
+| 1 | **Steckbrief** | Was/wer ist das? | 1 Framing-Satz unter der H1, dann rollen-spezifische Felder (s.u.) | hoch |
+| 2 | **Motivation** | Warum existiert das für mich, was ist mein Einsatz? | Motivation, Einsatz, Verortung — Orientierung, keine Verhaltenssteuerung, kein Psychogramm | hoch |
+| 3 | **Lage** | Wie steht es? | Der Wissenskörper. **Frei untergliederbar** — Org-Bäume, Marktbilder, Tech-Stacks, Beziehungsstände | lebendig |
+| 4 | **Richtung** | Wohin? | Zielbild, woran gearbeitet wird — als *Zustand*, nicht als To-do-Liste | lebendig |
+| 5 | **Offene Punkte** | Was ist unerledigt? | Offene Tasks **und** offene Fragen / Wissenslücken | lebendig |
 
-- **Quasi-Pflicht:** Kopf + „Motivation". **Nach Bedarf:** Lage (der Wissenskörper). **Optional:** Richtung / Offene Punkte.
-- **Stabilitäts-Gefälle statt statisch-vs-lebendig:** `context.md` ist nicht einheitlich das eine oder andere. Kopf + Motivation sind quasi-statisch (ändern sich selten), Lage/Richtung/Offene-Punkte sind lebendig. Es braucht kein zweites Artefakt für „das Statische".
+- **Fünf Top-Level-Sektionen**, Steckbrief als eigene `## Steckbrief` (gelebte Konvention, hier geadelt). **Quasi-Pflicht:** Steckbrief + Motivation. **Nach Bedarf:** Lage. **Optional:** Richtung / Offene Punkte.
+- **Datierung:** ausschließlich über die Frontmatter (`created`/`updated`). Eine `Stand:`-Zeile im Kopf gibt es nicht mehr — zwei Datierungen driften (Empirie 08/2026); Bestands-Zeilen werden beim Anfassen entfernt.
+- **Stabilitäts-Gefälle statt statisch-vs-lebendig:** Steckbrief + Motivation quasi-statisch, der Rest lebendig. Es braucht kein zweites Artefakt für „das Statische".
 
-### Steckbrief-Felder je Ebene
+### Steckbrief-Felder je Rolle
 
-- **L1 (Ich):** Eckdaten, Rollen, Angebot/Tätigkeit, Arbeitsweise-Grundzüge, Domänen-Orientierung (Typen, kein gepflegtes Verzeichnis).
-- **L2 (Stakeholder):** Org-Steckbrief (Firma/Entität, Eckdaten) **+ Personen-Block** (s.u.).
-- **L3 (Projekt):** Auftrag, Scope, Stand, Beteiligte (Verweis auf L2-Personen statt Duplikat).
-- **L4 (Arbeitspaket):** konkretes Ergebnis, Abgrenzung zum Projekt.
+- **Wurzel (Ich):** Eckdaten, Rollen, Angebot/Tätigkeit, Arbeitsweise-Grundzüge, Domänen-Orientierung (Typen, kein Verzeichnis).
+- **Anker (Stakeholder/Bereich):** Org-Steckbrief (Firma/Entität, Eckdaten) **+ Personen-Block** (s.u.) + Pointer auf `infra.md`, falls vorhanden.
+- **Knoten (Projekt/Arbeitspaket):** Auftrag, Scope, Stand, Beteiligte (Verweis auf Anker-Personen statt Duplikat); bei tieferen Knoten zusätzlich die Abgrenzung zum Eltern-Knoten.
 
-### Personen-Erfassung (löst den Fünf-Muster-Wildwuchs)
+### Personen-Erfassung
 
-- **Organisation = Ordner (L2).** Personen = Einträge im Steckbrief der Ebene, auf der die Beziehung lebt.
-- Org-weite Person (z.B. die CDO des Kunden) → **L2**. Projekt-spezifischer Kontakt → **L3** (mit Rückverweis auf L2, falls dort ebenfalls geführt).
-- **Ein Feld-Muster für alle:** `Name · Rolle/Funktion · Kontakt (optional) · Hinweis (optional)`. Der Hinweis trägt nur echte sachliche Information (Zuständigkeit, Entscheidungsmacht, Kommunikationsweg) — **kein** Psychogramm.
+- **Organisation = Anker-Ordner.** Personen = Einträge im Steckbrief der Ebene, auf der die Beziehung lebt: org-weite Person → Anker; projekt-spezifischer Kontakt → Knoten (mit Rückverweis).
+- **Ein Feld-Muster:** `Name · Rolle/Funktion · Kontakt (optional) · Hinweis (optional)`. Der Hinweis trägt nur sachliche Information (Zuständigkeit, Entscheidungsmacht, Kommunikationsweg).
+- **Grenze zum Personenwissen:** Der Steckbrief hält kein Psychogramm. **Arbeitsrelevantes Beziehungswissen** (wie jemand entscheidet, was ihn überzeugt, welche Themen heikel sind) ist legitim — sein Ort ist die `memory.md` des Ankers, als Urteil aus der Zusammenarbeit. Nicht legitim, in keinem Artefakt: Charakter-Dossiers und Bewertungen der Person jenseits der Arbeitsbeziehung.
 
 ### Disziplin-Schnitt
 
-**Raus aus `context.md`** (gehört woanders hin oder nirgends):
-- Chronologien / Zeitachsen → `log.md` / `memory.md`
-- Urteile, „Erkenntnisse", strategische Einordnungen → `memory.md`
-- Erledigt-Marker, abgehakte/abgeschlossene Tasks → `log.md` (als Faktum) bzw. ersatzlos
-- To-do-Mechanik mit Status-Tracking → nur „offene Punkte" bleiben, kein Status-Pingpong
+**Raus aus `context.md`:** Chronologien/Zeitachsen → `log.md`/`memory.md` · Urteile, Erkenntnisse, strategische Einordnungen → `memory.md` · Erledigt-Marker → `log.md` (als Faktum) bzw. ersatzlos · To-do-Mechanik mit Status-Tracking → nur offene Punkte bleiben · Betriebs-/Bedienungswissen → `infra.md` (§3).
 
-**Rein in `context.md`** (Reifegrad-Marker der guten Dateien):
-- Sicherheitsgrade `[BELEGT]` / `[ANNAHME]` / `[WEB]` / `[PITCH]`
-- Widerspruch-Marker `<!-- Widerspruch: Quelle A sagt X, Quelle B sagt Y -->`
+**Rein in `context.md`:** Sicherheitsgrade **`[BELEGT]` / `[ANNAHME]`** (genau diese zwei; freie Begründungszusätze wie `[ANNAHME — Quelle X]` sind erlaubt) · Widerspruch-Marker `<!-- Widerspruch: Quelle A sagt X, Quelle B sagt Y -->` · offene Fragen als `<!-- Offen: … -->`.
 
 ### Größen-Heuristik (weiche Regel)
 
-Eine `context.md` jenseits **~20 KB** (Faustregel, justierbar; Empirie 07/2026: gesundes Feld endet bei ~20 KB, der entgleiste Referenzfall lag bei 40 KB) ist ein Prüfsignal, kein Urteil — meist ist dann etwas als „Kontext" festgehalten, was ein anderes Artefakt sein will. Diagnose-Fächer: eingesickerte Chronologien/Urteile (→ Disziplin-Schnitt, memory/log) · Register-Fall (→ operatives Register, §5) · eigenständiger Fach-Block (→ Fach-Artefakt + Pointer, Muster `bewerbungsformate.md`) · legitim groß (→ belassen). **Hart messen, weich handeln:** Gemessen wird mechanisch im `remember`-Bottom-up-Schritt; bei Überschreitung wird der Befund vorgelegt, nie autonom umgebaut. Geduldete Genre-Fremdkörper (private Personen- und Themen-Dossiers) und Register-Artefakte sind ausgenommen.
+Eine `context.md` jenseits **~20 KB** ist ein Prüfsignal, kein Urteil. Diagnose-Fächer: eingesickerte Chronologien/Urteile (→ Disziplin-Schnitt) · Register-Fall (→ §5) · eigenständiger Fach-Block (→ Fach-Artefakt + Pointer) · legitim groß (→ belassen). **Hart messen, weich handeln:** Gemessen wird mechanisch im `remember`-Bottom-up-Schritt; bei Überschreitung wird der Befund vorgelegt, nie autonom umgebaut. Geduldete Genre-Fremdkörper (private Dossiers) und Register-Artefakte sind ausgenommen.
 
-**Auslagerungs-Protokoll (Vollzug des Falls „Fach-Block"):** Bestätigt der User den Befund, ist der Vollzug `contextify`-Arbeit (context.md-Pflege) — im selben Durchlauf, egal aus welchem Skill der Befund kam; ein Befund ohne definierten Vollzugsweg verpufft im Chat. Regeln:
-1. **Verlustfreier Schnitt** — der Block wandert vollständig in ein Fach-Artefakt neben der `context.md` derselben Ebene (Frontmatter, H1, ein Framing-Satz); beim Umzug wird nicht mitverdichtet — Verdichtung wäre ein eigener, sichtbarer Schritt.
-2. **Pointer-Rückstand** — in der `context.md` bleibt ein Pointer mit einem Satz Substanz (was dort liegt, ggf. Stand); sie bleibt eigenständig lesbar. Referenzmuster: `bewerbungsformate.md`, `duesseldry/datenschutz.md`.
-3. **Ausweis** — der Umzug steht im contextify-log (chars vorher → nachher belegen die Entlastung) und im Bestätigungsblock.
+**Auslagerungs-Protokoll (Fach-Block):** Bestätigt der User den Befund, ist der Vollzug `contextify`-Arbeit im selben Durchlauf: (1) **Verlustfreier Schnitt** in ein Fach-Artefakt neben der `context.md` derselben Ebene (Frontmatter, H1, Framing-Satz; keine Mitverdichtung) · (2) **Pointer-Rückstand** mit einem Satz Substanz · (3) **Ausweis** im Bestätigungsblock (chars vorher → nachher). Referenzmuster: `bewerbungsformate.md`, `duesseldry/datenschutz.md`.
 
-## 3. Die drei Artefakte — Rollen & Asymmetrie
+## 3. Die Artefakte — Rollen, Formate, Kreisläufe
 
-Die heutige Formel „context = Zustände / memory = Übergänge" leckt, weil sie zwei Hälften *derselben* Daten suggeriert. Korrekt sind **drei verschiedene Fragen**:
+Drei Wissensartefakte, drei verschiedene Fragen:
 
-- **`context.md` = „was gilt jetzt".** Das integrierte, aktuelle Bild. **Vernichtet** Historie bewusst (alte Rolle wird überschrieben). Lebendig, kontinuierlich an die Wahrheit abgeglichen.
-- **`memory.md` = „was sich geändert hat und warum".** Der Urteils- und Begründungspfad, den man aus dem aktuellen Bild *nicht* rekonstruieren kann. **Bewahrt** Historie mit Wertung.
-- **`log.md` = Ereignisstrom.** Roh, session-nah, append-only. Speist `memory.md`.
+- **`context.md` = „was gilt jetzt".** Das integrierte, aktuelle Bild. **Vernichtet** Historie bewusst.
+- **`memory.md` = „was sich geändert hat und warum".** Der Urteils- und Begründungspfad. **Bewahrt** Historie mit Wertung.
+- **`log.md` = Ereignisstrom.** Session-nah, speist `memory.md`.
 
-**Die Asymmetrie ist der Kern:**
-- **State komponiert abwärts** (context): Fakten verengen sich von L1 → L4.
-- **Judgment integriert aufwärts** (memory): Urteile entstehen aus dem Zusammenführen *über* Projekte hinweg und kristallisieren eine Ebene höher. Sie bauen *nicht* additiv aufeinander auf wie context — sie verschmelzen.
+**Die Asymmetrie ist der Kern:** State komponiert abwärts (context verengt von der Wurzel zu den Knoten); **Judgment integriert aufwärts** (memory: Urteile entstehen aus dem Zusammenführen *über* Projekte hinweg und kristallisieren am Anker — sie verschmelzen, statt additiv zu stapeln).
 
-Empirie (Referenz-Implementierung, Beratungs-Workspace): Die „Strategische Positionierung" der Stakeholder-`memory.md` verwebt fünf Projekt- und Themenstränge zu *einem* Narrativ; ein Mandat starb an einer Budgetkürzung auf Konzernebene (Stakeholder-Fakt killt Projekt); ein im Projekt entstandenes Framework „trägt über den Kunden hinaus". Das Urteil lebt an den Nähten *zwischen* Projekten — Projekt-Silos zerschnitten genau dieses Bindegewebe.
+### Formate (normativ)
+
+- **`log.md`:** Header `# Log — {Name}`, dann ein YAML-Block mit Einträgen `- date: / event: / body: / artifacts:` — **neueste oben**. Keine Datei-Frontmatter (per Eintrag datiert). **Einziger Schreiber ist `/remember`**: Sessions editieren das Log nie direkt; die Verdichtung überführt ältere Einträge in die memory und entfernt sie aus dem Log. („Append-only" meint genau das — kein manuelles Editieren; es verbietet nicht die Verdichtung.) Führen mehrere Personen Einträge in denselben Ast, trägt der Eintrag ein `autor:`-Feld; bei einer Person entfällt es.
+- **`memory.md`:** Prosa-Markdown mit Frontmatter, **thematische Abschnitte** — die Struktur folgt dem Inhalt, nicht dem Kalender. **Verschmelzungsregel:** Die Verdichtung integriert in bestehende Abschnitte, statt datierte Abschnitte anzuhängen — eine memory, die wie ein zweites Log aussieht (chronologische Anhänge), ist das Signal, dass die zweite Verdichtungsstufe fällig ist. Leserichtung folgt der Kausalität (Grundlegendes zuerst); memory wird ganz gelesen, nicht vom Ende.
+- **Zwei Verdichtungsstufen:** Session → Log (Eintrag) · Log → Memory (Verdichtung, entfernt Quell-Einträge). Die dritte Bewegung ist die Verschmelzung *innerhalb* der memory (Abschnitte konsolidieren) — sie ist Teil der Verdichtung, keine eigene Stufe.
 
 ### temp.md — das flüchtige Arbeitsblatt
 
-Viertes Standard-Muster neben den drei Wissensartefakten — bewusst **kein** Wissensartefakt: `temp.md` hält Arbeitszustand, kein Wissen. Zweck: Zwischenablage und Dialog-Arbeitsfläche — Copy-Paste-Eingang, gemeinsames Arbeiten und Kommentieren an einem Markdown im Session-Dialog. Entsteht ad hoc dort, wo die Session arbeitet (jede Ebene; per Anweisung auch anderswo); der eine etablierte Name beugt Scratch-Wildwuchs vor.
+Bewusst **kein** Wissensartefakt: hält Arbeitszustand. Zwischenablage und Dialog-Arbeitsfläche; entsteht ad hoc auf jeder Ebene. **Flüchtig per Definition** (Inhalt wird überschrieben; ein `temp.md` pro Ebene; Instanzen unabhängig) · **Ernte vor Überschreiben** (Erhaltenswertes vorher in ein dauerhaftes Artefakt routen — Session-Arbeit im Dialog, kein Skill-Automatismus; der `/remember`-Durchlauf *fragt* nach ungeernteter temp, §8) · **nie Pointer-Ziel** · **Skills lassen es liegen** · Frontmatter wie üblich. Namens-Konvergenz: genau `temp.md`; Abweichler beim Anfassen umbenennen.
 
-- **Flüchtig per Definition:** Der Inhalt wird beim nächsten Bedarf überschrieben — ein `temp.md` pro Ebene genügt. Instanzen auf verschiedenen Ebenen sind unabhängig (keine Varianten, keine Dups).
-- **Ernte vor Überschreiben:** Inhalt, der bleiben soll, wird vorher in ein dauerhaftes Artefakt geroutet (context/memory/log/Fach-Artefakt). Die Ernte ist Session-Arbeit im Dialog, kein Skill-Automatismus.
-- **Nie stabiles Pointer-Ziel:** `context.md`/`memory.md` verweisen nie auf `temp.md`; in `log.md` allenfalls als historischer Vermerk mit Flüchtigkeits-Kennzeichnung.
-- **Skills lassen es liegen:** `cleanup` archiviert, verschiebt oder benennt `temp.md` nie um; offensichtlich Erntenswertes wird als Content-Punkt vorgelegt. Frontmatter wie üblich (`updated` zeigt die Frische des Inhalts).
-- **Namens-Konvergenz:** genau `temp.md`; Abweichler (`input_temp.md` u.ä.) werden opportunistisch beim Anfassen umbenannt — kein Massen-Retrofit.
+### infra.md — die Betriebs-Referenz
 
-### infra.md — die Betriebs-Referenz (benanntes Fach-Artefakt, seit 05.08.)
+Das benannte Muster für Wissen über die *Bedienung von Systemen und Werkzeugen* — APIs, CLIs, Zugriffswege, Eigenheiten, Fehlerbilder samt Fix. Abgrenzung: `context.md` hält den Zustand der **Arbeit**, `infra.md` die Bedienung der **Werkzeuge**, `memory.md` die Urteile.
 
-Kein fünftes Standard-Artefakt, sondern das **benannte Muster** für einen wiederkehrenden Fach-Block: Wissen über die *Bedienung von Systemen* — APIs, CLIs, MCP-Server, Zugriffs-Wege, Eigenheiten, Fehlerbilder samt Fix. Die Abgrenzung trägt das Genre: `context.md` hält den Zustand der **Arbeit**, `infra.md` die Bedienung der **Werkzeuge**; Übergänge und Urteile bleiben in `memory.md`. Ohne benannten Ort weicht dieses Wissen erfahrungsgemäß in Flüchtiges aus (Chat, Scratch-Notizen) — genau das Wissen, das Betriebs-Stabilität tragen soll.
+- **Zwei Sorten, zwei Orte:** *Dienst-Infra* (Systeme einer Domäne — deren ERP-API, die Firmen-Postfächer, ein eigener Bot) → `infra.md` neben der `context.md` der Ebene, zu der das System gehört. *Maschinen-Infra* (der Rechner: Tools, MCP, Pfade) → **`~/.claude/reference/infra.md`**, außerhalb des Workspace — gerätegebunden, wandert nicht über Sync.
+- **Kreislauf** (die drei Momente): *Lesen* — on-demand, nie vorladen; der Session-Start **registriert** beim Pfad-Scan, welche `infra.md` existieren (CLAUDE.md-Regel), und Anker-Steckbriefe halten den Pointer. *Schreiben* — die **`/remember`-Weiche**: Betriebslektionen einer Session gehören in die infra der betroffenen Ebene, nicht in log/memory (§8). *Hygiene* — Einträge mit Verfallsbedingung („Flag kann raus, sobald …") werden im `/remember`-Durchlauf der Ebene bei Gelegenheit geprüft.
+- **Secrets-Grenze (hart):** Schlüssel, Tokens, Passwörter, Schlüsseldateien (.pfx/.pem/.p12) stehen **nie** in `infra.md` oder anderen Workspace-Dateien. Einziger Ort ist ein Vault (Passwort-Manager mit CLI, sonst OS-Schlüsselbund); `infra.md` hält den *Verweis* (Vault, Eintragsname, Zugriffs-Kommando). Zur Laufzeit aus dem Vault in die Session-Umgebung, nie in Dateien materialisiert; Klartext-`.env` ist kein Fallback. **Mess-Moment:** Der `cleanup`-Inventar-Schritt scannt auf Secret-Muster (§8) — Empirie 08/2026: Ohne Scan lagen Klartext-Passwörter monatelang im Sync-Pfad.
 
-- **Zwei Sorten, zwei Orte:** *Dienst-Infra* (das System einer Domäne — deren ERP-API, ein eigener Bot) → `infra.md` neben der `context.md` der Ebene, zu der das System gehört. *Maschinen-Infra* (der Rechner: Tools, MCP-Konfiguration, Pfade) → `~/.claude/infra.md`, außerhalb des Workspace — sie gehört zum Gerät und wandert nicht über Sync mit.
-- **Lese-/Schreib-Disziplin:** on-demand lesen (nicht im Session-Start vorladen); verifizierte neue Erkenntnis sofort nachtragen. Entsteht nur, wo tatsächlich gegen Systeme gearbeitet wird — kein präventives Anlegen auf jeder Ebene.
-- **Secrets-Grenze (hart):** Schlüssel, Tokens, Passwörter stehen **nie** in `infra.md` oder anderen Workspace-Dateien. Ihr einziger Ort ist ein Vault — Passwort-Manager mit CLI, sonst der OS-Schlüsselbund (macOS Keychain · Windows Credential Manager/DPAPI). `infra.md` hält den *Verweis*: Vault, Eintragsname, Zugriffs-Kommando. Zur Laufzeit wird aus dem Vault in die Session-Umgebung geladen, nicht in Dateien materialisiert; eine Klartext-`.env` im Workspace ist kein legitimer Fallback.
+### Werkzeuge — ausführbare Artefakte einer Ebene
 
-## 4. Artefakt-Verteilung über die Ebenen
+Wiederverwendbarer eigener Code, der zu einer Domäne gehört (Bau-Skripte, ein CI-Layout-Gerüst, Automatisierungen), lebt **neben der `context.md` der Ebene, zu der er gehört** — bei Nutzung über mehrere Projekte auf dem untersten gemeinsamen Vorfahren (Anker). Die `infra.md` derselben Ebene hält je Werkzeug die Bedien-Zeile (wann benutzen, was man leicht falsch macht); der Code selbst dokumentiert das Wie. Werkzeuge sind keine Kontext-Artefakte — sie werden nie vorgeladen und folgen keiner Frontmatter-Pflicht. Ein Designsystem entsteht aus dem zweiten Anwendungsfall, nicht aus dem ersten: erst beim zweiten Bau wird getrennt, was Ebene (Marke) und was Anlass (das eine Deck) war.
 
-- **`context.md`: auf jeder Ebene (L1–L4).** Additiv.
-- **`memory.md` + `log.md`: per Default auf Stakeholder-Ebene (L2).** Projekt-Ebene (L3) ist eine **Earn-it-Ausnahme** (Kriterien s. §6). log und memory splitten **gemeinsam** — dieselbe Integrations-Grenze.
-- L1 trägt allenfalls eine schlanke memory; L4 nie.
+### Binär- und Bildmaterial
 
-Begründung aus den Daten: Die per-Projekt-`log.md` der Referenz-Implementierung (drei Projekte) sind winzig (538 B – 1,5 KB) und früh eingefroren, während Stakeholder-`memory.md` (14 KB) und `log.md` (11 KB) monatelang weiterleben. Die Schwerkraft zieht nach oben — und das ist gesund.
+Rohmaterial (Bilder, Videos, große Assets) ist kein Kontext-Artefakt: Es liegt in einem benannten Ordner der Ebene (z.B. `bildmaterial/`, `assets/`) — **außerhalb von Repos**, wenn nur Ergebnisse geteilt werden (Empirie: Kurs-Bildmaterial); ein `README.md` im Ordner trägt die Bau-Regeln. Schlüssel- und Zertifikatsdateien sind nie „Assets" — Secrets-Grenze.
 
-**Tokenökonomie:** Der Spar-Einwand gegen große Stakeholder-memory ist real, aber (a) das „irrelevante" Drittel ist oft der strategische Rahmen für das aktuelle Projekt, und (b) die Lösung bei echtem Überlauf ist **Sektionierung + Verdichtung innerhalb** der Stakeholder-memory (nach Thema), nicht Datei-Fragmentierung nach Projekt.
+## 4. Artefakt-Verteilung über die Rollen
+
+- **`context.md`: auf jedem Rollen-Träger.** Additiv, beliebig tief.
+- **`memory.md` + `log.md`: per Default am Anker.** Tiefere Knoten sind eine **Earn-it-Ausnahme** (§6); log und memory splitten **gemeinsam**. Die Wurzel führt keine memory — Urteile kristallisieren an den Ankern.
+- Begründung aus den Daten: per-Projekt-Logs sind typischerweise winzig und früh eingefroren, während Anker-memory und -log monatelang weiterleben. Die Schwerkraft zieht nach oben — das ist gesund.
+- **Tokenökonomie:** Der Spar-Einwand gegen große Anker-memory ist real, aber (a) das „irrelevante" Drittel ist oft der strategische Rahmen des aktuellen Projekts, und (b) die Lösung bei echtem Überlauf ist die Verschmelzung innerhalb (§3) oder — wenn die Split-Kriterien tragen — der Split, nicht Datei-Fragmentierung auf Verdacht.
 
 ## 5. Task-Lebenslauf
 
-context.md ist der Kern des PMO. Ein Task wandert über die drei Artefakte, statt als totes Gewicht zu verrotten:
+`context.md` ist der Kern des PMO. Ein Task wandert:
 
 ```
-Task entsteht        → context.md §4 "Offene Punkte"      [offene Verpflichtung = aktueller Zustand]
-Task läuft           → bleibt in context.md, wird fortgeschrieben  [lebendiges Scaffolding]
-Task erledigt        → (a) raus aus context.md            [Scaffolding gelöscht — kein Verlust]
-                       (b) log.md: "TT.MM. X getan/übergeben"   [das Faktum bleibt auffindbar]
-                       (c) falls Urteil dranhängt: memory.md
+Task entsteht   → context.md §5 „Offene Punkte"   [offene Verpflichtung = Zustand]
+Task läuft      → bleibt dort, wird fortgeschrieben
+Task erledigt   → (a) raus aus context.md          [Scaffolding gelöscht — kein Verlust]
+                  (b) Faktum → log.md               [als Satz im Body des Session-Eintrags,
+                                                     kein eigener Log-Eintrag]
+                  (c) falls Urteil dranhängt → memory.md
+                  (d) falls betrieblich referenzpflichtig → Register-Artefakt
 ```
 
-Drei Dinge, die nicht zu verschmelzen sind: das **Arbeits-Scaffolding** (lebt in context solange offen, wird beim Schließen gelöscht — sein einziger Zweck war die Erledigung), das **Faktum** (→ log, die 6-Monats-Erinnerung), das **Urteil** (→ memory).
+**Triage** (in `remember` kodiert, vier Ausgänge): prunen (trivial, ersatzlos) · Faktum-Zeile im Session-Eintrag (6-Monats-Frage) · memory-Urteil · **Register**. Das Register-Genre: Vorgänge, die abgeschlossen, aber referenzpflichtig bleiben (erledigt ≠ irrelevant — z.B. Bewerbungen unter Dedup-Pflicht), leben in einem eigenen Register-Artefakt neben der `context.md` (darf append-only wachsen); die `context.md` hält den Pointer, `memory.md` die Muster. Referenzfall: `consulting_portale/bewerbungen.md`.
 
-**Auslöser + Triage** (in `remember` kodiert): Task-Schluss feuert „prune aus context + (falls relevant) log-Zeile". Triviale Erledigungen werden nur geprunt, ersatzlos. Triage-Schwelle = „will ich das in 6 Monaten noch erinnern?".
-
-**Ausnahme — operatives Register:** Vorgänge, die abgeschlossen, aber betrieblich referenzpflichtig bleiben (erledigt ≠ irrelevant — z.B. Bewerbungen unter Portal-Doppel-Erkennung), folgen dem Task-Lebenslauf nicht. Sie leben in einem eigenen **Register-Artefakt** neben der `context.md` (Dossier-Genre, darf append-only wachsen); die `context.md` hält nur den Pointer, `memory.md` die Muster. Referenzfall: `consulting_portale/bewerbungen.md` — ohne dieses Genre wuchs der Tracker in der context.md auf 40 KB, weil abgeschlossene Vorgänge dedup-relevant blieben und der Prune-Mechanismus nie greifen durfte.
-
-## 6. Split-Entscheidung (memory/log L2 → L3)
+## 6. Split-Entscheidung (memory/log Anker → Knoten)
 
 **Wer/wann:** `remember`, im Bottom-up-Schritt — fester Prüfpunkt, nicht ad hoc.
 
-**Drei Bedingungen, alle drei nötig:**
-1. **Volumen** (mechanisch): Stakeholder-memory ist so groß, dass Mitlesen bei projektfremden Prompts spürbar Ballast ist, UND der Projekt-Strang ist ein großer, klar abgrenzbarer Block.
-2. **Severabilität** (Urteil): memory-Einträge des Projekts zeigen nach *innen*, nicht seitwärts. Wenn ich beim Schreiben ständig Schwester-Projekte / Stakeholder-weite Fakten referenzieren muss → verschränkt → **kein** Split.
-3. **Eigenleben:** genug eigene Historie, dass eine separate Verdichtung Substanz hätte — keine *präventiven* Splits frischer Projekte.
+**Drei Bedingungen, alle nötig:** (1) **Volumen** — Anker-memory so groß, dass Mitlesen bei fremden Prompts spürbar Ballast ist, UND der Projekt-Strang ist ein großer, klar abgrenzbarer Block (Faustregel-Auslöser: memory > ~15 KB und ein Projekt ≳ ⅓) · (2) **Severabilität** — die Projekt-Einträge zeigen nach innen, nicht seitwärts · (3) **Eigenleben** — genug eigene Historie für separate Verdichtung; keine präventiven Splits.
 
-**Protokoll:**
-- **Default = nicht splitten.** Asymmetrische Kosten: Aufschieben billig, Zusammenführen teuer, verfrühter Split zerschneidet Bindegewebe.
-- **Klarer Fall** (alle drei deutlich, keine Quer-Referenzen) → autonom ausführen + im `/remember`-Bestätigungsblock melden.
-- **Grenzfall** (groß aber verschränkt / unabhängig aber dünn) → vorlegen.
+**Protokoll:** Default = nicht splitten (Aufschieben billig, Zusammenführen teuer). Klarer Fall → autonom ausführen + melden; Grenzfall → vorlegen. **Marker-Pflicht:** Der Vollzug hinterlässt im Kopf des Anker-Logs die Zeile „*Split-Hinweis: `{Projekt}` führt eigenes Log + Memory (Split TT.MM.) — Projekt-Einträge gehören dorthin.*" — ein Split, der nur Dateisystem-Zustand ist, wird von späteren Sessions überschrieben. **Lese-Folge:** Die Session-Start-Regel lädt bei Split-Projekten deren memory zusätzlich zur Anker-memory (CLAUDE.md).
 
-## 7. Schicht-Modell: CLAUDE.md / L1 / Referenz
+## 7. Schicht-Modell: CLAUDE.md / Wurzel / Referenzen
 
-Aus dem ursprünglichen Aufschlag (imperativ vs. deskriptiv). Prinzip entschieden, Detail-Umsetzung nachgelagert:
-
-- **`CLAUDE.md` = imperative Regeln + Pointer.** Schlank. Behält: Rolle, Don'ts, Trust, Sprach-/Dokument-Konventionen, **Session-Start-Lade-Regel**. Verweist für Artefakt-Spezifikation hierher.
-- **Deskriptive Infra raus** (MCP-Tabelle, rclone, IPv6, Google-Workspace-Specifics) → eigene Referenz-Datei, on-demand gezogen statt in jeder Session geladen.
-- **Persona raus** → `/workspace/context.md` (L1). `CLAUDE.md` *pointet* darauf, hält sie nicht.
-- **Session-Start-Regel erweitern:** L1-`context.md` (Persona) wird relevant, sobald im Workspace gearbeitet wird; L2/L3-Laden wie gehabt nach CWD.
+- **`CLAUDE.md` = imperative Regeln + Pointer.** Schlank: Rolle, Don'ts, Trust, Sprach-/Dokument-Konventionen, **Session-Start-Lade-Regel** (context-Pfad + memory inkl. Split-Zweig + Log-Kopf + infra-Registrierung). Verweist für die Artefakt-Spezifikation hierher. CLAUDE.md ist das einzige Artefakt mit Ladegarantie — was zuverlässig passieren soll, muss dort oder in einem Skill-Flow verankert sein.
+- **Deskriptive Maschinen-Infra** → `~/.claude/reference/infra.md`, on-demand.
+- **Persona** → Wurzel-`context.md`; CLAUDE.md pointet darauf.
+- **Maschinen-Status (explizite Annahme):** Das System läuft derzeit auf **einer** Maschine; der frühere Workspace-Sync ist stillgelegt (08/2026). Multi-Maschinen-Betrieb braucht vor Reaktivierung eine Merge-Strategie — das Neueste-oben-Log kollidiert bei parallelem Schreiben strukturell an der obersten Zeile.
 
 ## 8. Skill-Konsequenzen
 
-### contextify — Umbau
+### contextify
 
-Von „transformiere beliebige Inputs in *ein* ideales Dokument" zu **„lege/pflege die `context.md` *dieser Ebene* gegen das Backbone-Schema an"**.
+„Lege/pflege die `context.md` *dieser Ebene* gegen das Backbone-Schema an." Kennt Backbone (§2) und Rollen (§1), instanziiert die rollen-spezifischen Steckbrief-Felder, erzwingt Personen-Block und Disziplin-Schnitt. Inputs beliebig; das Ziel ist immer eine schema-konforme `context.md`. **Kein contextify-log mehr:** Der Nachweis eines Laufs ist der Bestätigungsblock (chars vorher → nachher bei Auslagerungen); die HTML-Kommentar-Telemetrie am Dateiende ist abgeschafft — Bestands-Blöcke werden beim Anfassen entfernt. Das eingebettete Backbone im Skill trägt den Spiegel-Vermerk (Master: §2).
 
-- **Behält** seine Prinzipien als das *Wie* der Befüllung: semantische Kompression, Implizites explizieren, Widerspruch-Marker, Quellen-Vollständigkeitsprüfung, kein Informationsverlust.
-- **Neu:** kennt das Backbone (§2), erkennt die Ebene aus dem Pfad (L1–L4), instanziiert die ebenen-spezifischen Steckbrief-Felder, erzwingt den Personen-Block und den Disziplin-Schnitt (schiebt Chronologien/Urteile raus statt sie aufzunehmen).
-- Inputs bleiben beliebig (Calls, PDFs, Notizen) — das *Ziel* ist immer eine schema-konforme `context.md`.
+### remember
 
-### remember — Erweiterung
+Zwei Verdichtungsstufen + Bottom-up-Abgleich. Die Prüf- und Schreibpunkte:
 
-Kern (Drei-Stufen-Verdichtung, Bottom-up-Abgleich) bleibt; vier Ergänzungen:
+1. **Split-Probe** (mechanisch, Pflicht) und **Mess-Pflicht** (Log-Stand erheben, Pflichtzeile im Bestätigungsblock).
+2. **Task-Closure** mit Vier-Wege-Triage (§5, inkl. Register-Zweig).
+3. **infra-Weiche:** Betriebslektionen der Session (Werkzeug-Eigenheit, Fehlerbild + Fix, System-Bedienung) werden in die `infra.md` der betroffenen Ebene geschrieben, nicht in den Log-Eintrag; der Log-Eintrag referenziert allenfalls. Ausweis im Bestätigungsblock. Bei der Gelegenheit: infra-Verfallsbedingungen der Ebene prüfen.
+4. **Verschmelzungsregel memory** (§3): in bestehende thematische Abschnitte integrieren; chronologische Anhänge sind das Signal zur Konsolidierung.
+5. **Split-Kriterien** (§6) als fester Prüfpunkt; **Größen-Heuristik context.md** (§2) messen und ggf. vorlegen.
+6. **temp-Erinnerung:** Führt die Ebene eine `temp.md` mit ungeerntetem Inhalt (updated jünger als der letzte Log-Eintrag), wird im Bestätigungsblock daran erinnert — geerntet wird im Dialog.
+7. **Pointer-Pflege:** Entsteht im Durchlauf ein neues Artefakt (infra, Register, Fach-Artefakt), wird der Pointer der Ebene (Steckbrief bzw. Lage) im selben Durchlauf gesetzt.
 
-1. **Task-Closure modellieren:** beim Erledigen prune aus `context.md` §4 + (falls relevant) log-Zeile + ggf. memory-Urteil.
-2. **Split-Kriterien kodieren** (§6) als fester Prüfpunkt im Bottom-up-Schritt.
-3. **Neues `context.md`-Schema kennen**, damit der Bottom-up-Abgleich (Korrektur veralteter context-Stellen) das Backbone respektiert.
-4. **Default memory/log auf L2** (statt der bisherigen impliziten Projekt-Ebene); Projekt-Ebene nur per Earn-it.
+### cleanup
 
-### cleanup — Komposition
+Kompositions-Schicht über `contextify`: gewachsene Teilbäume in die Logik überführen. Sicherheits-Prinzipien: Plan-dann-Bestätigen · `mv` statt `rm`, löschen nur autorisiert · Varianten flaggen · Pointer-Reconcile ist Pflicht · Repos atomar, Symlink-Ziele nie verschieben. Zwei Pflicht-Erweiterungen: **Secrets-Scan im Inventar-Schritt** (Muster: Passwort-/Token-Zuweisungen, `BEGIN … PRIVATE KEY`, Dateitypen .pfx/.pem/.p12/.key; Befund — auch „keiner" — ist Pflichtbestandteil des Dispositions-Plans) und die Kategorie **Assets/Binärmaterial** (benannter Ordner + README statt lose Dateien; Secret-Träger nie als Asset klassifizieren).
 
-`cleanup` ist die **Kompositions-Schicht über `contextify`**: es überführt einen ganzen *gewachsenen* Teilbaum in die Logik — Projekte erkennen, L3-Contexts anlegen, lose Dateien einsortieren, die übergeordnete `context.md` zum Index reconcilen, Quer-Liegendes flaggen.
+### Geteilte Regeln
 
-- **Scope aus dem Pfad** (wie `contextify`): `/cleanup {pfad}` → L1 (ganzer Workspace, Stakeholder-für-Stakeholder) / L2 (Stakeholder) / L3 (ein Projekt). Kein Pfad → nachfragen.
-- **Geschwister über geteilter Spec, keine harte Kopplung:** `cleanup` und `contextify` lesen das Backbone beide aus diesem Dokument + `template_context.md`. `cleanup` bettet das Backbone **nicht** neu ein (sonst Re-Duplikation). Safety-Check = *Spec erreichbar*, nicht „`contextify` installiert". Fehlt die Spec → Abbruch des Kontext-Schritts (Tidy/Flags laufen trotzdem).
-- **Sicherheits-Prinzipien:** Plan-dann-Bestätigen (nie blind); `mv` statt `rm`, löschen nur autorisiert, Zweifel → `archive/`; Varianten flaggen statt entscheiden; **Pointer-Reconcile ist Pflicht** (Moves erzeugen eine Pointer-Kaskade in context/memory/log).
-- **Repos & Symlinks:** `.git`-Verzeichnisse und Symlinks werden im Inventar mechanisch erhoben (Mess-Pflicht), der Befund — auch „keine" — im Dispositions-Plan ausgewiesen. Ein Repo ist eine **atomare Einheit**: als Ganzes klassifizieren (i.d.R. Bestandteil eines Projekts), nie intern umsortieren — kein `mv` hinein oder heraus, kein `archive/` im Repo, keine Löschungen; die innere Struktur gehört dem Repo (eigene Konventionen, `git mv`, Commits). Kontext-Artefakte leben per Default außerhalb des Repos auf der Ebenen-Wurzel; Ausnahme ist das Master-Muster (Repo hält den Master, der Workspace Symlinks — Vorbild Kurs-Repo). Symlink-Ziele nie verschieben (bricht den Link) → flaggen. Ändert der Kontext-Schritt doch eine Datei innerhalb eines Repos (z.B. Pointer-Reconcile), wird der entstandene dirty Zustand im Bestätigungsblock ausgewiesen; das Committen bleibt beim User.
-- **Arbeitsteilung:** `cleanup` fasst memory/log nur *strukturell* an (Split-Ebene, verkümmerte Logs nach Autorisierung); die inhaltliche Verdichtung bleibt `remember`.
+- Skills lesen Backbone und Kriterien aus dieser Spec + `template_context.md`; gespiegelte Passagen tragen den Spiegel-Vermerk.
+- Frontmatter-Konvention (`created`/`updated`) setzen alle Skills um; `log.md` ist ausgenommen (per Eintrag datiert).

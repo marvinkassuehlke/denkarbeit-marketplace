@@ -5,15 +5,15 @@ description: Use when creating or maintaining a `context.md` — the workspace s
 
 ## Zweck
 
-Lege die `context.md` einer Workspace-Ebene an oder pflege sie — gegen das feste Backbone des Kontext-Systems (`../../context_system/design.md`). Inputs sind beliebig (Calls, PDFs, Notizen, Briefings, Inline-Text); das *Ziel* ist immer eine schema-konforme `context.md` an einem `/workspace`-Pfad. Nicht kürzen — in die Idealform der jeweiligen Ebene überführen: semantische Kompression mit Strukturierung. Jeder Token verdient seinen Platz, aber Telegrammstil ist kein Ideal — vollständige, knappe Sätze schlagen reine Stichworte.
+Lege die `context.md` einer Workspace-Ebene an oder pflege sie — gegen das feste Backbone des Kontext-Systems (`/workspace/strgaGmbH/denkarbeit_onlinekurs/context_system/design.md`). Inputs sind beliebig (Calls, PDFs, Notizen, Briefings, Inline-Text); das *Ziel* ist immer eine schema-konforme `context.md` an einem `/workspace`-Pfad. Nicht kürzen — in die Idealform der jeweiligen Ebene überführen: semantische Kompression mit Strukturierung. Jeder Token verdient seinen Platz, aber Telegrammstil ist kein Ideal — vollständige, knappe Sätze schlagen reine Stichworte.
 
 `context.md` hält **was jetzt gilt** (Zustand). Übergänge, Urteile, Chronologien gehören nicht hierher (siehe Disziplin-Schnitt) — dafür sind `memory.md`/`log.md` da (`/remember`).
 
 ## Backbone (Pflichtstruktur)
 
-Jede `context.md` hat fünf Top-Level-Sektionen in dieser Reihenfolge. Skelett: `../../context_system/template_context.md`.
+Jede `context.md` hat fünf Top-Level-Sektionen in dieser Reihenfolge. Skelett: `/workspace/strgaGmbH/denkarbeit_onlinekurs/context_system/template_context.md`. (Spiegelt design.md §2 — Änderungen dort zuerst.)
 
-1. **Steckbrief** (Pflicht) — Kopf: ein Framing-Satz unter der H1 + `Stand: JJJJ-MM-TT`, dann ebenen-spezifische Felder (s.u.).
+1. **Steckbrief** (Pflicht) — Kopf: ein Framing-Satz unter der H1, dann ebenen-spezifische Felder (s.u.). Datierung ausschließlich über die Frontmatter — keine `Stand:`-Zeile; Bestands-Zeilen beim Anfassen entfernen.
 2. **Motivation** (Pflicht) — warum existiert das für mich, mein Einsatz, Verortung. Orientierung („worum geht es hier"), **nicht** Verhaltenssteuerung, **kein** Psychogramm.
 3. **Lage** (nach Bedarf) — der Wissenskörper. **Frei untergliederbar** (eigene `##`/`###`). Hier lebt die inhaltliche Vielfalt: Org, Markt, Technik, Beziehungsstand.
 4. **Richtung** (optional) — Zielbild / woran gearbeitet wird, als *Zustand*, nicht als To-do-Liste.
@@ -56,7 +56,7 @@ Die Pfadtiefe ist Heuristik, keine Semantik: Zwischenordner (Programm-Ebenen, Sa
 
 9. **Output schreiben.** Schreibe die `context.md` an den Zielpfad, inklusive YAML-Frontmatter (`created`/`updated`) gemäß Dokument-Frontmatter-Konvention.
 
-10. **Log-Eintrag anhängen.** Füge einen contextify-log-Eintrag am Dateiende an (siehe Log-Konvention). Liegt der Output über ~20 KB: Größen-Heuristik-Befund im Bestätigungs-Output vorlegen (Diagnose-Fächer in Spec §2 — eingesickerte Chronologien/Urteile, Register-Fall, Fach-Block oder legitim groß), nicht autonom auslagern. Bestätigt der User eine Auslagerung, vollziehe sie nach dem **Auslagerungs-Protokoll** (Spec §2): verlustfreier Schnitt in ein Fach-Artefakt neben der `context.md` (Frontmatter, H1, Framing-Satz; keine Mitverdichtung), Pointer-Rückstand mit einem Satz Substanz, Ausweis im Log und Bestätigungs-Output.
+10. **Bestätigungs-Ausweis.** Nenne im Bestätigungs-Output Modus, Quellen und Zeichenumfang vorher → nachher (kein Log-Kommentar in der Datei — die contextify-log-Telemetrie ist abgeschafft; Bestands-Blöcke beim Anfassen entfernen). Liegt der Output über ~20 KB: Größen-Heuristik-Befund vorlegen (Diagnose-Fächer in Spec §2 — eingesickerte Chronologien/Urteile, Register-Fall, Fach-Block oder legitim groß), nicht autonom auslagern. Bestätigt der User eine Auslagerung, vollziehe sie nach dem **Auslagerungs-Protokoll** (Spec §2): verlustfreier Schnitt in ein Fach-Artefakt neben der `context.md` (Frontmatter, H1, Framing-Satz; keine Mitverdichtung), Pointer-Rückstand mit einem Satz Substanz, Ausweis im Bestätigungs-Output.
 
 ## Prinzipien
 
@@ -73,10 +73,9 @@ Diese Prinzipien sind das *Wie* der Befüllung des Backbones — sie ersetzen di
 ### Harte Gates
 
 - Bei unklarer Rahmung/Ebene: Rückfrage stellen, nicht raten.
-- Log-Kommentar am Dateiende — immer.
 - Erfinde keine Informationen, die nicht im Input stehen.
 - Bei Inputs, die das Context Window übersteigen: User informieren, Priorisierung erfragen, nie still abschneiden.
-- **Disziplin-Schnitt context.md:** Nicht hierher gehören — Chronologien/Zeitachsen, Urteile/Erkenntnisse, sowie *erledigte* Tasks samt ihrer Verlaufshistorie (Erledigt-Marker, offen→done-Ketten). Der aktuelle Stand eines *offenen* Punkts („wartet auf X", „Entwurf liegt vor") ist Zustand und bleibt. Begegnet Verlaufs-, Urteils- oder Erledigt-Material im Input → nach `memory.md`/`log.md` verweisen, nicht hier aufnehmen, knapp im Bestätigungs-Output vermerken. **Ausnahme operatives Register:** Abgeschlossenes, das betrieblich referenzpflichtig bleibt (z.B. ein Dedup-Register), gehört weder in die `context.md` noch ins Log, sondern in ein eigenes Register-Artefakt neben der `context.md` — die `context.md` hält nur den Pointer (Spec §5).
+- **Disziplin-Schnitt context.md:** Nicht hierher gehören — Chronologien/Zeitachsen, Urteile/Erkenntnisse, Betriebs-/Bedienungswissen über Systeme und Werkzeuge (→ `infra.md` der Ebene, Spec §3), sowie *erledigte* Tasks samt ihrer Verlaufshistorie (Erledigt-Marker, offen→done-Ketten). Der aktuelle Stand eines *offenen* Punkts („wartet auf X", „Entwurf liegt vor") ist Zustand und bleibt. Begegnet Verlaufs-, Urteils- oder Erledigt-Material im Input → nach `memory.md`/`log.md` verweisen, nicht hier aufnehmen, knapp im Bestätigungs-Output vermerken. **Ausnahme operatives Register:** Abgeschlossenes, das betrieblich referenzpflichtig bleibt (z.B. ein Dedup-Register), gehört weder in die `context.md` noch ins Log, sondern in ein eigenes Register-Artefakt neben der `context.md` — die `context.md` hält nur den Pointer (Spec §5).
 - **Opportunistische Migration:** Triffst du eine Bestands-`context.md` ohne Backbone, bring sie beim Anfassen auf die Struktur (kein separater Massen-Retrofit). Genre-Fremdkörper (reine Dossiers/Fallakten) nicht in die Form pressen.
 - **Personen-Block:** kein Psychogramm — nur sachliche Rolle, Zuständigkeit, Kommunikationsweg.
 
@@ -204,16 +203,3 @@ Ein Dokument enthält zwei Informationsschichten — z.B. ein OKR-Dokument mit Z
 
 **Das ist falsch.** Thematische Nähe ist nicht Redundanz. Zwei Informationsschichten im selben Dokument sind zwei Informationsschichten im Output. Die Quellen-Vollständigkeitsprüfung (Workflow Schritt 8) existiert genau für diesen Fall.
 
-## Log-Konvention
-
-Füge am Ende jedes Output-Dokuments einen Log-Eintrag als HTML-Kommentar an:
-
-```html
-<!-- contextify-log
-YYYY-MM-DD | modus: neu | source: briefing_adl.pdf | 12.400 → 3.200 chars
-YYYY-MM-DD | modus: erweitern | source: meeting_notes.md | 3.200 → 4.100 chars
-YYYY-MM-DD | modus: re-run | 4.100 → 3.950 chars
--->
-```
-
-Felder pro Eintrag: Datum, Modus (neu/erweitern/re-run), Source (kommasepariert bei mehreren Inputs), Zeichenanzahl vorher → nachher. Bei Modus "neu": vorher = Summe aller Input-Rohzeichen. Bei bestehendem Log: beibehalten und neue Zeile anfügen.

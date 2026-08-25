@@ -7,7 +7,7 @@ description: Use when bringing a grown, messy workspace area into the context-sy
 
 `cleanup` ist die **Kompositions-Schicht über `contextify`**. Wo `contextify` *eine* `context.md` pflegt, überführt `cleanup` einen ganzen *gewachsenen* Teilbaum in die Kontext-System-Logik: Projekte erkennen, L3-Contexts anlegen, lose Dateien einsortieren, die übergeordnete `context.md` zum Index reconcilen, Quer-Liegendes flaggen.
 
-`cleanup` erfindet das Backbone **nicht neu** — es liest die Spezifikation aus `../../context_system/design.md` und `template_context.md` (Single Source of Truth, geteilt mit `contextify`). Die beiden Skills sind Geschwister über derselben Spec, keine harte Skill-zu-Skill-Kopplung.
+`cleanup` erfindet das Backbone **nicht neu** — es liest die Spezifikation aus `/workspace/strgaGmbH/denkarbeit_onlinekurs/context_system/design.md` und `template_context.md` (Single Source of Truth, geteilt mit `contextify`). Die beiden Skills sind Geschwister über derselben Spec, keine harte Skill-zu-Skill-Kopplung.
 
 ## Scope bestimmen (Pflicht-Input)
 
@@ -35,13 +35,14 @@ Die Pfadtiefe ist Heuristik, keine Semantik (Erkennungskette in `design.md` §1)
 
 1. **Anker lesen.** L1 (`/workspace/context.md`) + die Ziel-`context.md` der Sweep-Ebene (bzw. anlegen, falls sie fehlt — via `contextify`-Logik). Das ist der Rahmen, der nach unten injiziert wird, damit L3-Contexts nicht duplizieren.
 
-2. **Inventarisieren.** Vollständiges Listing des Subtrees — Ordner **und** lose Dateien, alle Typen. **Mess-Pflicht Repos/Symlinks:** `.git`-Verzeichnisse und Symlinks mechanisch erheben (`find {pfad} -name .git`, `find {pfad} -type l`) — der Befund (auch „keine") ist Pflichtbestandteil des Dispositions-Plans; eine Prüfung ohne erhobenen Befund hat nicht stattgefunden.
+2. **Inventarisieren.** Vollständiges Listing des Subtrees — Ordner **und** lose Dateien, alle Typen. **Mess-Pflicht Repos/Symlinks:** `.git`-Verzeichnisse und Symlinks mechanisch erheben (`find {pfad} -name .git`, `find {pfad} -type l`) — der Befund (auch „keine") ist Pflichtbestandteil des Dispositions-Plans; eine Prüfung ohne erhobenen Befund hat nicht stattgefunden. **Mess-Pflicht Secrets:** den Subtree mechanisch auf Secret-Muster scannen — Passwort-/Token-Zuweisungen in Textdateien (`grep -riE 'passwor[dt]|passwd|secret|api[_-]?key|token' --include='*.md' --include='*.txt' --include='*.env*'`, Treffer einzeln sichten — 1Password-`op://`-Verweise sind konform, Klartext-Werte nicht), `BEGIN.*PRIVATE KEY`, sowie Schlüssel-Dateitypen (`find {pfad} -name '*.pfx' -o -name '*.pem' -o -name '*.p12' -o -name '*.key'`). Der Befund — auch „keiner" — ist Pflichtbestandteil des Dispositions-Plans; Fundstücke werden als **Secrets-Verstoß** geflaggt (Ziel: Vault + Verweis, Datei löschen nur mit Freigabe). Spec: design.md §3, Secrets-Grenze.
 
 3. **Klassifizieren** (der harte Kern — bei Ambiguität fragen). Je Ordner/Datei genau eine Kategorie:
    - **Projekt (L3)** — eigener Arbeitsgegenstand mit Substanz → bekommt `context.md`.
    - **Repo** — Ordner mit `.git`: atomare Einheit, als Ganzes einem Projekt zuordnen (oder selbst das Projekt); Innenleben nicht anfassen (Safety-Gate).
    - **temp.md** — flüchtiges Arbeitsblatt (Spec §3): bleibt liegen — nie archivieren, verschieben, umbenennen oder als Dup/Variante werten (Instanzen je Ebene sind unabhängig). Offensichtlich Erntenswertes als Content-Punkt vorlegen (Schritt 7), nicht selbst umrouten.
    - **Input/Support** (`transkripte/`, `customer_inputs/`, …) → behalten, **kein** Kontext.
+   - **Assets/Binärmaterial** (Bilder, Videos, Fonts, große Medien) → in einen benannten Ordner der Ebene (`bildmaterial/`, `assets/`) mit `README.md` für die Bau-Regeln; lose Binärdateien auf Ebenen-Wurzeln sind ein Flag. Schlüssel-/Zertifikatsdateien sind **nie** Assets → Secrets-Verstoß (s. Inventar-Schritt).
    - **Archiv / Superseded** — ersetzte Entwürfe, alte Stände → `archive/`.
    - **Dup** — gleicher Inhalt, existiert woanders → `archive/`.
    - **Variante** — gleicher Name, abweichender Inhalt → `archive/` + `.VARIANT` + flaggen.
@@ -65,6 +66,7 @@ Die Pfadtiefe ist Heuristik, keine Semantik (Erkennungskette in `design.md` §1)
 ## Harte Gates (Kurzfassung)
 
 - Spec (`design.md` / `template_context.md`) erreichbar — sonst Abbruch.
+- Secrets-Scan im Inventar — Befund (auch „keiner") im Dispositions-Plan.
 - Scope aus dem Pfad, sonst nachfragen; breiter Scope → Plan zuerst.
 - Plan-dann-Bestätigen, nie blind ausführen.
 - `mv` statt `rm`; löschen nur explizit autorisiert; Zweifel → `archive/`.

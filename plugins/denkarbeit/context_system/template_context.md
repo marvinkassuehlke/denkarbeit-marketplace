@@ -5,7 +5,7 @@ updated: JJJJ-MM-TT
 
 # {Titel} — Kontext
 
-{Ein Satz: was ist das, wofür dieser Ordner.} Stand: JJJJ-MM-TT.
+{Ein Satz: was ist das, wofür dieser Ordner.}
 
 ## Steckbrief
 <!-- Ebenen-spezifisch:
