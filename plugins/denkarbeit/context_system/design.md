@@ -109,6 +109,14 @@ Das benannte Muster für Wissen über die *Bedienung von Systemen und Werkzeugen
 
 Wiederverwendbarer eigener Code, der zu einer Domäne gehört (Bau-Skripte, ein CI-Layout-Gerüst, Automatisierungen), lebt **neben der `context.md` der Ebene, zu der er gehört** — bei Nutzung über mehrere Projekte auf dem untersten gemeinsamen Vorfahren (Anker). Die `infra.md` derselben Ebene hält je Werkzeug die Bedien-Zeile (wann benutzen, was man leicht falsch macht); der Code selbst dokumentiert das Wie. Werkzeuge sind keine Kontext-Artefakte — sie werden nie vorgeladen und folgen keiner Frontmatter-Pflicht. Ein Designsystem entsteht aus dem zweiten Anwendungsfall, nicht aus dem ersten: erst beim zweiten Bau wird getrennt, was Ebene (Marke) und was Anlass (das eine Deck) war.
 
+### language.md — die Sprach-Referenz (optional)
+
+Die Sprachregeln selbst leben in der `CLAUDE.md` und gelten immer, weil sie kurz sind und jede Session sie trägt. Eine `language.md` auf Workspace-Wurzel ergänzt sie um **Referenzmaterial** für längere Texte an Dritte (ab etwa einer halben Seite): kuratierte Absätze aus eigenen, selbst verfassten Texten plus eine Fallenliste beobachteter Drifts.
+
+- **Optional, kein Default-Artefakt.** Ohne geeignetes Material verschlechtert eine Sprach-Datei den Ton, statt ihn zu schärfen — dann bleibt es bei den CLAUDE.md-Regeln. `setup` bietet sie an und nennt die Eignungskriterien (§8).
+- **Beispiel statt Vorschrift.** Positive Stilregeln („nutze Gedankenstriche", „variiere den Rhythmus") werden als Checkliste abgearbeitet und übererfüllt: Was im Original zweimal trägt, steht dann in jedem Absatz und fällt als Manier auf. Wirksam sind Referenztexte (sie prägen Satzbau und Register) und **negative** Listen (sie sind prüfbar). Empirie 08/2026: Die Vorgänger-Datei schrieb Gedankenstrich-Einschübe, „Nicht X, sondern Y" und Kurzsatz-Kaskaden ausdrücklich vor — genau die drei Muster, die als maschinell auffielen.
+- **Kein Fremdmaterial im Auslieferungspaket.** Ein mitgelieferter Referenzkorpus prägt alle Nutzer auf eine fremde Stimme und widerspricht dem Kurs-Kernsatz, dass Kontext kuratiert wird. Jeder Workspace baut seine eigene.
+
 ### Binär- und Bildmaterial
 
 Rohmaterial (Bilder, Videos, große Assets) ist kein Kontext-Artefakt: Es liegt in einem benannten Ordner der Ebene (z.B. `bildmaterial/`, `assets/`) — **außerhalb von Repos**, wenn nur Ergebnisse geteilt werden (Empirie: Kurs-Bildmaterial); ein `README.md` im Ordner trägt die Bau-Regeln. Schlüssel- und Zertifikatsdateien sind nie „Assets" — Secrets-Grenze.
