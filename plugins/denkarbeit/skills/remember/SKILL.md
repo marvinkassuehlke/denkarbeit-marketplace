@@ -103,7 +103,7 @@ Parse die Usereingabe und bestimme den Modus:
    - Was am Ende zählt: Was ist passiert, warum, und was hat es verändert?
    - Bei Log → Memory: mehrere Log-Einträge können zu einem Memory-Eintrag verschmelzen, wenn sie kausal zusammenhängen.
    - **Verschmelzen statt anhängen:** in bestehende thematische Abschnitte der memory integrieren, keine datierten Abschnitte stapeln — die Struktur folgt dem Inhalt, nicht dem Kalender (Master: design.md §3).
-   - Betriebslektionen, die im Log stecken, wandern bei der Verdichtung in die `infra.md` der Ebene, nicht in die memory.
+   - Betriebslektionen, die im Log stecken, wandern bei der Verdichtung in die `infra.md`, für die sie gelten, nicht in die memory.
    - Bei Projekt → Stakeholder: nur die Essenz — "CIP-Projekt: 15k, abgeschlossen Dez 2026, Consumer Insights Team ist offen für Automatisierung."
 
 4. **Ergebnis schreiben.** Schreibe/aktualisiere die Ziel-`memory.md`. Bei Log-Verdichtung: entferne die verdichteten Einträge aus `log.md` (die Information lebt jetzt in `memory.md`).

@@ -11,7 +11,7 @@ description: Use when bringing a grown, messy workspace area into the context-sy
 
 ## Scope bestimmen (Pflicht-Input)
 
-Der **Pfad bestimmt die Ebene** (wie bei `contextify`):
+Der **Pfad bestimmt den Scope**:
 
 - `/cleanup` ohne Pfad → der ganze Workspace ab Root. Geht **Ordner für Ordner**, mit Scope-Bestätigung vorab.
 - `/cleanup {pfad}` → dieser Ordner und alles darunter.
@@ -27,7 +27,7 @@ Die Tiefe sagt nichts (Pfad-Mechanik, `design.md` §1): Ein **Kontext-Ordner** i
 - **Verschieben, nicht löschen.** Default ist `mv` (reversibel). **Löschen nur auf explizite Autorisierung** des Users (z.B. verkümmerte Logs). Im Zweifel → `archive/`.
 - **Varianten nicht auto-entscheiden.** Gleicher Dateiname + abweichender Inhalt/Größe = **Variante**, nicht Dup → nach `archive/` mit `.VARIANT`-Marker + flaggen. Nie die kanonische Version überschreiben.
 - **Schreiben/Verschieben macht der Hauptlauf.** Read-only Subagents dürfen lesen und Kontext-Entwürfe zurückgeben; die tatsächlichen Datei-Operationen führt der Controller aus.
-- **Repo = atomare Einheit.** Ein Ordner mit `.git` wird als Ganzes klassifiziert, nie intern umsortiert: kein `mv` hinein oder heraus, kein `archive/` im Repo, keine Löschungen — die innere Struktur gehört dem Repo (eigene Konventionen, `git mv`, Commits). Kontext-Artefakte leben außerhalb des Repos auf der Ebenen-Wurzel; Ausnahme ist das Master-Muster (Repo hält den Master, der Workspace Symlinks). Ändert der Kontext-Schritt doch eine Datei im Repo (z.B. Pointer-Reconcile): dirty Zustand im Bestätigungsblock ausweisen, committen bleibt beim User.
+- **Repo = atomare Einheit.** Ein Ordner mit `.git` wird als Ganzes klassifiziert, nie intern umsortiert: kein `mv` hinein oder heraus, kein `archive/` im Repo, keine Löschungen — die innere Struktur gehört dem Repo (eigene Konventionen, `git mv`, Commits). Kontext-Artefakte leben in der Wurzel des Kontext-Ordners; Ausnahme ist das Master-Muster (Repo hält den Master, der Workspace Symlinks). Ändert der Kontext-Schritt doch eine Datei im Repo (z.B. Pointer-Reconcile): dirty Zustand im Bestätigungsblock ausweisen, committen bleibt beim User.
 - **Symlink-Schutz.** Symlink-Ziele nie verschieben (bricht den Link) → flaggen. Einen Symlink selbst nur verschieben, wenn der Plan das Nachziehen des Links enthält.
 
 ## Workflow
@@ -41,7 +41,7 @@ Die Tiefe sagt nichts (Pfad-Mechanik, `design.md` §1): Ein **Kontext-Ordner** i
    - **Repo** — Ordner mit `.git`: atomare Einheit, als Ganzes zuordnen (oder selbst der Gegenstand); Innenleben nicht anfassen (Safety-Gate).
    - **temp.md** — flüchtiges Arbeitsblatt (Spec §3): bleibt liegen — nie archivieren, verschieben, umbenennen oder als Dup/Variante werten (Instanzen in verschiedenen Ordnern sind unabhängig). Offensichtlich Erntenswertes als Content-Punkt vorlegen (Schritt 7), nicht selbst umrouten.
    - **Input/Support** (`transkripte/`, `customer_inputs/`, …) → behalten, **kein** Kontext.
-   - **Assets/Binärmaterial** (Bilder, Videos, Fonts, große Medien) → in einen benannten Ordner der Ebene (`bildmaterial/`, `assets/`) mit `README.md` für die Bau-Regeln; lose Binärdateien auf Ebenen-Wurzeln sind ein Flag. Schlüssel-/Zertifikatsdateien sind **nie** Assets → Secrets-Verstoß (s. Inventar-Schritt).
+   - **Assets/Binärmaterial** (Bilder, Videos, Fonts, große Medien) → in einen benannten Unterordner (`bildmaterial/`, `assets/`) mit `README.md` für die Bau-Regeln; lose Binärdateien in einer Ordner-Wurzel sind ein Flag. Schlüssel-/Zertifikatsdateien sind **nie** Assets → Secrets-Verstoß (s. Inventar-Schritt).
    - **Archiv / Superseded** — ersetzte Entwürfe, alte Stände → `archive/`.
    - **Dup** — gleicher Inhalt, existiert woanders → `archive/`.
    - **Variante** — gleicher Name, abweichender Inhalt → `archive/` + `.VARIANT` + flaggen.
