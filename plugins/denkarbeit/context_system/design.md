@@ -103,7 +103,7 @@ Drei Wissensartefakte, drei verschiedene Fragen:
 
 ### temp.md — das flüchtige Arbeitsblatt
 
-Bewusst **kein** Wissensartefakt: hält Arbeitszustand. Zwischenablage und Dialog-Arbeitsfläche; entsteht ad hoc auf jeder Ebene. **Flüchtig per Definition** (Inhalt wird überschrieben; ein `temp.md` pro Ebene; Instanzen unabhängig) · **Ernte vor Überschreiben** (Erhaltenswertes vorher in ein dauerhaftes Artefakt routen — Session-Arbeit im Dialog, kein Skill-Automatismus; der `/remember`-Durchlauf *fragt* nach ungeernteter temp, §8) · **nie Pointer-Ziel** · **Skills lassen es liegen** · Frontmatter wie üblich. Namens-Konvergenz: genau `temp.md`; Abweichler beim Anfassen umbenennen.
+Bewusst **kein** Wissensartefakt: hält Arbeitszustand. Zwischenablage und Dialog-Arbeitsfläche; entsteht ad hoc in jedem Ordner. **Flüchtig per Definition** (Inhalt wird überschrieben; ein `temp.md` pro Ordner; Instanzen unabhängig) · **Ernte vor Überschreiben** (Erhaltenswertes vorher in ein dauerhaftes Artefakt routen — Session-Arbeit im Dialog, kein Skill-Automatismus; der `/remember`-Durchlauf *fragt* nach ungeernteter temp, §8) · **nie Pointer-Ziel** · **Skills lassen es liegen** · Frontmatter wie üblich. Namens-Konvergenz: genau `temp.md`; Abweichler beim Anfassen umbenennen.
 
 ### infra.md — die Betriebs-Referenz
 

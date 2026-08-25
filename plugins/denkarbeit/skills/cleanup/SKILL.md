@@ -39,7 +39,7 @@ Die Tiefe sagt nichts (Pfad-Mechanik, `design.md` §1): Ein **Kontext-Ordner** i
 3. **Klassifizieren** (der harte Kern — bei Ambiguität fragen). Je Ordner/Datei genau eine Kategorie:
    - **Eigener Gegenstand** — Vorhaben oder Bereich mit Substanz → bekommt `context.md` und wird damit Kontext-Ordner.
    - **Repo** — Ordner mit `.git`: atomare Einheit, als Ganzes zuordnen (oder selbst der Gegenstand); Innenleben nicht anfassen (Safety-Gate).
-   - **temp.md** — flüchtiges Arbeitsblatt (Spec §3): bleibt liegen — nie archivieren, verschieben, umbenennen oder als Dup/Variante werten (Instanzen je Ebene sind unabhängig). Offensichtlich Erntenswertes als Content-Punkt vorlegen (Schritt 7), nicht selbst umrouten.
+   - **temp.md** — flüchtiges Arbeitsblatt (Spec §3): bleibt liegen — nie archivieren, verschieben, umbenennen oder als Dup/Variante werten (Instanzen in verschiedenen Ordnern sind unabhängig). Offensichtlich Erntenswertes als Content-Punkt vorlegen (Schritt 7), nicht selbst umrouten.
    - **Input/Support** (`transkripte/`, `customer_inputs/`, …) → behalten, **kein** Kontext.
    - **Assets/Binärmaterial** (Bilder, Videos, Fonts, große Medien) → in einen benannten Ordner der Ebene (`bildmaterial/`, `assets/`) mit `README.md` für die Bau-Regeln; lose Binärdateien auf Ebenen-Wurzeln sind ein Flag. Schlüssel-/Zertifikatsdateien sind **nie** Assets → Secrets-Verstoß (s. Inventar-Schritt).
    - **Archiv / Superseded** — ersetzte Entwürfe, alte Stände → `archive/`.
