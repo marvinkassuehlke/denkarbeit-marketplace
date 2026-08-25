@@ -66,7 +66,7 @@ Knoten   {…}/context.md             ARBEITSGEGENSTAND — Projekt, Arbeitspake
 
 ### Disziplin-Schnitt
 
-**Raus aus `context.md`:** Chronologien/Zeitachsen → `log.md`/`memory.md` · Urteile, Erkenntnisse, strategische Einordnungen → `memory.md` · Erledigt-Marker → `log.md` (als Faktum) bzw. ersatzlos · To-do-Mechanik mit Status-Tracking → nur offene Punkte bleiben · Betriebs-/Bedienungswissen → `infra.md` (§3).
+**Raus aus `context.md`:** Chronologien/Zeitachsen und Urteile/Erkenntnisse → `memory.md` (Fakten-Splitter gelangen über `/remember` ins Log — contextify schreibt nie ins Log, §3) · Erledigt-Marker → ersatzlos bzw. als Faktum über die Task-Closure (§5) · To-do-Mechanik mit Status-Tracking → nur offene Punkte bleiben · Betriebs-/Bedienungswissen → `infra.md` (§3).
 
 **Rein in `context.md`:** Sicherheitsgrade **`[BELEGT]` / `[ANNAHME]`** (genau diese zwei; freie Begründungszusätze wie `[ANNAHME — Quelle X]` sind erlaubt) · Widerspruch-Marker `<!-- Widerspruch: Quelle A sagt X, Quelle B sagt Y -->` · offene Fragen als `<!-- Offen: … -->`.
 
@@ -164,7 +164,7 @@ Zwei Verdichtungsstufen + Bottom-up-Abgleich. Die Prüf- und Schreibpunkte:
 2. **Task-Closure** mit Vier-Wege-Triage (§5, inkl. Register-Zweig).
 3. **infra-Weiche:** Betriebslektionen der Session (Werkzeug-Eigenheit, Fehlerbild + Fix, System-Bedienung) werden in die `infra.md` der betroffenen Ebene geschrieben, nicht in den Log-Eintrag; der Log-Eintrag referenziert allenfalls. Ausweis im Bestätigungsblock. Bei der Gelegenheit: infra-Verfallsbedingungen der Ebene prüfen.
 4. **Verschmelzungsregel memory** (§3): in bestehende thematische Abschnitte integrieren; chronologische Anhänge sind das Signal zur Konsolidierung.
-5. **Split-Kriterien** (§6) als fester Prüfpunkt; **Größen-Heuristik context.md** (§2) messen und ggf. vorlegen.
+5. **Split-Kriterien** (§6) als fester Prüfpunkt; **Größen-Heuristik context.md** (§2) messen und ggf. vorlegen. Der Bottom-up-Schritt korrigiert offensichtlich überholte `context.md`-Stellen **direkt** (Backbone wahrend) — ein eigener contextify-Lauf ist nur für Neuanlage oder strukturellen Umbau nötig. Reihenfolge am Session-Ende damit: `/remember` genügt im Regelfall; `/contextify` auf Ansage.
 6. **temp-Erinnerung:** Führt die Ebene eine `temp.md` mit ungeerntetem Inhalt (updated jünger als der letzte Log-Eintrag), wird im Bestätigungsblock daran erinnert — geerntet wird im Dialog.
 7. **Pointer-Pflege:** Entsteht im Durchlauf ein neues Artefakt (infra, Register, Fach-Artefakt), wird der Pointer der Ebene (Steckbrief bzw. Lage) im selben Durchlauf gesetzt.
 
