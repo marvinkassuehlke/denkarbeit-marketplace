@@ -8,12 +8,13 @@ updated: JJJJ-MM-TT
 {Ein Satz: was ist das, wofür dieser Ordner.}
 
 ## Steckbrief
-<!-- Ebenen-spezifisch:
-  L1 (Ich): Eckdaten, Rollen, Angebot/Tätigkeit, Arbeitsweise, Domänen-Orientierung (Typen, kein gepflegtes Verzeichnis).
-  L2 (Stakeholder/Bereich): Org-Eckdaten + Personen-Block (ein Muster):
-     - **{Name}** — {Rolle/Funktion} · {Kontakt, optional} · {Hinweis, nur wenn sachlich — kein Psychogramm}
-  L3 (Projekt): Auftrag, Scope, Stand, Beteiligte (Verweis auf L2-Personen statt Duplikat).
-  L4 (Arbeitspaket): konkretes Ergebnis, Abgrenzung zum Projekt. -->
+<!-- Steckbrief-Felder:
+  Felder nach dem, WAS der Ordner beschreibt (nicht nach Tiefe):
+  Mich selbst (der Workspace-Root): Eckdaten, Rollen, Angebot/Tätigkeit, Arbeitsweise, Domänen-Orientierung (Typen, kein gepflegtes Verzeichnis).
+  Ein Gegenüber oder eigener Bereich: Org-Eckdaten + Personen-Block (ein Muster):
+    **{Name}** — {Rolle/Funktion} · {Kontakt, optional} · {Hinweis, nur wenn sachlich}
+  Ein Vorhaben: Auftrag, Scope, Stand, Beteiligte (Verweis auf die Personen darüber statt Duplikat).
+  Beides zugleich möglich (ein Gegenüber mit genau einem Vorhaben) — dann beide Feldgruppen. -->
 
 ## Motivation
 <!-- Motivation, Einsatz, Verortung. Orientierung ("worum geht es hier"), nicht Verhaltenssteuerung. Quasi-statisch. -->

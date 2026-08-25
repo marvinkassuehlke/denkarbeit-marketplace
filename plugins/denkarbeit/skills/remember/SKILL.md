@@ -1,6 +1,6 @@
 ---
 name: remember
-description: Use when the user wants to persist memory from the current session, initialize a new Stakeholder/Projekt memory structure, or compress older memories. Triggers on /remember.
+description: Use when the user wants to persist session knowledge (log entry), compress older entries into memory, or set up memory files for a folder. Triggers on /remember.
 ---
 
 ## Zweck
@@ -12,25 +12,13 @@ Verdichtungsstufen:
 1. **Log** (`log.md`) — Ereignisstrom, session-nah. Einziger Schreiber ist dieser Skill.
 2. **Memory** (`memory.md`) — verdichtet aus dem Log: Urteile, Übergänge, das Warum.
 
-Beide liegen **per Default auf Stakeholder-Ebene (L2)**. Ein Projekt bekommt eigene `log.md`/`memory.md` nur als Earn-it-Ausnahme (siehe „## Split"). „Vergessen" ist gewollte Kompression, kein Datenverlust.
+Wo sie liegen, bestimmt die **Pfad-Mechanik** (Spec §1): Geschrieben wird in die **nächste vorhandene Datei aufwärts** vom Session-Ordner bis zum Workspace-Root. Neu angelegt wird nur in einem Ordner, der bereits eine `context.md` trägt, und nur auf Ansage. „Vergessen" ist gewollte Kompression, kein Datenverlust.
 
-**Nicht alles gehört in log/memory:** Betriebslektionen der Session — Werkzeug-Eigenheiten, Fehlerbilder samt Fix, System-Bedienung — gehören in die `infra.md` der betroffenen Ebene (infra-Weiche, Schritt 4). Log und Memory tragen Übergänge und Urteile, infra trägt Bedienung.
+**Wo Gedächtnis hingehört** (Master: design.md §1): *so hoch wie es gilt, so tief wie möglich.* Ein Urteil, das auch außerhalb des aktuellen Ordners gilt, gehört weiter nach oben — dort sehen es mehr Sessions, und ein neu angelegtes Vorhaben erbt es automatisch. Zu tief abgelegtes Wissen ist unsichtbar verloren; zu hoch abgelegtes kostet nur Token.
 
-## Ordnerstruktur
+**Nicht alles gehört in log/memory:** Betriebslektionen der Session — Werkzeug-Eigenheiten, Fehlerbilder samt Fix, System-Bedienung — gehören in die `infra.md` des Ordners, für den sie gelten (infra-Weiche, Schritt 4). Log und Memory tragen Übergänge und Urteile, infra trägt Bedienung.
 
-```
-{workspace}/
-├── context.md                  ← L1: Ich (via /contextify)
-├── {Stakeholder}/
-│   ├── context.md              ← L2: wer (via /contextify)
-│   ├── memory.md               ← L2: Urteile/Übergänge (Default-Heimat)
-│   ├── log.md                  ← L2: Ereignisstrom (Default-Heimat)
-│   └── {Projekt}/
-│       ├── context.md          ← L3: was mit ihnen (via /contextify)
-│       └── (log.md / memory.md nur bei Split — siehe unten)
-```
-
-`context.md` wird über `/contextify` erstellt und gepflegt — nicht Aufgabe dieses Skills. `memory.md`/`log.md` liegen per Default auf Stakeholder-Ebene; Projekt-Ebene nur bei Split.
+`context.md` wird über `/contextify` gepflegt, nicht von diesem Skill.
 
 ## Workflow
 
@@ -38,15 +26,15 @@ Beide liegen **per Default auf Stakeholder-Ebene (L2)**. Ein Projekt bekommt eig
 
 Parse die Usereingabe und bestimme den Modus:
 
-- **Log** (default, keine Argumente oder nur Kontext-Hinweise) — schreibe einen Eintrag in `log.md`
-- **Init** (`init {Stakeholder}` oder `init {Stakeholder}/{Projekt}`) — lege Ordnerstruktur und leere Dateien an
-- **Verdichten** (`verdichten`) — komprimiere ältere Einträge
+- **Log** (default) — schreibe einen Eintrag in das nächste `log.md` aufwärts
+- **Verdichten** (`verdichten`) — komprimiere ältere Einträge in die memory
+- **Anlegen** (`init {pfad}`) — lege `log.md` + `memory.md` in einem Ordner an, der eine `context.md` trägt (auf Ansage, siehe unten)
 
 ### 2. Modus: Log (default)
 
-1. **Kontext bestimmen.** Ermittle aus dem Workspace-Pfad den Stakeholder (und ggf. das Projekt). Die Ebene erkennst du semantisch, nicht an der Pfadtiefe: Sammel-/Zwischenordner (z.B. `inaktiv/`) verschieben die Tiefe, nicht die Ebene — Ebenen-Träger ist der Ordner, der die Standardartefakte trägt (Erkennungskette: `design.md` §1). `log.md`/`memory.md` liegen per Default auf Stakeholder-Ebene (L2); nur bei bestehendem Split auf Projekt-Ebene. Wenn nicht eindeutig: frage nach.
+1. **Ort bestimmen — Pfad-Probe ist Pflicht.** Scanne mechanisch (`ls`) den Pfad vom Session-Ordner aufwärts bis zum Workspace-Root und stelle fest: Wo liegt das **nächste `log.md`**? Dort wird geschrieben. Nicht aus dem Bestand schließen, sondern prüfen — dass ältere Einträge zu diesem Thema woanders liegen, ist kein Beleg, es kann Drift sein. Der Pfad-Befund ist Pflichtbestandteil des Bestätigungsblocks; eine Lokalisierung ohne Probe hat nicht stattgefunden. Existiert auf dem ganzen Pfad kein `log.md`: frage den User, wo eins entstehen soll (Vorschlag: der nächste Ordner mit `context.md`) — kein Auto-Create.
 
-2. **`log.md` lokalisieren — Split-Probe ist Pflicht.** Prüfe mechanisch (`ls`), ob auf der Projekt-Ebene des Session-Themas eigene `log.md`/`memory.md` existieren. Existieren sie → das Projekt ist gesplittet, dort wird geschrieben; sonst Stakeholder-Ebene (L2). Nicht aus dem Bestand schließen: Dass ältere projektbezogene Einträge in L2 liegen, ist kein Beleg für L2 — es kann Drift sein (Vorfall 21.08.: zwei Wochen Kurs-Einträge am vollzogenen Split vorbei). Der geprüfte Pfad-Befund ist Pflichtbestandteil des Bestätigungsblocks; eine Lokalisierung ohne Probe hat nicht stattgefunden. Existiert nirgends eine `log.md`: frage den User, ob du sie anlegen sollst (kein Auto-Create).
+2. **Scope prüfen.** Gilt das, was die Session hervorgebracht hat, auch außerhalb dieses Ordners? Dann gehört es weiter nach oben (Spec §1). Berührt die Session erkennbar **beide** Bereiche — das laufende Vorhaben und den Rahmen darüber —, entstehen zwei Einträge: der spezifische Teil ins nächste Log, der übergreifende in das darüber. Sonst genau ein Eintrag.
 
 3. **Session-Kontext auswerten.** Lies den bisherigen Gesprächsverlauf der aktuellen Session. Identifiziere:
    - Was ist passiert? (Events, Entscheidungen, Ergebnisse)
@@ -55,13 +43,13 @@ Parse die Usereingabe und bestimme den Modus:
    - Welche Urteile oder Einschätzungen wurden getroffen?
    - Welche Artefakte wurden erzeugt?
 
-4. **infra-Weiche, dann Eintrag schreiben.** Erst die Weiche: Enthält die Session Betriebslektionen (Werkzeug-Eigenheit, Fehlerbild + Fix, System-Bedienung), trage sie in die `infra.md` der betroffenen Ebene ein — existiert dort keine, schlage das Anlegen vor (kein Auto-Create). Der Log-Eintrag referenziert die Lektion allenfalls in einem Halbsatz, trägt sie aber nicht aus. Bei der Gelegenheit: Verfallsbedingungen in der infra der Ebene prüfen („Flag kann raus, sobald …"). Dann der Eintrag: Setze ihn im Log-Format an den **Kopf** des YAML-Blocks der `log.md` (neueste oben). Ein `/remember`-Aufruf erzeugt genau einen Eintrag — auch wenn die Session mehrere Themen berührt hat. Fasse zusammen, splitte nicht. **Ausnahme Misch-Session bei Split:** Berührt die Session ein gesplittetes Projekt UND Stakeholder-Themen, entstehen zwei getrennte Einträge — der projektspezifische Teil ins Projekt-Log, der Rest nach L2 (nie den ganzen Misch-Eintrag auf eine Ebene zwingen).
+4. **infra-Weiche, dann Eintrag schreiben.** Erst die Weiche: Enthält die Session Betriebslektionen (Werkzeug-Eigenheit, Fehlerbild + Fix, System-Bedienung), trage sie in die `infra.md` des Ordners ein, für den sie gilt (Scope-Regel, Spec §1) — existiert dort keine, schlage das Anlegen vor (kein Auto-Create). Der Log-Eintrag referenziert die Lektion allenfalls in einem Halbsatz, trägt sie aber nicht aus. Bei der Gelegenheit: Verfallsbedingungen der berührten `infra.md` prüfen („Flag kann raus, sobald …"). Dann der Eintrag: Setze ihn im Log-Format an den **Kopf** des YAML-Blocks der `log.md` (neueste oben). Ein `/remember`-Aufruf erzeugt genau einen Eintrag — auch wenn die Session mehrere Themen berührt hat. Fasse zusammen, splitte nicht. Zwei Einträge entstehen nur im Scope-Fall aus Schritt 2.
 
 5. **Task-Closure.** Wurde in der Session ein offener Punkt aus `context.md` §„Offene Punkte" erledigt — Triage mit vier Ausgängen (Master: design.md §5):
    1. Entferne ihn aus `context.md` (das Arbeits-Scaffolding ist verbraucht — kein Verlust).
    2. Falls „in 6 Monaten erinnernswert": das Faktum als Satz **im Body des Session-Eintrags** („X getan/übergeben") — kein eigener Log-Eintrag. Triviales nur prunen, ersatzlos.
    3. Hängt ein Urteil dran (warum, mit welcher Folge): nach `memory.md`.
-   4. Bleibt der Vorgang betrieblich referenzpflichtig (erledigt ≠ irrelevant, z.B. Dedup-Pflicht): in das **Register-Artefakt** der Ebene — existiert keines, schlage das Anlegen vor; die `context.md` hält den Pointer.
+   4. Bleibt der Vorgang betrieblich referenzpflichtig (erledigt ≠ irrelevant, z.B. Dedup-Pflicht): in das **Register-Artefakt** des Ordners — existiert keines, schlage das Anlegen vor; die `context.md` hält den Pointer.
 
    Triage-Schwelle = die 6-Monats-Frage.
 
@@ -75,24 +63,23 @@ Parse die Usereingabe und bestimme den Modus:
 
    Ergebnis festhalten: **N** Einträge gesamt, davon **M** älter als die aktuelle Arbeitswoche, Dateigrößen in KB (log **und** context). Diese Zahlen sind Pflichtbestandteil des Bestätigungsblocks (Schritt 7) — eine Volumen-Prüfung ohne erhobene Zahlen hat nicht stattgefunden.
 
-   **Prüfen:** Lies `memory.md` (L2; Projekt-`memory.md` nur falls Split) und `context.md` (alle relevanten Ebenen, falls vorhanden). Prüfe gegen den neuen Log-Eintrag und die bestehenden Log-Einträge:
+   **Prüfen:** Lies alle `memory.md` und `context.md` auf dem Pfad (Spec §1). Prüfe gegen den neuen Log-Eintrag und die bestehenden Log-Einträge:
    - **Volumen:** M ≥ 3 (Einträge älter als aktuelle Arbeitswoche) → verdichten. **Ab 20 KB Dateigröße ist die Verdichtung nicht mehr optional** — sie läuft im selben Durchlauf (wie Modus Verdichten, Schritte 2–4); Aufschieben nur, wenn der User es in dieser Session explizit abwählt.
    - **Widerspruch:** Log-Eintrag überholt eine Aussage in `memory.md` → korrigieren
    - **Lücke:** `memory.md` leer/nicht vorhanden bei ≥5 Log-Einträgen → erstmalig befüllen
    - **context.md veraltet:** Offensichtlich falsche Fakten (besetzte Rollen als offen markiert, falscher Projektstatus, überholte Strukturen) → direkt fixen, dabei das Backbone respektieren (Steckbrief / Warum / Lage / Richtung / Offene Punkte). Fälschlich in `context.md` stehende Übergänge/Urteile nach `memory.md` verschieben.
-   - **Split:** Prüfe, ob ein Projekt eigene `memory.md`/`log.md` verdient (siehe „## Split").
+   - **Struktur:** Beschreibt eine `context.md` erkennbar mehrere getrennte Vorhaben, oder sammelt ein Unterordner ohne eigene `context.md` Substanz? Als Befund vorlegen (Spec §1, Strukturwechsel), nie selbst vollziehen.
    - **temp-Erinnerung:** Führt die Ebene eine `temp.md` mit ungeerntetem Inhalt (`updated` jünger als der jüngste Log-Eintrag), im Bestätigungsblock daran erinnern — geerntet wird im Dialog, nicht vom Skill.
    - **context.md zu groß:** > ~20 KB (Faustregel, justierbar) → **nicht autonom umbauen**, sondern diagnostizieren und dem User als Befund vorlegen: (a) eingesickerte Chronologien/Urteile → memory/log, (b) Register-Fall (abgeschlossen, aber betrieblich referenzpflichtig, z.B. Dedup) → eigenes Register-Artefakt neben der context.md, (c) eigenständiger Fach-Block → Fach-Artefakt + Pointer, (d) legitim groß → belassen. Geduldete Genre-Fremdkörper (Dossiers) und Register-Artefakte sind ausgenommen. **Bestätigt der User eine Auslagerung (Fall b/c), läuft der Vollzug im selben Durchlauf nach dem Auslagerungs-Protokoll** (Spec §2: verlustfreier Schnitt, Pointer-Rückstand mit einem Satz Substanz, Ausweis) — nicht als vertagte Empfehlung enden lassen. Spezifikation: `design.md` §2 Größen-Heuristik — Pfad aus der globalen CLAUDE.md (Referenzen); Fallback: vom Skill-Verzeichnis aufwärts nach `context_system/design.md` suchen.
 
    **Handeln:** Wenn Signale vorliegen, handle autonom — nicht fragen, sondern tun:
-   - Memory verdichten/aktualisieren (Log → Memory, L2) — dabei **verschmelzen statt anhängen**: in bestehende thematische Abschnitte integrieren, keine neuen datierten Abschnitte stapeln. Sieht die memory aus wie ein zweites Log (chronologische Anhänge), ist die Konsolidierung der Abschnitte fällig
+   - Memory verdichten/aktualisieren (Log → nächste memory aufwärts) — dabei **verschmelzen statt anhängen**: in bestehende thematische Abschnitte integrieren, keine neuen datierten Abschnitte stapeln. Sieht die memory aus wie ein zweites Log (chronologische Anhänge), ist die Konsolidierung der Abschnitte fällig
    - Stakeholder-Memory aktualisieren, wenn sich etwas Wesentliches verändert hat
    - context.md-Stellen korrigieren, die durch die Session offensichtlich überholt sind (Backbone wahren)
    - Verdichtete Log-Einträge aus `log.md` entfernen
-   - Bei klar erfülltem Split-Kriterium: Projekt-`memory.md`/`log.md` abspalten
-   - **Pointer-Pflege:** Entstand im Durchlauf ein neues Artefakt (infra, Register, Fach-Artefakt), den Pointer der Ebene (Steckbrief bzw. Lage der `context.md`) im selben Durchlauf setzen
+   - **Pointer-Pflege:** Entstand im Durchlauf ein neues Artefakt (infra, Register, Fach-Artefakt), den Pointer in der `context.md` desselben Ordners (Steckbrief bzw. Lage) im selben Durchlauf setzen
 
-   Nur bei echten Grenzfällen (unklar ob eine Aussage überholt ist, mehrdeutige Signale, Split-Grenzfall) nachfragen.
+   Nur bei echten Grenzfällen (unklar ob eine Aussage überholt ist, mehrdeutige Signale) nachfragen.
 
 7. **Bestätigung.** Zeige dem User kompakt, was passiert ist — in einem Block:
    - Den geschriebenen Log-Eintrag
@@ -101,25 +88,13 @@ Parse die Usereingabe und bestimme den Modus:
    - Was in welchen Dateien aktualisiert/verdichtet/abgespalten wurde (falls etwas passiert ist)
    - Falls darüber hinaus nichts nötig war: Log-Eintrag + Log-Stand-Zeile + infra-Ausweis genügen
 
-### 3. Modus: Init
+### 3. Modus: Anlegen
 
-1. **Pfad parsen.** Erwarte `init {Stakeholder}` oder `init {Stakeholder}/{Projekt}`.
-
-2. **Ordner anlegen.** Erstelle die Ordnerstruktur im Workspace.
-
-3. **Leere Dateien anlegen:**
-   - Bei `init {Stakeholder}`: `memory.md` (mit Frontmatter + Header, leer) und `log.md` (mit Header, ohne Frontmatter) auf Stakeholder-Ebene.
-   - Bei `init {Stakeholder}/{Projekt}`: nur den Projekt-Ordner. **Keine** Projekt-`memory.md`/`log.md` — die entstehen erst bei einem Split. Die Projekt-`context.md` erstellt der User separat via `/contextify`.
-   - `memory.md` erhält oben `created`/`updated` (beide = heutiges Datum) gemäß Dokument-Frontmatter-Konvention. `log.md` ist per Eintrag datiert und bekommt keine Frontmatter.
-   - Keine `context.md` — die erstellt der User separat via `/contextify`.
-
-4. **Bestätigung.** Zeige die angelegte Struktur.
+`init {pfad}` legt in diesem Ordner `log.md` (Header, keine Frontmatter — per Eintrag datiert) und `memory.md` (Frontmatter + Header) an. Voraussetzung: Der Ordner trägt eine `context.md`; sonst nachfragen, ob sie zuerst entstehen soll (`/contextify`). Beide Dateien entstehen gemeinsam — ein Log ohne Verdichtungsziel läuft voll, eine Memory ohne Zufluss verhungert. Ab dem nächsten Lauf greift die Pfad-Mechanik von selbst; ein Marker oder Hinweis anderswo ist nicht nötig.
 
 ### 4. Modus: Verdichten
 
-1. **Ebene bestimmen.** Frage den User oder leite aus dem Kontext ab:
-   - **Log → Memory (Default, L2):** Verdichte ältere `log.md`-Einträge in die `memory.md` derselben Ebene. "Älter" = alles was nicht aus der aktuellen Arbeitswoche stammt (Faustregel, User kann abweichen).
-   - **Projekt-Memory → Stakeholder-Memory (nur bei Split):** Verdichte eine abgespaltene Projekt-`memory.md` in die Stakeholder-`memory.md`. Typisch bei Projektabschluss oder wenn sich auf Stakeholder-Ebene etwas Wesentliches verändert hat.
+1. **Quelle und Ziel bestimmen.** Verdichtet wird das `log.md`, das die Pfad-Probe liefert, in die **nächste `memory.md` aufwärts** (im Normalfall dieselbe Ordner-Ebene). „Älter" = alles, was nicht aus der aktuellen Arbeitswoche stammt (Faustregel, User kann abweichen). Wird ein Vorhaben abgeschlossen, kann sein Gedächtnis auf Ansage in das darüberliegende verschmolzen werden — nur die Essenz, nicht der Bestand.
 
 2. **Quelle lesen.** Lies die zu verdichtende Datei vollständig.
 
@@ -135,15 +110,11 @@ Parse die Usereingabe und bestimme den Modus:
 
 5. **Bestätigung.** Zeige was verdichtet wurde und was in der Ziel-Datei steht.
 
-## Split: memory/log L2 → L3
+## Ein eigenes Gedächtnis für ein Vorhaben
 
-Prüfpunkt im Bottom-up-Schritt. Ein Projekt bekommt eigene `memory.md`/`log.md` nur, wenn ALLE drei gelten:
+Kein Vorgang, ein Handgriff: `log.md` und `memory.md` im Ordner des Vorhabens anlegen (Modus „Anlegen"). Die Pfad-Mechanik findet sie ab dem nächsten Lauf, weil immer die nächste Datei aufwärts gilt.
 
-1. **Volumen:** Stakeholder-`memory.md` so groß, dass Mitlesen bei projektfremden Prompts spürbar Ballast ist, UND der Projekt-Strang ist ein großer, klar abgrenzbarer Block. Faustregel-Auslöser zur Prüfung: `memory.md` > ~15 KB und ein Projekt ≳ ein Drittel davon (Zahl justierbar).
-2. **Severabilität:** Die Projekt-Einträge zeigen nach innen — kein ständiges Referenzieren von Schwester-Projekten oder Stakeholder-weiten Fakten. Sonst: kein Split.
-3. **Eigenleben:** genug eigene Historie für eine sinnvolle separate Verdichtung. Keine präventiven Splits frischer Projekte.
-
-Protokoll: Default = nicht splitten (Aufschieben billig, Zusammenführen teuer, ein verfrühter Split zerschneidet das Bindegewebe). Klarer Fall (alle drei deutlich, keine Quer-Referenzen) → autonom ausführen + im Bestätigungsblock melden. Grenzfall → vorlegen. `log` und `memory` splitten gemeinsam. **Der Vollzug hinterlässt einen Marker:** In den Kopf des L2-Logs gehört eine Zeile „*Split-Hinweis: `{Projekt}` führt eigenes Log + Memory (Split TT.MM.) — Projekt-Einträge gehören dorthin.*" — der Split darf nie nur Dateisystem-Zustand sein, sonst schreiben spätere Sessions daran vorbei.
+**Wann es sich lohnt** (Erfahrung, kein Prüfpunkt): genug eigene Historie für eine sinnvolle Verdichtung · Einträge, die nach innen zeigen statt ständig auf Nachbarn zu verweisen · ein Umfang, bei dem Mitlesen in fremden Sessions spürbar Ballast wird. **Wann nicht:** vorsorglich bei frischen Vorhaben, denn Aufschieben ist billig und Zusammenführen teuer. Beobachtest du diese Signale, lege sie als Befund vor; angelegt wird auf Ansage.
 
 ## Log-Format (`log.md`)
 
@@ -190,7 +161,7 @@ Die Datei beginnt mit einem Header, gefolgt von YAML-Einträgen. **Neueste Eintr
 
 Prosa-Markdown, verdichtet. Im Inhalt keine YAML-Einträge, keine starre Struktur — aber **thematische Abschnitte, nicht Kalender-Anhänge**: Die Verdichtung integriert in bestehende Abschnitte; die Leserichtung folgt der Kausalität (Grundlegendes zuerst), memory wird ganz gelesen. Oben steht die Dokument-Frontmatter (`created`/`updated`): bei jeder Aktualisierung von `memory.md` `updated` auf das heutige Datum hochsetzen. Dasselbe gilt für `context.md`, wenn die Bottom-up-Aktualisierung (Schritt 6) sie korrigiert. (Master: design.md §3.)
 
-Die Default-Heimat ist die Stakeholder-Ebene (L2). Das Projekt-Memory-Beispiel unten zeigt den Split-Fall.
+Die beiden Beispiele unten zeigen dieselbe Form in zwei Zuschnitten: eng auf ein Vorhaben, breit auf ein Gegenüber.
 
 ### Projekt-Memory
 
@@ -255,7 +226,7 @@ KI-Visionen einsteigen. Budget ist freigeräumt, Governance-Tür zu IT öffnet s
 
 ## Harte Gates
 
-- **Kein Auto-Create neuer Genres.** Fehlt eine `log.md`, `infra.md` oder ein Register: fragen, nicht anlegen. Ausgenommen ist der Vollzug einer im Workflow geregelten Entscheidung (Split nach §6, erstmalige memory-Befüllung ab 5 Einträgen) — dort wird gehandelt und im Bestätigungsblock ausgewiesen.
+- **Kein Auto-Create neuer Genres.** Fehlt eine `log.md`, `infra.md` oder ein Register: fragen, nicht anlegen. Ausgenommen ist die erstmalige memory-Befüllung ab 5 Log-Einträgen — dort wird gehandelt und im Bestätigungsblock ausgewiesen.
 - **Kein Task-Tracking in memory.** Keine TODOs, keine offenen Punkte, keine Checklisten. (Tasks und ihr aktueller Stand leben in `context.md` §Offene Punkte.)
 - **Kein Status-Tracking in memory.** Zustände gehören in `context.md`, nicht in Memory.
 - **Keine Erfindung.** Nur festhalten, was in der Session tatsächlich passiert oder besprochen wurde.

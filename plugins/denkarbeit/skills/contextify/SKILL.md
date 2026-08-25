@@ -1,11 +1,11 @@
 ---
 name: contextify
-description: Use when creating or maintaining a `context.md` — the workspace standard context artifact — from raw inputs (calls, PDFs, notes, briefings). Level-aware (L1–L4), enforces the context-system backbone. Triggers on /contextify.
+description: Use when creating or maintaining a `context.md` — the workspace standard context artifact — from raw inputs (calls, PDFs, notes, briefings). Enforces the context-system backbone. Triggers on /contextify.
 ---
 
 ## Zweck
 
-Lege die `context.md` einer Workspace-Ebene an oder pflege sie — gegen das feste Backbone des Kontext-Systems. **Spec-Auflösung** (gilt für alle Verweise auf `design.md`/`template_context.md` in diesem Skill): der in der globalen CLAUDE.md verankerte Pfad (Sektion Referenzen bzw. Workspace-Konvention); Fallback: vom Skill-Verzeichnis aufwärts nach `context_system/design.md` suchen (liegt in der Plugin- bzw. Repo-Wurzel oberhalb von `skills/`). Inputs sind beliebig (Calls, PDFs, Notizen, Briefings, Inline-Text); das *Ziel* ist immer eine schema-konforme `context.md` an einem `/workspace`-Pfad. Nicht kürzen — in die Idealform der jeweiligen Ebene überführen: semantische Kompression mit Strukturierung. Jeder Token verdient seinen Platz, aber Telegrammstil ist kein Ideal — vollständige, knappe Sätze schlagen reine Stichworte.
+Lege die `context.md` einer Workspace-Ebene an oder pflege sie — gegen das feste Backbone des Kontext-Systems. **Spec-Auflösung** (gilt für alle Verweise auf `design.md`/`template_context.md` in diesem Skill): der in der globalen CLAUDE.md verankerte Pfad (Sektion Referenzen bzw. Workspace-Konvention); Fallback: vom Skill-Verzeichnis aufwärts nach `context_system/design.md` suchen (liegt in der Plugin- bzw. Repo-Wurzel oberhalb von `skills/`). Inputs sind beliebig (Calls, PDFs, Notizen, Briefings, Inline-Text); das *Ziel* ist immer eine schema-konforme `context.md` im Zielordner. Nicht kürzen — in die Idealform der jeweiligen Ebene überführen: semantische Kompression mit Strukturierung. Jeder Token verdient seinen Platz, aber Telegrammstil ist kein Ideal — vollständige, knappe Sätze schlagen reine Stichworte.
 
 `context.md` hält **was jetzt gilt** (Zustand). Übergänge, Urteile, Chronologien gehören nicht hierher (siehe Disziplin-Schnitt) — dafür sind `memory.md`/`log.md` da (`/remember`).
 
@@ -21,14 +21,17 @@ Jede `context.md` hat fünf Top-Level-Sektionen in dieser Reihenfolge. Skelett: 
 
 Fixer Kopf, freie Tiefe: Die fünf Überschriften liegen fest; unter „Lage" ist die Substruktur frei.
 
-### Ebene aus dem Pfad bestimmen
+### Steckbrief-Felder — nach Inhalt des Ordners
 
-- `/workspace/context.md` → **L1** (Ich): Eckdaten, Rollen, Angebot/Tätigkeit, Arbeitsweise; Domänen nur als Typ-Orientierung (Kunden / eigene Bereiche / privat), **kein** gepflegtes Verzeichnis — point, don't duplicate.
-- `/workspace/{X}/context.md` → **L2** (Stakeholder oder eigener Bereich): Org-Eckdaten + **Personen-Block**. Ein Muster: `**{Name}** — {Rolle/Funktion} · {Kontakt, optional} · {Hinweis, nur wenn sachlich}`. Org-weite Personen hier, projekt-spezifische Kontakte auf L3.
-- `/workspace/{X}/{Y}/context.md` → **L3** (Projekt): Auftrag, Scope, Stand, Beteiligte (Verweis auf L2-Personen statt Duplikat).
-- tiefer → **L4** (Arbeitspaket): konkretes Ergebnis, Abgrenzung zum Projekt.
+Die Felder ergeben sich daraus, **was der Ordner beschreibt**, nicht aus seiner Pfadtiefe (Master: design.md §2):
 
-Die Pfadtiefe ist Heuristik, keine Semantik: Zwischenordner (Programm-Ebenen, Sammlungen) verschieben die Tiefe, nicht die Ebene. Benennt der User die Ebene semantisch, gilt seine Ansprache vor der Tiefen-Ableitung. Bei unklarer Ebene/Pfad: nachfragen.
+- **Mich selbst** (die `context.md` im Workspace-Root): Eckdaten, Rollen, Angebot/Tätigkeit, Arbeitsweise; Domänen nur als Typ-Orientierung, kein gepflegtes Verzeichnis — point, don't duplicate.
+- **Ein Gegenüber oder eigener Bereich** (Kunde, Arbeitgeber, Firma, privates Feld): Org-Eckdaten + **Personen-Block**. Muster: `**{Name}** — {Rolle/Funktion} · {Kontakt, optional} · {Hinweis, nur wenn sachlich}`. Org-weite Personen hier, vorhabenspezifische Kontakte im jeweiligen Vorhaben.
+- **Ein Vorhaben** (Projekt, Arbeitspaket): Auftrag, Scope, Stand, Beteiligte (Verweis auf die Personen darüber statt Duplikat); bei Teilstücken die Abgrenzung zum übergeordneten Vorhaben.
+
+Ein Ordner kann beides sein (ein Gegenüber mit genau einem Vorhaben) — dann trägt eine `context.md` beide Feldgruppen. Benennt der User den Gegenstand, gilt seine Ansprache. Bei Unklarheit nachfragen.
+
+**Beobachtung, kein Vollzug:** Beschreibt eine bestehende `context.md` erkennbar mehrere getrennte Vorhaben, lege das als Befund vor (Spec §1, Strukturwechsel) — die Teilung ist Nutzerarbeit.
 
 ## Workflow
 
@@ -37,9 +40,9 @@ Die Pfadtiefe ist Heuristik, keine Semantik: Zwischenordner (Programm-Ebenen, Sa
    - **Inputs** — Dateipfade oder Inline-Text
    - **Zielpfad** — wohin die `context.md` geschrieben wird
 
-2. **Ebene bestimmen.** Leite die Ebene (L1–L4) aus dem Zielpfad ab (siehe oben). Sie bestimmt die Steckbrief-Felder.
+2. **Gegenstand bestimmen.** Was beschreibt dieser Ordner (siehe oben)? Das bestimmt die Steckbrief-Felder.
 
-3. **Rückfragen-Safeguard.** Wenn die Rahmung unklar ist (kein Zweck erkennbar, Scope zu vage), kein Zielpfad angegeben oder die Ebene nicht eindeutig: frage nach, bevor du transformierst. Kein stilles Raten.
+3. **Rückfragen-Safeguard.** Wenn die Rahmung unklar ist (kein Zweck erkennbar, Scope zu vage), kein Zielpfad angegeben oder der Gegenstand nicht eindeutig: frage nach, bevor du transformierst. Kein stilles Raten.
 
 4. **Modus bestimmen:**
    - **Neu** — keine Datei am Zielpfad → erzeuge gegen das Backbone von Grund auf.
@@ -72,7 +75,7 @@ Diese Prinzipien sind das *Wie* der Befüllung des Backbones — sie ersetzen di
 
 ### Harte Gates
 
-- Bei unklarer Rahmung/Ebene: Rückfrage stellen, nicht raten.
+- Bei unklarer Rahmung oder unklarem Gegenstand: Rückfrage stellen, nicht raten.
 - Erfinde keine Informationen, die nicht im Input stehen.
 - Bei Inputs, die das Context Window übersteigen: User informieren, Priorisierung erfragen, nie still abschneiden.
 - **Disziplin-Schnitt context.md:** Nicht hierher gehören — Chronologien/Zeitachsen, Urteile/Erkenntnisse, Betriebs-/Bedienungswissen über Systeme und Werkzeuge (→ `infra.md` der Ebene, Spec §3), sowie *erledigte* Tasks samt ihrer Verlaufshistorie (Erledigt-Marker, offen→done-Ketten). Der aktuelle Stand eines *offenen* Punkts („wartet auf X", „Entwurf liegt vor") ist Zustand und bleibt. Begegnet Verlaufs-, Urteils- oder Erledigt-Material im Input → nach `memory.md`/`log.md` verweisen, nicht hier aufnehmen, knapp im Bestätigungs-Output vermerken. **Ausnahme operatives Register:** Abgeschlossenes, das betrieblich referenzpflichtig bleibt (z.B. ein Dedup-Register), gehört weder in die `context.md` noch ins Log, sondern in ein eigenes Register-Artefakt neben der `context.md` — die `context.md` hält nur den Pointer (Spec §5).
