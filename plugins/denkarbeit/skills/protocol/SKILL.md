@@ -47,7 +47,7 @@ Zwei Ebenen, strikt getrennt:
 
 ## Output-Format — Protokoll
 
-Kompatibel zum `doccontent`-Vertrag (`skills/folien/doccontent.SCHEMA.md`) → direkt mit `/pdfrender` renderbar.
+Das Format folgt dem `doccontent`-Vertrag — wo eine Render-Strecke existiert (z.B. `/pdfrender` mit `doccontent.SCHEMA.md`), ist es damit direkt PDF-renderbar; beides ist optional und nicht Bestandteil dieses Skills.
 
 ```markdown
 ---
@@ -105,4 +105,4 @@ Gleiche Frontmatter-Logik (`title: "Interne Notiz — <Anlass>"`, ohne `doc_type
 
 ## Abgrenzung
 
-- Verfassen des Protokolls: dieser Skill. Rendern als PDF: `/pdfrender`. Einspeisen von Erkenntnissen in Kontext-Artefakte: `/contextify` bzw. `/remember`, mit dem Protokoll als Input — nie automatisch.
+- Verfassen des Protokolls: dieser Skill. Rendern als PDF: ein Render-Skill, falls vorhanden (z.B. `/pdfrender`). Einspeisen von Erkenntnissen in Kontext-Artefakte: `/contextify` bzw. `/remember`, mit dem Protokoll als Input — nie automatisch.

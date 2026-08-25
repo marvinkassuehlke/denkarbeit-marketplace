@@ -14,7 +14,7 @@ Der Begleiter richtet das Denkarbeit-Setup ein und prüft es — für Kurs-Train
 
 **Scope-Linie:** Der Begleiter endet bei „System steht leer und korrekt konfiguriert". Die erste Domäne anlegen und befüllen ist Kursinhalt, nicht Setup.
 
-Die Spezifikation des Kontext-Systems liegt unter `../../context_system/design.md` (mit `template_context.md` daneben); die Templates dieses Skills unter `templates/` relativ zum Skill-Basisverzeichnis.
+Die Spezifikation des Kontext-Systems liegt unter `../../context_system/design.md` relativ zum Skill-Basisverzeichnis (mit `template_context.md` daneben); existiert bereits eine globale CLAUDE.md mit Referenzen-Sektion, gilt deren Spec-Pfad. Die Templates dieses Skills liegen unter `templates/` relativ zum Skill-Basisverzeichnis.
 
 ## Bausteine & Messung
 
@@ -46,7 +46,7 @@ Workspace-Pfad finden: aus der CLAUDE.md (Baustein 1 verankert ihn). Fehlt die C
    - Workspace-Ordner anlegen (Vorschlag `~/workspace`, User bestätigt).
    - Obsidian: Vault auf den Workspace-Ordner öffnen („Open folder as vault") — prüfbar an `{workspace}/.obsidian/`.
 
-   **B1 — CLAUDE.md.** Aus `templates/CLAUDE_template.md` erzeugen; Platzhalter füllen: `{{NAME}}`, `{{WORKSPACE}}` (absoluter Pfad), `{{SPEC_PATH}}` (absoluter Pfad zur design.md — vom Skill-Basisverzeichnis aus auflösen). **Existiert bereits eine CLAUDE.md: nie überschreiben** — fehlende Blöcke ergänzen vorschlagen, Konflikte flaggen.
+   **B1 — CLAUDE.md.** Aus `templates/CLAUDE_template.md` erzeugen; Platzhalter füllen: `{{NAME}}`, `{{WORKSPACE}}` (absoluter Pfad), `{{SPEC_PATH}}` (absoluter Pfad zur design.md — vom Skill-Basisverzeichnis aus auflösen). **Existiert bereits eine CLAUDE.md: nie überschreiben** — fehlende Blöcke ergänzen vorschlagen, Konflikte flaggen. Ergänzungen landen als **ein** zusammenhängender, markierter Block (`<!-- denkarbeit:begin -->` … `<!-- denkarbeit:end -->`), damit sie neben einer bestehenden Fremd-Konfiguration identifizierbar und rückbaubar bleiben; in fremde Blöcke wird nie hineingeschrieben.
 
    **B2 — L1-Kontext (Mini-Interview).** Das Interview ist der Primärweg, Dokumente sind Beschleuniger — es gibt keinen „keine Quellen"-Fall. 5–7 Fragen: Rolle und Organisation · für wen/was gearbeitet wird (Domänen, Stakeholder) · Kern-Arbeitsinhalte · laufende Vorhaben · Ziel mit dem Setup. Quellen, falls vorhanden: CV-PDF · LinkedIn-Export (im Profil „Als PDF speichern" — URLs scheitern oft an der Login-Wall) · **ein selbstverfasstes Arbeitsdokument** (die wertvollste Quelle: verrät Rolle und Sprache, füttert auch B3). L1 braucht Gegenwart, nicht Werdegang — CV-Vergangenheit nur als Steckbrief-Hintergrund. Die Zielgruppe weiß, was sie will: Interview kurz halten, keine Use-Case-Findung. Dann `{workspace}/context.md` gegen das Backbone der Spezifikation erzeugen (contextify-Logik; die Regeln stehen dort, nicht hier).
 
@@ -58,7 +58,7 @@ Workspace-Pfad finden: aus der CLAUDE.md (Baustein 1 verankert ihn). Fehlt die C
 
    **B6 — Systeme & Secrets (situativ; der Gewerbe-Regelfall).** Eine Interview-Frage: „Wird dein Claude mit Systemen arbeiten — APIs, Datenbanken, eigene Dienste, MCP-Server?" Wenn nein: kein Baustein, kein Skip-Vermerk. Wenn ja:
    1. **Vault klären** (Staffel, kein Tool-Zwang): vorhandener Passwort-Manager mit CLI (1Password `op` · Bitwarden `bw` · KeePassXC `keepassxc-cli`) → sonst der **OS-Schlüsselbund** (macOS Keychain via `security` · Windows Credential Manager/DPAPI via PowerShell) — der ist immer da und ist der Default-Fallback. Eine Klartext-Datei ist **kein** Fallback. Laufzeit-Muster einmal zeigen: Secret aus dem Vault in die Umgebung der Session laden, nie in eine Datei.
-   2. **`infra.md`-Gerüst anlegen** — auf der Ebene, zu der das System gehört (Dienst-Infra; Spec §3), mit den Sektionen *System & Zugang* (Verweis-Muster: Vault + Eintragsname + Zugriffs-Kommando — nie der Wert), *Eigenheiten*, *Fehlerbilder & Fixes*. Maschinen-Infra (Tools, MCP-Konfig) → `~/.claude/infra.md`.
+   2. **`infra.md`-Gerüst anlegen** — auf der Ebene, zu der das System gehört (Dienst-Infra; Spec §3), mit den Sektionen *System & Zugang* (Verweis-Muster: Vault + Eintragsname + Zugriffs-Kommando — nie der Wert), *Eigenheiten*, *Fehlerbilder & Fixes*. Maschinen-Infra (Tools, MCP-Konfig) → `~/.claude/reference/infra.md`.
    3. **Secrets-Block der CLAUDE.md** verifizieren (Baustein 1 legt ihn aus dem Template an; bei Alt-Installationen fehlt er → ergänzen vorschlagen).
    Liegen bereits Zugriffs-Praktiken in flüchtigen Notizen (Scratchpad, temp.md, Chat-Verläufe), werden sie in die `infra.md` **geerntet** — das ist der häufigste Alt-Fall.
 

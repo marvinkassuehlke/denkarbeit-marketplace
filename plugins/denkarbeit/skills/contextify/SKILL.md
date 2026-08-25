@@ -5,13 +5,13 @@ description: Use when creating or maintaining a `context.md` — the workspace s
 
 ## Zweck
 
-Lege die `context.md` einer Workspace-Ebene an oder pflege sie — gegen das feste Backbone des Kontext-Systems (`/workspace/strgaGmbH/denkarbeit_onlinekurs/context_system/design.md`). Inputs sind beliebig (Calls, PDFs, Notizen, Briefings, Inline-Text); das *Ziel* ist immer eine schema-konforme `context.md` an einem `/workspace`-Pfad. Nicht kürzen — in die Idealform der jeweiligen Ebene überführen: semantische Kompression mit Strukturierung. Jeder Token verdient seinen Platz, aber Telegrammstil ist kein Ideal — vollständige, knappe Sätze schlagen reine Stichworte.
+Lege die `context.md` einer Workspace-Ebene an oder pflege sie — gegen das feste Backbone des Kontext-Systems. **Spec-Auflösung** (gilt für alle Verweise auf `design.md`/`template_context.md` in diesem Skill): der in der globalen CLAUDE.md verankerte Pfad (Sektion Referenzen bzw. Workspace-Konvention); Fallback `../../context_system/design.md` relativ zum Skill-Basisverzeichnis. Inputs sind beliebig (Calls, PDFs, Notizen, Briefings, Inline-Text); das *Ziel* ist immer eine schema-konforme `context.md` an einem `/workspace`-Pfad. Nicht kürzen — in die Idealform der jeweiligen Ebene überführen: semantische Kompression mit Strukturierung. Jeder Token verdient seinen Platz, aber Telegrammstil ist kein Ideal — vollständige, knappe Sätze schlagen reine Stichworte.
 
 `context.md` hält **was jetzt gilt** (Zustand). Übergänge, Urteile, Chronologien gehören nicht hierher (siehe Disziplin-Schnitt) — dafür sind `memory.md`/`log.md` da (`/remember`).
 
 ## Backbone (Pflichtstruktur)
 
-Jede `context.md` hat fünf Top-Level-Sektionen in dieser Reihenfolge. Skelett: `/workspace/strgaGmbH/denkarbeit_onlinekurs/context_system/template_context.md`. (Spiegelt design.md §2 — Änderungen dort zuerst.)
+Jede `context.md` hat fünf Top-Level-Sektionen in dieser Reihenfolge. Skelett: `template_context.md` neben der design.md (Spec-Auflösung s.o.). (Spiegelt design.md §2 — Änderungen dort zuerst.)
 
 1. **Steckbrief** (Pflicht) — Kopf: ein Framing-Satz unter der H1, dann ebenen-spezifische Felder (s.u.). Datierung ausschließlich über die Frontmatter — keine `Stand:`-Zeile; Bestands-Zeilen beim Anfassen entfernen.
 2. **Motivation** (Pflicht) — warum existiert das für mich, mein Einsatz, Verortung. Orientierung („worum geht es hier"), **nicht** Verhaltenssteuerung, **kein** Psychogramm.

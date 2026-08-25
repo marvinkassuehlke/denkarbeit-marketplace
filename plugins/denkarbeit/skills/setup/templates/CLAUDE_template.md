@@ -7,7 +7,7 @@
 
 ## Workspace-Konvention
 
-Der Workspace (`{{WORKSPACE}}`) folgt der Kontext-Hierarchie: **Ich** (L1) → **Domäne/Stakeholder** (L2) → **Projekt** (L3) → optional **Arbeitspaket** (L4). Die Ebenen sind semantisch, nicht Pfadtiefe: Sammel-/Zwischenordner sind ebenen-transparent; Ebenen-Träger ist der Ordner mit den Standardartefakten. Spezifikation: `{{SPEC_PATH}}`.
+Der Workspace (`{{WORKSPACE}}`) folgt der Kontext-Hierarchie: **Ich** (L1) → **Domäne/Stakeholder** (L2) → **Projekt** (L3) → tiefere Knoten nach Bedarf (mehr Tiefe ist erlaubt und ändert keine Regel). Die Ebenen sind semantisch, nicht Pfadtiefe: Sammel-/Zwischenordner sind ebenen-transparent; Ebenen-Träger ist der Ordner mit den Standardartefakten. Spezifikation: `{{SPEC_PATH}}`.
 
 - `context.md` — was jetzt gilt (Zustand), gepflegt via `/contextify`. Auf jeder Ebene.
 - `memory.md` — Übergänge und Urteile (das Warum), gepflegt via `/remember`. Default auf Domänen-Ebene (L2).
@@ -34,7 +34,7 @@ Jedes Prosa-Markdown, das im Workspace erzeugt oder bearbeitet wird, trägt YAML
 Wie Systeme bedient werden, ist eigenes Wissen neben der Arbeit: APIs, CLIs, MCP-Server, Zugriffs-Wege, Eigenheiten, Fehlerbilder samt Fix. Es lebt in `infra.md` — nicht im Chat, nicht in Wegwerf-Notizen:
 
 - **Dienst-Infra** (das System einer Firma/Domäne, z.B. deren ERP-API oder ein eigener Bot): `infra.md` neben der `context.md` der Ebene, zu der das System gehört.
-- **Maschinen-Infra** (dieser Rechner: installierte Tools, MCP-Konfiguration, Pfade): `~/.claude/infra.md` — sie gehört zum Rechner, nicht zum Workspace.
+- **Maschinen-Infra** (dieser Rechner: installierte Tools, MCP-Konfiguration, Pfade): `~/.claude/reference/infra.md` — sie gehört zum Rechner, nicht zum Workspace.
 - Vor Arbeit gegen ein bekanntes System: dessen `infra.md` lesen (on-demand, nicht vorladen). Eine neue, verifizierte Erkenntnis über ein System: sofort dort nachtragen.
 - Abgrenzung: `context.md` hält den Zustand der **Arbeit**, `infra.md` die Bedienung der **Werkzeuge**.
 

@@ -7,7 +7,7 @@ description: Use when bringing a grown, messy workspace area into the context-sy
 
 `cleanup` ist die **Kompositions-Schicht über `contextify`**. Wo `contextify` *eine* `context.md` pflegt, überführt `cleanup` einen ganzen *gewachsenen* Teilbaum in die Kontext-System-Logik: Projekte erkennen, L3-Contexts anlegen, lose Dateien einsortieren, die übergeordnete `context.md` zum Index reconcilen, Quer-Liegendes flaggen.
 
-`cleanup` erfindet das Backbone **nicht neu** — es liest die Spezifikation aus `/workspace/strgaGmbH/denkarbeit_onlinekurs/context_system/design.md` und `template_context.md` (Single Source of Truth, geteilt mit `contextify`). Die beiden Skills sind Geschwister über derselben Spec, keine harte Skill-zu-Skill-Kopplung.
+`cleanup` erfindet das Backbone **nicht neu** — es liest die Spezifikation aus `design.md` und `template_context.md` (Single Source of Truth, geteilt mit `contextify`). **Spec-Auflösung:** der in der globalen CLAUDE.md verankerte Pfad (Sektion Referenzen bzw. Workspace-Konvention); Fallback `../../context_system/design.md` relativ zum Skill-Basisverzeichnis. Die beiden Skills sind Geschwister über derselben Spec, keine harte Skill-zu-Skill-Kopplung.
 
 ## Scope bestimmen (Pflicht-Input)
 
