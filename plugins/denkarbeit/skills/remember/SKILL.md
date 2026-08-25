@@ -75,7 +75,7 @@ Parse die Usereingabe und bestimme den Modus:
    **Handeln:** Wenn Signale vorliegen, handle autonom — nicht fragen, sondern tun:
    - Memory verdichten/aktualisieren (Log → nächste memory aufwärts) — dabei **verschmelzen statt anhängen**: in bestehende thematische Abschnitte integrieren, keine neuen datierten Abschnitte stapeln. Sieht die memory aus wie ein zweites Log (chronologische Anhänge), ist die Konsolidierung der Abschnitte fällig
    - Stakeholder-Memory aktualisieren, wenn sich etwas Wesentliches verändert hat
-   - context.md-Stellen korrigieren, die durch die Session offensichtlich überholt sind (Backbone wahren)
+   - context.md-Stellen korrigieren, die durch die Session offensichtlich überholt sind (Backbone wahren). **Das geschieht hier, nicht über `/contextify`** — der Skill ist für Neuanlage aus Rohmaterial und strukturellen Umbau da. Ein zusätzlicher Aufruf am Session-Ende kostet Kontext ohne Zusatznutzen.
    - Verdichtete Log-Einträge aus `log.md` entfernen
    - **Pointer-Pflege:** Entstand im Durchlauf ein neues Artefakt (infra, Register, Fach-Artefakt), den Pointer in der `context.md` desselben Ordners (Steckbrief bzw. Lage) im selben Durchlauf setzen
 
