@@ -84,41 +84,13 @@ Diese Prinzipien sind das *Wie* der Befüllung des Backbones — sie ersetzen di
 
 ## Output-Format
 
-Reines Markdown. Top-Level die fünf Backbone-Sektionen mit `##`, Substruktur (vor allem unter „Lage") mit `###`, maximal 3 Ebenen tief. **YAML-Frontmatter** (`created`/`updated`) gehört an den Dateianfang — `context.md` fällt unter die Dokument-Frontmatter-Konvention. HTML-Kommentare sind erlaubt für Meta-Annotationen (Widerspruch-Marker, offene Fragen). Korrekte deutsche Umlaute verwenden (ä, ö, ü, ß) — niemals ae, oe, ue, ss als Ersatz.
+Reines Markdown. Top-Level die fünf Backbone-Sektionen mit `##`, Substruktur (vor allem unter „Lage") mit `###`, maximal 3 Ebenen tief. **YAML-Frontmatter** (`created`/`updated`) gehört an den Dateianfang — `context.md` fällt unter die Dokument-Frontmatter-Konvention. HTML-Kommentare sind erlaubt für Meta-Annotationen (Widerspruch-Marker, offene Fragen).
 
 Wenn ein Fakt oder KPI in mehreren Quellen identisch vorkommt, steht er genau einmal im Output — an der thematisch passenden Stelle. Nicht pro Quelle wiederholen, nicht in mehreren Sektionen duplizieren.
 
 ## Beispiele
 
 Die folgenden Beispiele illustrieren das *Wie* (die Prinzipien): die transformierten Sektionen leben typischerweise unter „Lage", das Backbone (Steckbrief, Motivation, …) liegt verbindlich darum herum.
-
---- Beispiel 1 — Prosa-Briefing (Kompression) ---
-
-**Rahmung:** Entscheidungsgrundlage für den Vorstand zur Marktexpansion NordLog GmbH nach Polen.
-
-**Input:**
-
-> Die NordLog GmbH hat in den letzten Jahren eine starke Position im norddeutschen Logistikmarkt aufgebaut. Vor dem Hintergrund der strategischen Wachstumsziele für die kommenden Jahre prüft die Geschäftsführung nun intensiv eine mögliche Expansion in den polnischen Markt, der mit einem Volumen von ca. 48 Mrd. EUR als einer der dynamischsten Logistikmärkte in Mittelosteuropa gilt. Dabei ist zu berücksichtigen, dass bereits drei große deutsche Wettbewerber — Schenker, Hellmann und Dachser — in Polen aktiv sind und zusammen rund 12% Marktanteil halten. Regulatorisch ist vor allem die polnische Kabotage-Regelung relevant, die seit 2022 verschärft wurde und den Einsatz ausländischer Fahrzeuge für Inlandstransporte begrenzt. Was in den bisherigen Analysen noch nicht ausreichend berücksichtigt wurde: Der polnische Arbeitsmarkt für LKW-Fahrer ist extrem angespannt — die Branche meldet aktuell ca. 15.000 unbesetzte Stellen landesweit.
-
-**Output:**
-
-## Markt
-
-Polnischer Logistikmarkt: ~48 Mrd. EUR Volumen, einer der dynamischsten in Mittelosteuropa.
-
-## Wettbewerb
-
-Schenker, Hellmann und Dachser sind bereits in Polen aktiv (zusammen ~12% Marktanteil).
-
-## Regulatorik
-
-Verschärfte Kabotage-Regelung seit 2022: Einsatz ausländischer Fahrzeuge für polnische Inlandstransporte ist begrenzt.
-
-## Risiken
-
-Fahrermangel: ~15.000 unbesetzte LKW-Fahrer-Stellen in Polen. Betrifft Personalaufbau und Betriebskontinuität direkt.
-
-**Warum:** Narrativer Fließtext auf vier thematische Sektionen verdichtet. Der Fahrermangel war im Original als Nebenbemerkung vergraben — hier als explizites Risiko mit Auswirkung auf den Markteintritt herausgestellt. Redundante Floskeln ("in den letzten Jahren", "prüft nun intensiv") entfernt. Alle Fakten erhalten.
 
 --- Beispiel 2 — Stichpunktartige Notizen (Implizites explizieren) ---
 
@@ -137,25 +109,25 @@ Fahrermangel: ~15.000 unbesetzte LKW-Fahrer-Stellen in Polen. Betrifft Personala
 
 **Output:**
 
-## Rollen und Zuständigkeiten
+### Rollen und Zuständigkeiten
 
 ML übernimmt ab April die Leitung von Ops und Dev (Doppelrolle). SK bleibt Teamlead Data mit reduziertem Pensum (60%).
 
 Die Vertriebsschnittstelle ist ungeklärt. TH hat sie bisher verantwortet und verlässt das Unternehmen Ende März — es gibt keinen designierten Nachfolger für diese Funktion.
 
-## Offene Stellen
+### Offene Stellen
 
 Drei Positionen ausgeschrieben: zwei Dev, eine Ops. Ausschreibung läuft.
 
-## Budget
+### Budget
 
 Budgetfreigabe steht aus. FK strebt Freigabe bis Q3 an.
 
-## Team-Feedback
+### Team-Feedback
 
 Retro ergab: Team wünscht klarere Zuständigkeiten. Relevant im Kontext der anstehenden Umstrukturierung.
 
-## Offene Punkte
+### Offene Punkte
 
 Steering-Termin 14.04. — offen: Vertriebsschnittstelle, Budgetfreigabe und Zuständigkeitsklärung.
 
@@ -178,23 +150,23 @@ Steering-Termin 14.04. — offen: Vertriebsschnittstelle, Budgetfreigabe und Zus
 
 **Output:**
 
-## Status Entwicklung
+### Status Entwicklung
 
 Entwicklung ist mehrheitlich abgeschlossen. Kritischer Pfad: API-Integration Partnersystem.
 
 <!-- Widerspruch: Projektleitung meldet 70% Fortschritt (08.03.), Controlling misst 58% via Ticketsystem (10.03.). Unterschied möglicherweise durch verschiedene Messmethoden. -->
 
-## Zeitplan
+### Zeitplan
 
 <!-- Widerspruch: Report A (08.03.) nennt Go-Live Q2, Report B (10.03.) nennt Q3 nach Steering-Entscheidung. Report B ist aktueller — Q3 wahrscheinlich der gültige Termin, aber Bestätigung einholen. -->
 
-## Budget
+### Budget
 
 Kernbudget: 280–340k EUR. Externe Beratungskosten kommen hinzu (noch nicht final beziffert).
 
 <!-- Widerspruch: Projektleitung nennt 340k Gesamtbudget, Controlling 280k zzgl. externe Kosten. Unklar ob 340k die externen Kosten bereits enthält. -->
 
-## Team
+### Team
 
 Team ist vollständig besetzt (laut Projektleitung).
 
@@ -202,7 +174,4 @@ Team ist vollständig besetzt (laut Projektleitung).
 
 ## Typischer Fehler: Subsumption
 
-Ein Dokument enthält zwei Informationsschichten — z.B. ein OKR-Dokument mit Zielgrößen (Objective + Key Results) und Arbeitspaketen (Working Packages). Die Arbeitspakete sind detailliert und konkret, die Key Results wirken wie "die Klammer drum herum". Ergebnis: Nur die WPs werden übernommen, die KRs mit ihren messbaren Schwellenwerten, Methodik und Milestones gehen verloren.
-
-**Das ist falsch.** Thematische Nähe ist nicht Redundanz. Zwei Informationsschichten im selben Dokument sind zwei Informationsschichten im Output. Die Quellen-Vollständigkeitsprüfung (Workflow Schritt 8) existiert genau für diesen Fall.
-
+Zwei Informationsschichten im selben Dokument (z.B. Zielgrößen *und* Arbeitspakete) sind zwei Schichten im Output. Thematische Nähe ist nicht Redundanz — die Quellen-Vollständigkeitsprüfung (Schritt 8) existiert genau dafür.

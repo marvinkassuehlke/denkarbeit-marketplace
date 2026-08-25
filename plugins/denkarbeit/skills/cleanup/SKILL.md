@@ -61,16 +61,3 @@ Die Tiefe sagt nichts (Pfad-Mechanik, `design.md` §1): Ein **Kontext-Ordner** i
 
 - **`contextify`** = das Atom (eine `context.md` gegen das Backbone). `cleanup` ruft dessen Logik je Kontext-Ordner auf. Fehlt `contextify`, ist aber die Spec da: `cleanup` baut die Contexts selbst gegen das Backbone. Echte Degradation nur, wenn die Spec fehlt — dann Abbruch des Kontext-Schritts (Tidy + Klassifikation + Flags laufen trotzdem; Hinweis „contextify/Spec nachziehen").
 - **`remember`** = pflegt `memory.md`/`log.md` **inhaltlich** (Übergänge, Urteile, Verdichtung, Task-Closure). `cleanup` fasst sie nur **strukturell** an (verkümmerte Logs nach Autorisierung) — die inhaltliche Verdichtung bleibt `remember`.
-
-## Harte Gates (Kurzfassung)
-
-- Spec (`design.md` / `template_context.md`) erreichbar — sonst Abbruch.
-- Secrets-Scan im Inventar — Befund (auch „keiner") im Dispositions-Plan.
-- Scope aus dem Pfad, sonst nachfragen; breiter Scope → Plan zuerst.
-- Plan-dann-Bestätigen, nie blind ausführen.
-- `mv` statt `rm`; löschen nur explizit autorisiert; Zweifel → `archive/`.
-- Varianten flaggen, nicht entscheiden.
-- Pointer-Reconcile ist Pflicht, kein Bonus.
-- Repos atomar behandeln (nichts hinein/heraus/löschen), Symlink-Ziele nie verschieben; Repo-/Symlink-Befund im Plan ausweisen.
-- Kontext-Ordner sind die mit `context.md`; Sammelordner bekommen keine.
-- Bei Klassifikations-Ambiguität: fragen.

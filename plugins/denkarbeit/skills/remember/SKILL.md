@@ -118,7 +118,7 @@ Kein Vorgang, ein Handgriff: `log.md` und `memory.md` im Ordner des Vorhabens an
 
 ## Log-Format (`log.md`)
 
-Die Datei beginnt mit einem Header, gefolgt von YAML-Einträgen. **Neueste Einträge stehen oben** — nie vom Dateiende lesen. Führen mehrere Personen Einträge im selben Ast, trägt jeder Eintrag ein `autor:`-Feld; bei einer Person entfällt es. (Master: design.md §3.)
+Die Datei beginnt mit einem Header, gefolgt von YAML-Einträgen. **Neueste Einträge stehen oben** — nie vom Dateiende lesen. (Master: design.md §3.)
 
 ````markdown
 # Log — {Stakeholder}
@@ -163,35 +163,7 @@ Prosa-Markdown, verdichtet. Im Inhalt keine YAML-Einträge, keine starre Struktu
 
 Die beiden Beispiele unten zeigen dieselbe Form in zwei Zuschnitten: eng auf ein Vorhaben, breit auf ein Gegenüber.
 
-### Projekt-Memory
-
-```markdown
----
-created: 2026-03-01
-updated: 2026-03-18
----
-# Memory — {Projekt}
-
-## Wie es dazu kam
-
-CIP entstand als Zufallsfund im Effizienz-Projekt: Petra (Consumer Insights)
-beschrieb ihren manuellen Auswertungsprozess — 2-3 Tage pro Studie, 90-Slide-Decks,
-kein Signifikanztest. Der Automatisierungshebel war offensichtlich.
-
-## Wesentliche Entscheidungen
-
-Three-Container-Architektur gewählt (Data → Stats → LLM), weil die statistische
-Analyse deterministisch sein muss — kein LLM für Signifikanztests. POC bewusst ohne
-CIP-Branding übergeben, um Pipeline-Diskussion zu vermeiden bevor der Wert sichtbar ist.
-
-## Was wir gelernt haben
-
-Consumer Insights ist eine der datenintensivsten Funktionen bei Herbanea, läuft aber
-komplett manuell. Das Team ist offen für Automatisierung, hat aber keine IT-Anbindung
-und keinen eigenen Tech-Zugang.
-```
-
-### Stakeholder-Memory
+### Beispiel
 
 ```markdown
 ---
@@ -226,9 +198,6 @@ KI-Visionen einsteigen. Budget ist freigeräumt, Governance-Tür zu IT öffnet s
 
 ## Harte Gates
 
-- **Kein Auto-Create neuer Genres.** Fehlt eine `log.md`, `infra.md` oder ein Register: fragen, nicht anlegen. Ausgenommen ist die erstmalige memory-Befüllung ab 5 Log-Einträgen — dort wird gehandelt und im Bestätigungsblock ausgewiesen.
-- **Kein Task-Tracking in memory.** Keine TODOs, keine offenen Punkte, keine Checklisten. (Tasks und ihr aktueller Stand leben in `context.md` §Offene Punkte.)
-- **Kein Status-Tracking in memory.** Zustände gehören in `context.md`, nicht in Memory.
+- **Kein Auto-Create neuer Genres.** Fehlt auf dem Pfad eine `log.md`, `infra.md` oder ein Register: fragen, nicht anlegen. Ausgenommen ist die erstmalige memory-Befüllung ab 5 Log-Einträgen — dort wird gehandelt und im Bestätigungsblock ausgewiesen.
 - **Keine Erfindung.** Nur festhalten, was in der Session tatsächlich passiert oder besprochen wurde.
-- **Verdichtung löscht die Quelle.** Was verdichtet wurde, wird aus der Quelldatei entfernt — die Information lebt jetzt eine Ebene höher.
-- **Ein `/remember`-Aufruf = ein Eintrag.** Nicht splitten, nicht mehrere Einträge für eine Session.
+- **Verdichtung löscht die Quelle.** Was verdichtet wurde, wird aus der Quelldatei entfernt.

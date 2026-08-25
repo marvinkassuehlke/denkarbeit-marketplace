@@ -9,7 +9,7 @@ Kanonische Spezifikation des Kontext-Systems im `/workspace`: die Standardartefa
 
 ## Zweck & Geltung
 
-Das System war gewachsen, nicht spezifiziert; es funktioniert gut — dies ist Optimierung, kein Rebuild. Leitprinzip: **`context.md` ist und bleibt die *eine* Wissensdatei pro Ordner.** Kein Zerlegen in `stakeholder.md` / `objective.md` o.ä. Die Grundstruktur ist bewusst weit abstrahiert, damit „alles reinpasst"; dass Einzelfälle das Konstrukt strapazieren, ist akzeptiert.
+Leitprinzip: **`context.md` ist und bleibt die *eine* Wissensdatei pro Ordner.** Kein Zerlegen in `stakeholder.md` / `objective.md` o.ä. Die Grundstruktur ist bewusst weit abstrahiert, damit „alles reinpasst"; dass Einzelfälle das Konstrukt strapazieren, ist akzeptiert.
 
 **Enforcement-Doktrin** (gilt für jede Regel dieser Spec): *Eine Regel, deren Bedingung der Normallauf nicht misst, existiert nicht.* Mess-Pflicht (mechanisch erheben, nicht schätzen) + Ausweis-Pflicht (Ergebnis als Pflichtzeile im Output) + harte Gates nur, wo groß immer falsch ist. Jedes Artefakt-Genre braucht einen definierten **Lese-Moment**, **Schreib-Moment** und **Hygiene-Moment** — ein Genre ohne alle drei verwaist (Empirie: `infra.md` 08/2026). Maschinelle Härtung (Hooks) darf diese Momente **härten, nie tragen**: Das System muss rein prompt-basiert funktionieren, weil nicht jede Harness Hooks kennt (Cowork).
 
@@ -97,7 +97,7 @@ Drei Wissensartefakte, drei verschiedene Fragen:
 
 ### Formate (normativ)
 
-- **`log.md`:** Header `# Log — {Name}`, dann ein YAML-Block mit Einträgen `- date: / event: / body: / artifacts:` — **neueste oben**. Keine Datei-Frontmatter (per Eintrag datiert). **Einziger Schreiber ist `/remember`**: Sessions editieren das Log nie direkt; die Verdichtung überführt ältere Einträge in die memory und entfernt sie aus dem Log. („Append-only" meint genau das — kein manuelles Editieren; es verbietet nicht die Verdichtung.) Führen mehrere Personen Einträge in denselben Ast, trägt der Eintrag ein `autor:`-Feld; bei einer Person entfällt es.
+- **`log.md`:** Header `# Log — {Name}`, dann ein YAML-Block mit Einträgen `- date: / event: / body: / artifacts:` — **neueste oben**. Keine Datei-Frontmatter (per Eintrag datiert). **Einziger Schreiber ist `/remember`**: Sessions editieren das Log nie direkt; die Verdichtung überführt ältere Einträge in die memory und entfernt sie aus dem Log. („Append-only" meint genau das — kein manuelles Editieren; es verbietet nicht die Verdichtung.)
 - **`memory.md`:** Prosa-Markdown mit Frontmatter, **thematische Abschnitte** — die Struktur folgt dem Inhalt, nicht dem Kalender. **Verschmelzungsregel:** Die Verdichtung integriert in bestehende Abschnitte, statt datierte Abschnitte anzuhängen — eine memory, die wie ein zweites Log aussieht (chronologische Anhänge), ist das Signal, dass die zweite Verdichtungsstufe fällig ist. Leserichtung folgt der Kausalität (Grundlegendes zuerst); memory wird ganz gelesen, nicht vom Ende.
 - **Zwei Verdichtungsstufen:** Session → Log (Eintrag) · Log → Memory (Verdichtung, entfernt Quell-Einträge). Die dritte Bewegung ist die Verschmelzung *innerhalb* der memory (Abschnitte konsolidieren) — sie ist Teil der Verdichtung, keine eigene Stufe.
 
@@ -168,7 +168,6 @@ Kein Vorgang mit Kriterien, sondern ein Handgriff: Wer für ein Vorhaben eigenes
 - **`CLAUDE.md` = imperative Regeln + Pointer.** Schlank: Rolle, Don'ts, Trust, Sprach-/Dokument-Konventionen, **Session-Start-Lade-Regel** (Pfad-Scan, alle context/memory aufwärts, nächstes Log, infra-Registrierung — §1). Verweist für die Artefakt-Spezifikation hierher. CLAUDE.md ist das einzige Artefakt mit Ladegarantie — was zuverlässig passieren soll, muss dort oder in einem Skill-Flow verankert sein.
 - **Deskriptive Maschinen-Infra** → `~/.claude/reference/infra.md`, on-demand.
 - **Persona** → `context.md` im Root; CLAUDE.md pointet darauf und verankert den Root-Pfad. Der Root ist die einzige Konfiguration, die eine Installation braucht.
-- **Maschinen-Status (explizite Annahme):** Das System läuft derzeit auf **einer** Maschine; der frühere Workspace-Sync ist stillgelegt (08/2026). Multi-Maschinen-Betrieb braucht vor Reaktivierung eine Merge-Strategie — das Neueste-oben-Log kollidiert bei parallelem Schreiben strukturell an der obersten Zeile.
 
 ## 8. Skill-Konsequenzen
 
