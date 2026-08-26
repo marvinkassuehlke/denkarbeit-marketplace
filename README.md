@@ -24,7 +24,7 @@ Alternativ interaktiv in Claude Code: `/plugin marketplace add <QUELLE>` → `/p
 | `denkarbeit:cleanup` | Gewachsenen Workspace-Bereich in die Kontext-Logik überführen |
 | `denkarbeit:research` | Web-Recherche → strukturiertes Wissensdokument (`research.md`) |
 
-Die Spezifikation des Kontext-Systems liegt plugin-intern unter `plugins/denkarbeit/context_system/`.
+Die Skills tragen ihre Regeln selbst — es wird keine separate Spezifikation ausgeliefert und kein Pfad in dieses Plugin in eine fremde `CLAUDE.md` geschrieben.
 
 ## Update
 
@@ -33,4 +33,4 @@ Die Spezifikation des Kontext-Systems liegt plugin-intern unter `plugins/denkarb
 
 ## Pflege
 
-Dieses Repo ist **Auslieferung, kein Master.** Master ist das Kurs-Repo (`repo/skills/` + `context_system/`); publiziert wird mit `repo/tools/publish_marketplace.sh`. Manifeste (`.claude-plugin/`) und dieses README werden manuell gepflegt.
+Dieses Repo ist **Auslieferung, kein Master.** Master ist das Kurs-Repo (`repo/skills/`); publiziert wird mit `repo/tools/publish_marketplace.sh`, das dabei die Skill-Trigger auf `/denkarbeit:*` qualifiziert. Manifeste (`.claude-plugin/`) und dieses README werden manuell gepflegt.

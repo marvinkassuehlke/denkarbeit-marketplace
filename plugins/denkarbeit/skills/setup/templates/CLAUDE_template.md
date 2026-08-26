@@ -9,11 +9,11 @@
 
 ## Workspace-Konvention
 
-Der Workspace-Root ist `{{WORKSPACE}}` (dort liegt die oberste `context.md`). Die Struktur darunter ist frei; **ein Ordner mit `context.md` ist ein Kontext-Ordner**, alles andere ist Ablage. Bewährte Gliederung: ich → für wen ich arbeite → was ich mit ihnen tue; mehr oder weniger Tiefe ändert keine Regel. Spezifikation: `{{SPEC_PATH}}`.
+Der Workspace-Root ist `{{WORKSPACE}}` (dort liegt die oberste `context.md`). Die Struktur darunter ist frei; **ein Ordner mit `context.md` ist ein Kontext-Ordner**, alles andere ist Ablage. Bewährte Gliederung: ich → für wen ich arbeite → was ich mit ihnen tue; mehr oder weniger Tiefe ändert keine Regel.
 
-- `context.md` — was jetzt gilt (Zustand), gepflegt via `/contextify`. In jedem Kontext-Ordner.
-- `memory.md` — Übergänge und Urteile (das Warum), gepflegt via `/remember`.
-- `log.md` — Ereignisstrom im YAML-Format (`- date:` je Eintrag, **neueste oben**). Einziger Schreiber ist `/remember`; Sessions editieren nie direkt.
+- `context.md` — was jetzt gilt (Zustand), gepflegt via `/denkarbeit:contextify`. In jedem Kontext-Ordner.
+- `memory.md` — Übergänge und Urteile (das Warum), gepflegt via `/denkarbeit:remember`.
+- `log.md` — Ereignisstrom im YAML-Format (`- date:` je Eintrag, **neueste oben**). Einziger Schreiber ist `/denkarbeit:remember`; Sessions editieren nie direkt.
 - `temp.md` — flüchtiges Arbeitsblatt (Zwischenablage, Dialog-Arbeitsfläche), ad hoc überall; Inhalt wird überschrieben, Erhaltenswertes vorher in ein dauerhaftes Artefakt ernten. Nie Pointer-Ziel.
 - `infra.md` — Betriebs-Referenz eines Ordners: Bedienung von Systemen und Werkzeugen (siehe unten). On-demand lesen, nie vorladen.
 

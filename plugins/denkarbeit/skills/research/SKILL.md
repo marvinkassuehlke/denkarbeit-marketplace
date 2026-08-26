@@ -1,6 +1,6 @@
 ---
 name: research
-description: Use when researching a topic from scratch via web search to build a structured knowledge document. Triggers on /research.
+description: Use when researching a topic from scratch via web search to build a structured knowledge document. Triggers on /denkarbeit:research.
 ---
 
 ## Zweck

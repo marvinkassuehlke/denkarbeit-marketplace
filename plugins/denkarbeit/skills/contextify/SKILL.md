@@ -1,17 +1,17 @@
 ---
 name: contextify
-description: Use when creating or maintaining a `context.md` — the workspace standard context artifact — from raw inputs (calls, PDFs, notes, briefings). Enforces the context-system backbone. Triggers on /contextify.
+description: Use when creating or maintaining a `context.md` — the workspace standard context artifact — from raw inputs (calls, PDFs, notes, briefings). Enforces the context-system backbone. Triggers on /denkarbeit:contextify.
 ---
 
 ## Zweck
 
-Lege die `context.md` einer Workspace-Ebene an oder pflege sie — gegen das feste Backbone des Kontext-Systems. **Spec-Auflösung** (gilt für alle Verweise auf `design.md`/`template_context.md` in diesem Skill): der in der globalen CLAUDE.md verankerte Pfad (Sektion Referenzen bzw. Workspace-Konvention); Fallback: vom Skill-Verzeichnis aufwärts nach `context_system/design.md` suchen (liegt in der Plugin- bzw. Repo-Wurzel oberhalb von `skills/`). Inputs sind beliebig (Calls, PDFs, Notizen, Briefings, Inline-Text); das *Ziel* ist immer eine schema-konforme `context.md` im Zielordner. Nicht kürzen — in die Idealform der jeweiligen Ebene überführen: semantische Kompression mit Strukturierung. Jeder Token verdient seinen Platz, aber Telegrammstil ist kein Ideal — vollständige, knappe Sätze schlagen reine Stichworte.
+Lege die `context.md` eines Ordners an oder pflege sie — gegen das feste Backbone des Kontext-Systems. Inputs sind beliebig (Calls, PDFs, Notizen, Briefings, Inline-Text); das *Ziel* ist immer eine schema-konforme `context.md` im Zielordner. Nicht kürzen — in die Idealform des jeweiligen Ordners überführen: semantische Kompression mit Strukturierung. Jeder Token verdient seinen Platz, aber Telegrammstil ist kein Ideal — vollständige, knappe Sätze schlagen reine Stichworte.
 
-`context.md` hält **was jetzt gilt** (Zustand). Übergänge, Urteile, Chronologien gehören nicht hierher (siehe Disziplin-Schnitt) — dafür sind `memory.md`/`log.md` da (`/remember`).
+`context.md` hält **was jetzt gilt** (Zustand). Übergänge, Urteile, Chronologien gehören nicht hierher (siehe Disziplin-Schnitt) — dafür sind `memory.md`/`log.md` da (`/denkarbeit:remember`).
 
 ## Backbone (Pflichtstruktur)
 
-Jede `context.md` hat fünf Top-Level-Sektionen in dieser Reihenfolge. Skelett: `template_context.md` neben der design.md (Spec-Auflösung s.o.). (Spiegelt design.md §2 — Änderungen dort zuerst.)
+Jede `context.md` hat fünf Top-Level-Sektionen in dieser Reihenfolge.
 
 1. **Steckbrief** (Pflicht) — Kopf: ein Framing-Satz unter der H1, dann ebenen-spezifische Felder (s.u.). Datierung ausschließlich über die Frontmatter — keine `Stand:`-Zeile; Bestands-Zeilen beim Anfassen entfernen.
 2. **Motivation** (Pflicht) — warum existiert das für mich, mein Einsatz, Verortung. Orientierung („worum geht es hier"), **nicht** Verhaltenssteuerung, **kein** Psychogramm.
@@ -23,7 +23,7 @@ Fixer Kopf, freie Tiefe: Die fünf Überschriften liegen fest; unter „Lage" is
 
 ### Steckbrief-Felder — nach Inhalt des Ordners
 
-Die Felder ergeben sich daraus, **was der Ordner beschreibt**, nicht aus seiner Pfadtiefe (Master: design.md §2):
+Die Felder ergeben sich daraus, **was der Ordner beschreibt**, nicht aus seiner Pfadtiefe:
 
 - **Mich selbst** (die `context.md` im Workspace-Root): Eckdaten, Rollen, Angebot/Tätigkeit, Arbeitsweise; Domänen nur als Typ-Orientierung, kein gepflegtes Verzeichnis — point, don't duplicate.
 - **Ein Gegenüber oder eigener Bereich** (Kunde, Arbeitgeber, Firma, privates Feld): Org-Eckdaten + **Personen-Block**. Muster: `**{Name}** — {Rolle/Funktion} · {Kontakt, optional} · {Hinweis, nur wenn sachlich}`. Org-weite Personen hier, vorhabenspezifische Kontakte im jeweiligen Vorhaben.
@@ -31,7 +31,7 @@ Die Felder ergeben sich daraus, **was der Ordner beschreibt**, nicht aus seiner 
 
 Ein Ordner kann beides sein (ein Gegenüber mit genau einem Vorhaben) — dann trägt eine `context.md` beide Feldgruppen. Benennt der User den Gegenstand, gilt seine Ansprache. Bei Unklarheit nachfragen.
 
-**Beobachtung, kein Vollzug:** Beschreibt eine bestehende `context.md` erkennbar mehrere getrennte Vorhaben, lege das als Befund vor (Spec §1, Strukturwechsel) — die Teilung ist Nutzerarbeit.
+**Beobachtung, kein Vollzug:** Beschreibt eine bestehende `context.md` erkennbar mehrere getrennte Vorhaben, lege das als Befund vor (Strukturwechsel) — die Teilung ist Nutzerarbeit.
 
 ## Workflow
 
@@ -59,7 +59,7 @@ Ein Ordner kann beides sein (ein Gegenüber mit genau einem Vorhaben) — dann t
 
 9. **Output schreiben.** Schreibe die `context.md` an den Zielpfad, inklusive YAML-Frontmatter (`created`/`updated`) gemäß Dokument-Frontmatter-Konvention.
 
-10. **Bestätigungs-Ausweis.** Nenne im Bestätigungs-Output Modus, Quellen und Zeichenumfang vorher → nachher (kein Log-Kommentar in der Datei — die contextify-log-Telemetrie ist abgeschafft; Bestands-Blöcke beim Anfassen entfernen). Liegt der Output über ~20 KB: Größen-Heuristik-Befund vorlegen (Diagnose-Fächer in Spec §2 — eingesickerte Chronologien/Urteile, Register-Fall, Fach-Block oder legitim groß), nicht autonom auslagern. Bestätigt der User eine Auslagerung, vollziehe sie nach dem **Auslagerungs-Protokoll** (Spec §2): verlustfreier Schnitt in ein Fach-Artefakt neben der `context.md` (Frontmatter, H1, Framing-Satz; keine Mitverdichtung), Pointer-Rückstand mit einem Satz Substanz, Ausweis im Bestätigungs-Output.
+10. **Bestätigungs-Ausweis.** Nenne im Bestätigungs-Output Modus, Quellen und Zeichenumfang vorher → nachher (kein Log-Kommentar in der Datei — die contextify-log-Telemetrie ist abgeschafft; Bestands-Blöcke beim Anfassen entfernen). Liegt der Output über ~20 KB: Größen-Heuristik-Befund vorlegen (Diagnose-Fächer — eingesickerte Chronologien/Urteile, Register-Fall, Fach-Block oder legitim groß), nicht autonom auslagern. Bestätigt der User eine Auslagerung, vollziehe sie nach dem **Auslagerungs-Protokoll**: verlustfreier Schnitt in ein Fach-Artefakt neben der `context.md` (Frontmatter, H1, Framing-Satz; keine Mitverdichtung), Pointer-Rückstand mit einem Satz Substanz, Ausweis im Bestätigungs-Output.
 
 ## Prinzipien
 
@@ -78,7 +78,7 @@ Diese Prinzipien sind das *Wie* der Befüllung des Backbones — sie ersetzen di
 - Bei unklarer Rahmung oder unklarem Gegenstand: Rückfrage stellen, nicht raten.
 - Erfinde keine Informationen, die nicht im Input stehen.
 - Bei Inputs, die das Context Window übersteigen: User informieren, Priorisierung erfragen, nie still abschneiden.
-- **Disziplin-Schnitt context.md:** Nicht hierher gehören — Chronologien/Zeitachsen, Urteile/Erkenntnisse, Betriebs-/Bedienungswissen über Systeme und Werkzeuge (→ `infra.md` des zuständigen Ordners, Spec §3), sowie *erledigte* Tasks samt ihrer Verlaufshistorie (Erledigt-Marker, offen→done-Ketten). Der aktuelle Stand eines *offenen* Punkts („wartet auf X", „Entwurf liegt vor") ist Zustand und bleibt. Begegnet Verlaufs-, Urteils- oder Erledigt-Material im Input → nach `memory.md`/`log.md` verweisen, nicht hier aufnehmen, knapp im Bestätigungs-Output vermerken. **Ausnahme operatives Register:** Abgeschlossenes, das betrieblich referenzpflichtig bleibt (z.B. ein Dedup-Register), gehört weder in die `context.md` noch ins Log, sondern in ein eigenes Register-Artefakt neben der `context.md` — die `context.md` hält nur den Pointer (Spec §5).
+- **Disziplin-Schnitt context.md:** Nicht hierher gehören — Chronologien/Zeitachsen, Urteile/Erkenntnisse, Betriebs-/Bedienungswissen über Systeme und Werkzeuge (→ `infra.md` des zuständigen Ordners), sowie *erledigte* Tasks samt ihrer Verlaufshistorie (Erledigt-Marker, offen→done-Ketten). Der aktuelle Stand eines *offenen* Punkts („wartet auf X", „Entwurf liegt vor") ist Zustand und bleibt. Begegnet Verlaufs-, Urteils- oder Erledigt-Material im Input → nach `memory.md`/`log.md` verweisen, nicht hier aufnehmen, knapp im Bestätigungs-Output vermerken. **Ausnahme operatives Register:** Abgeschlossenes, das betrieblich referenzpflichtig bleibt (z.B. ein Dedup-Register), gehört weder in die `context.md` noch ins Log, sondern in ein eigenes Register-Artefakt neben der `context.md` — die `context.md` hält nur den Pointer.
 - **Opportunistische Migration:** Triffst du eine Bestands-`context.md` ohne Backbone, bring sie beim Anfassen auf die Struktur (kein separater Massen-Retrofit). Genre-Fremdkörper (reine Dossiers/Fallakten) nicht in die Form pressen.
 - **Personen-Block:** kein Psychogramm — nur sachliche Rolle, Zuständigkeit, Kommunikationsweg.
 
