@@ -1,5 +1,6 @@
 {
   "name": "denkarbeit",
+  "description": "Skills für die Denkarbeit-Arbeitsweise: ein Kontext-System aus context/memory/log, geführtes Setup und Arbeits-Skills.",
   "owner": {
     "name": "strg+a GmbH",
     "email": "marvin@strga.de"
@@ -9,10 +10,11 @@
       "name": "denkarbeit",
       "source": "./plugins/denkarbeit",
       "description": "Denkarbeit-Arbeitsweise: Kontext-System und Arbeits-Skills (setup, contextify, remember, cleanup, research)",
-      "version": "0.4.0",
+      "version": "0.5.3",
       "author": {
         "name": "strg+a GmbH"
       }
     }
-  ]
+  ],
+  "metadata": {}
 }

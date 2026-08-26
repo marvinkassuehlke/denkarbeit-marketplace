@@ -59,7 +59,7 @@ Ein Ordner kann beides sein (ein Gegenüber mit genau einem Vorhaben) — dann t
 
 9. **Output schreiben.** Schreibe die `context.md` an den Zielpfad, inklusive YAML-Frontmatter (`created`/`updated`) gemäß Dokument-Frontmatter-Konvention.
 
-10. **Bestätigungs-Ausweis.** Nenne im Bestätigungs-Output Modus, Quellen und Zeichenumfang vorher → nachher (kein Log-Kommentar in der Datei — die contextify-log-Telemetrie ist abgeschafft; Bestands-Blöcke beim Anfassen entfernen). Liegt der Output über ~20 KB: Größen-Heuristik-Befund vorlegen (Diagnose-Fächer — eingesickerte Chronologien/Urteile, Register-Fall, Fach-Block oder legitim groß), nicht autonom auslagern. Bestätigt der User eine Auslagerung, vollziehe sie nach dem **Auslagerungs-Protokoll**: verlustfreier Schnitt in ein Fach-Artefakt neben der `context.md` (Frontmatter, H1, Framing-Satz; keine Mitverdichtung), Pointer-Rückstand mit einem Satz Substanz, Ausweis im Bestätigungs-Output.
+10. **Bestätigungs-Ausweis.** Nenne im Bestätigungs-Output Modus, Quellen und Zeichenumfang vorher → nachher (bei Neuanlage entfällt das „vorher": nur der erzeugte Umfang) (kein Log-Kommentar in der Datei — die contextify-log-Telemetrie ist abgeschafft; Bestands-Blöcke beim Anfassen entfernen). Liegt der Output über ~20 KB: Größen-Heuristik-Befund vorlegen (Diagnose-Fächer — eingesickerte Chronologien/Urteile, Register-Fall, Fach-Block oder legitim groß), nicht autonom auslagern. Bestätigt der User eine Auslagerung, vollziehe sie nach dem **Auslagerungs-Protokoll**: verlustfreier Schnitt in ein Fach-Artefakt neben der `context.md` (Frontmatter, H1, Framing-Satz; keine Mitverdichtung), Pointer-Rückstand mit einem Satz Substanz, Ausweis im Bestätigungs-Output.
 
 ## Prinzipien
 
@@ -92,7 +92,7 @@ Wenn ein Fakt oder KPI in mehreren Quellen identisch vorkommt, steht er genau ei
 
 Die folgenden Beispiele illustrieren das *Wie* (die Prinzipien): die transformierten Sektionen leben typischerweise unter „Lage", das Backbone (Steckbrief, Motivation, …) liegt verbindlich darum herum.
 
---- Beispiel 2 — Stichpunktartige Notizen (Implizites explizieren) ---
+--- Beispiel 1 — Stichpunktartige Notizen (Implizites explizieren) ---
 
 **Rahmung:** Kontextdokument zur Team-Restrukturierung DataPuls AG für den neuen CTO.
 
@@ -136,7 +136,7 @@ Steering-Termin 14.04. — offen: Vertriebsschnittstelle, Budgetfreigabe und Zus
 
 **Warum:** Abkürzungen aufgelöst und AKV-Zuordnung (Aufgaben, Kompetenzen, Verantwortung) explizit gemacht. Die implizite Lücke — THs Abgang hinterlässt die Vertriebsschnittstelle unbesetzt — war im Original über zwei getrennte Stichpunkte verteilt und nirgends als Problem benannt. Offene Fragen als `<!-- Offen -->` markiert statt erfunden.
 
---- Beispiel 3 — Widersprüchliche Quellen (Synthese) ---
+--- Beispiel 2 — Widersprüchliche Quellen (Synthese) ---
 
 **Rahmung:** Statusübersicht Projekt Aurora für das Management-Review.
 

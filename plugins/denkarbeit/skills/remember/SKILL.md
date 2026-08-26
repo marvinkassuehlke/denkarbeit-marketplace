@@ -32,7 +32,7 @@ Parse die Usereingabe und bestimme den Modus:
 
 ### 2. Modus: Log (default)
 
-1. **Ort bestimmen — Pfad-Probe ist Pflicht.** Scanne mechanisch (`ls`) den Pfad vom Session-Ordner aufwärts bis zum Workspace-Root und stelle fest: Wo liegt das **nächste `log.md`**? Dort wird geschrieben. Nicht aus dem Bestand schließen, sondern prüfen — dass ältere Einträge zu diesem Thema woanders liegen, ist kein Beleg, es kann Drift sein. Der Pfad-Befund ist Pflichtbestandteil des Bestätigungsblocks; eine Lokalisierung ohne Probe hat nicht stattgefunden. Existiert auf dem ganzen Pfad kein `log.md`: frage den User, wo eins entstehen soll (Vorschlag: der nächste Ordner mit `context.md`) — kein Auto-Create.
+1. **Ort bestimmen — Pfad-Probe ist Pflicht.** Scanne mechanisch (`ls`) den Pfad vom Session-Ordner aufwärts bis zum Workspace-Root und stelle fest: Wo liegt das **nächste `log.md`**? Dort wird geschrieben. Nicht aus dem Bestand schließen, sondern prüfen — dass ältere Einträge zu diesem Thema woanders liegen, ist kein Beleg, es kann Drift sein. Der Pfad-Befund ist Pflichtbestandteil des Bestätigungsblocks; eine Lokalisierung ohne Probe hat nicht stattgefunden. Existiert auf dem ganzen Pfad kein `log.md`: frage den User, wo eins entstehen soll (Vorschlag: der nächste Ordner mit `context.md`) — kein Auto-Create. Trägt der Arbeitsordner selbst keine `context.md`, wandert der Eintrag mechanisch weiter nach oben, als sein Inhalt gilt. Das ist zulässig, aber nennenswert: Betrifft der Eintrag erkennbar nur diesen Ordner, im Bestätigungsblock den Weg dahin nennen — erst `context.md` anlegen, dann `init {ordner}`.
 
 2. **Scope prüfen.** Gilt das, was die Session hervorgebracht hat, auch außerhalb dieses Ordners? Dann gehört es weiter nach oben. Berührt die Session erkennbar **beide** Bereiche — das laufende Vorhaben und den Rahmen darüber —, entstehen zwei Einträge: der spezifische Teil ins nächste Log, der übergreifende in das darüber. Sonst genau ein Eintrag.
 
@@ -49,7 +49,7 @@ Parse die Usereingabe und bestimme den Modus:
 
    Der Log-Eintrag referenziert beides allenfalls in einem Halbsatz, trägt es aber nicht aus. Bei der Gelegenheit: Verfallsbedingungen der berührten `infra.md` prüfen („Flag kann raus, sobald …"). Dann der Eintrag: Setze ihn im Log-Format an den **Kopf** des YAML-Blocks der `log.md` (neueste oben). Ein `/denkarbeit:remember`-Aufruf erzeugt genau einen Eintrag — auch wenn die Session mehrere Themen berührt hat. Fasse zusammen, splitte nicht. Zwei Einträge entstehen nur im Scope-Fall aus Schritt 2.
 
-5. **Task-Closure.** Wurde in der Session ein offener Punkt aus `context.md` §„Offene Punkte" erledigt — Triage mit vier Ausgängen:
+5. **Task-Closure.** Führt die `context.md` keine Sektion „Offene Punkte" oder ist sie leer, entfällt dieser Schritt ersatzlos. Sonst, für jeden in der Session erledigten Punkt — Triage mit vier Ausgängen:
    1. Entferne ihn aus `context.md` (das Arbeits-Scaffolding ist verbraucht — kein Verlust).
    2. Falls „in 6 Monaten erinnernswert": das Faktum als Satz **im Body des Session-Eintrags** („X getan/übergeben") — kein eigener Log-Eintrag. Triviales nur prunen, ersatzlos.
    3. Hängt ein Urteil dran (warum, mit welcher Folge): nach `memory.md`.
@@ -62,7 +62,7 @@ Parse die Usereingabe und bestimme den Modus:
    **Messen (Pflicht, vor dem Prüfen):** Erhebe den Log-Stand mechanisch — nicht schätzen, nicht aus dem Gedächtnis:
 
    ```bash
-   wc -c {pfad}/log.md {pfad}/context.md && grep -c "^- date:" {pfad}/log.md && grep "^- date:" {pfad}/log.md | sed 's/- date: //' | sort | head -1
+   wc -c {pfad}/log.md {pfad}/context.md ; grep -c "^- date:" {pfad}/log.md ; grep "^- date:" {pfad}/log.md | sed 's/- date: //' | sort | head -1
    ```
 
    Ergebnis festhalten: **N** Einträge gesamt, davon **M** älter als die aktuelle Arbeitswoche, Dateigrößen in KB (log **und** context). Diese Zahlen sind Pflichtbestandteil des Bestätigungsblocks (Schritt 7) — eine Volumen-Prüfung ohne erhobene Zahlen hat nicht stattgefunden.
