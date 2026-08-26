@@ -29,7 +29,7 @@ Die Templates dieses Skills liegen unter `templates/` relativ zum Skill-Basisver
 | 2 | Root-Kontext | `{workspace}/context.md` existiert mit Backbone-Kopf (Steckbrief, Motivation) | Pflicht |
 | 3 | Sprache | Sprachregeln in der CLAUDE.md vorhanden (Baustein 1); `{workspace}/language.md` **optional**, nur mit geeignetem Referenzmaterial | Pflicht (Regeln) · optional (Referenz) |
 | 4 | Bestand | Liegt im Workspace Material, das **nicht** aus diesem Setup stammt (alles außer `context.md`, `CLAUDE.md`, `language.md` im Root)? | Situativ |
-| 5 | Secrets | Ein Vault ist benannt (OS-Schlüsselbund oder aktiv genutzter Passwort-Manager) · CLAUDE.md trägt den Secrets-Block · `infra.md`, sobald gegen ein System gearbeitet wird | Pflicht |
+| 5 | Secrets | Ein Vault ist benannt und nutzbar (OS-Schlüsselbund oder ein **angemeldeter** Passwort-Manager) · CLAUDE.md trägt den Secrets-Block · `infra.md` nur, wenn ein System benannt wurde | Pflicht |
 | 6 | Permissions | Der Nutzer weiß, dass Claude im Auslieferungszustand nichts ohne Rückfrage tut, und kennt den Weg, das zu ändern | Pflicht (erklären) · optional (setzen) |
 
 Workspace-Pfad finden: aus der CLAUDE.md (Baustein 1 verankert ihn). Fehlt sie **oder trägt sie keinen Workspace-Anker** (der Regelfall bei bestehender Fremd-Konfiguration): den User fragen, bei Neueinrichtung `~/workspace` vorschlagen. Widersprechen sich Anker und Nutzerangabe, **gilt die Nutzerangabe** — der Anker ist dann veraltet und wird im selben Lauf nachgezogen, nicht stillschweigend übergangen. Alle Skills arbeiten danach gegen diesen Anker; `{workspace}` in den Skills meint immer ihn, nie einen festen Pfad.
@@ -52,16 +52,17 @@ Workspace-Pfad finden: aus der CLAUDE.md (Baustein 1 verankert ihn). Fehlt sie *
 
    **B2 — Root-Kontext (Mini-Interview).**
 
-   **Zuerst nach Unterlagen fragen, nicht nebenbei.** Zwei Dokumente heben das Ergebnis deutlich, und wer sie hat, spart die Hälfte der Fragen: **eines zur Person** (CV als PDF, LinkedIn-Export über „Als PDF speichern" — URLs scheitern an der Login-Wall) und **eines zum Hauptkontext** (Firmenprofil, Projektbeschreibung, Angebot, ein Papier über den Arbeitgeber). Am wertvollsten ist ein **selbstverfasstes Arbeitsdokument**: Es verrät Rolle und Sprache zugleich. Liegt nichts vor, trägt das Interview allein — aber dann sagen, dass der Steckbrief dünner ausfällt und später nachgeschärft werden kann, statt so zu tun, als sei es gleichwertig.
+   **Zuerst nach Unterlagen fragen, nicht nebenbei.** Zwei Dokumente heben das Ergebnis deutlich, und wer sie hat, spart die Hälfte der Fragen: **eines zur Person** (CV als PDF, LinkedIn-Export über „Als PDF speichern" — URLs scheitern an der Login-Wall) und **eines zum Hauptkontext** (Firmenprofil, Projektbeschreibung, Angebot, ein Papier über den Arbeitgeber). Am wertvollsten ist ein **selbstverfasstes Arbeitsdokument**: Es verrät Rolle und Sprache zugleich. Liegt nichts vor, trägt das Interview allein — aber dann sagen, dass der Steckbrief dünner ausfällt und später nachgeschärft werden kann, statt so zu tun, als sei es gleichwertig. **Liegen Unterlagen vor, wird zuerst gelesen und dann nur die Lücke gefragt.** Nicht ankündigen, dass die Fragen schrumpfen, und sie anschließend doch alle stellen — was im Dokument steht, wird höchstens zur Bestätigung vorgelegt („Du bist demnach angestellt bei …, richtig?"). Alles andere ist Doppelarbeit und erweckt den Eindruck, die Unterlagen seien ungelesen geblieben.
 
-   **Fünf Fragen, nicht mehr.** Jede muss von jemandem beantwortbar sein, der Claude heute zum ersten Mal einrichtet:
+   **Vier Fragen, nicht mehr.** Jede muss von jemandem beantwortbar sein, der Claude heute zum ersten Mal einrichtet — also **ohne Erfahrung mit dem Werkzeug**. Fragen nach Absichten („wofür soll Claude dich entlasten?") oder nach Gewohnheiten im Umgang damit („was erklärst du immer wieder neu?") scheitern an dieser Bedingung, so einleuchtend sie beim Schreiben wirken.
    1. Was machst du, in welchem Rahmen (angestellt, selbständig, eigene Firma)?
    2. Für wen arbeitest du — Kunden, Arbeitgeber, interne Bereiche? Grobe Typen genügen.
    3. Welche zwei, drei Tätigkeiten machen den Großteil deiner Zeit aus?
-   4. Woran arbeitest du gerade konkret?
-   5. **Was erklärst du immer wieder neu, wenn du mit einem Chat anfängst?**
+   4. Was hat dich dazu gebracht, das hier einzurichten?
 
-   Frage 5 ersetzt die frühere Zielfrage („wofür soll Claude dich entlasten?"). Die setzte voraus, dass jemand die Möglichkeiten des Werkzeugs schon kennt — wer gerade installiert hat, kennt sie nicht. Die neue Frage fragt nach einer Erfahrung statt nach einer Absicht und liefert dasselbe Material.
+   Frage 4 füttert die Motivation, den zweiten Pflichtteil des Backbones. Sie fragt nach etwas Vergangenem, das jeder weiß, der gerade installiert hat.
+
+   **Nicht gefragt wird nach laufenden Vorhaben.** Die gehören in den Kontext-Ordner des Vorhabens, nicht in den Root — sonst sammelt der Steckbrief Material ein, das derselbe Lauf hinterher eine Ebene tiefer einsortiert.
 
    Der Root-Kontext braucht Gegenwart, nicht Werdegang — CV-Vergangenheit nur als Steckbrief-Hintergrund. Keine Use-Case-Findung. Dann `{workspace}/context.md` nach der contextify-Logik erzeugen — das Backbone und die Steckbrief-Felder stehen dort, nicht hier.
 
@@ -76,9 +77,19 @@ Workspace-Pfad finden: aus der CLAUDE.md (Baustein 1 verankert ihn). Fehlt sie *
 
    **B4 — Bestand.** War der Workspace nicht leer: Befund erheben (Ordnerzahl, lose Dateien, erkennbare Kontext-Ordner; Repos/Symlinks mechanisch: `find -name .git`, `find -type l`) und **an `/denkarbeit:cleanup` übergeben** — der hat Plan-Gate und Safety-Gates. Der Begleiter räumt nie selbst auf (keine Duplikation der cleanup-Logik).
 
-   **B5 — Secrets.** **Nicht fragen, ob mit Systemen gearbeitet wird** — die Antwort ist immer ja, und ein Nein heißt nur, dass es noch nicht aufgefallen ist. Der Baustein richtet den *Ort* ein, bevor das erste Secret auftaucht.
-   1. **Vault einrichten — der Mechanismus ist Pflicht, das Produkt nicht.** Default ist der **OS-Schlüsselbund** (macOS `security` · Windows Credential Manager/DPAPI via PowerShell): Er ist auf jedem Rechner vorhanden, kostet nichts und muss nicht eingerichtet werden. Nur wer bereits einen Passwort-Manager mit CLI **aktiv nutzt**, bleibt dabei (1Password `op` · Bitwarden `bw` · KeePassXC `keepassxc-cli`) — dann prüfen, ob er auch angemeldet ist (`op account list` und Entsprechungen; eine installierte CLI ohne Konto ist kein Vault). Kein Produkt vorschlagen, das der Nutzer nicht schon hat. Eine Klartext-Datei ist unter keinen Umständen ein Fallback. Laufzeit-Muster einmal zeigen: Secret aus dem Vault in die Umgebung der Session laden, nie in eine Datei.
-   2. **`infra.md`-Gerüst anlegen** — im Ordner, zu dem das System gehört (Dienst-Infra). Existiert dieser Ordner noch nicht (der Regelfall beim Ersteinrichten, weil die Scope-Linie hier endet): die `infra.md` **im Workspace-Root** anlegen und als Zeile in den Offenen Punkten vermerken, dass sie mitwandert, sobald der zugehörige Ordner entsteht. Sektionen: *System & Zugang* (Verweis-Muster: Vault + Eintragsname + Zugriffs-Kommando — nie der Wert), *Eigenheiten*, *Fehlerbilder & Fixes*. Maschinen-Infra (Tools, MCP-Konfig) → `{konfig}/reference/infra.md`.
+   **B5 — Secrets.** Nicht fragen, **ob** jemand mit Systemen arbeiten wird — das tut früher oder später jeder, und die Frage ist pauschal beantwortet. Gefragt wird nach dem **Bestand**, und das kann auch beantworten, wer heute anfängt.
+
+   Zuerst der Satz, der den Anspruch benennt, in dieser Reihenfolge: Dieses Setup geht davon aus, dass Schlüssel und Passwörter an **einem** Ort liegen und in keiner Datei. Erzwingen lässt sich das nicht, aber es ist an drei Stellen vorbereitet — die Regel steht in den Arbeits-Regeln, der Ort wird hier eingerichtet, und die Permissions aus B6 verbieten das Lesen von `.env`-Dateien.
+
+   Dann die Frage, mit Optionen statt offen: **„Hast du schon einen Ort für Passwörter und Schlüssel?"**
+   - **Ein Passwort-Manager mit CLI** (1Password `op` · Bitwarden `bw` · KeePassXC `keepassxc-cli`) → den nutzen. Prüfen, ob er auch **angemeldet** ist (`op account list` und Entsprechungen) — eine installierte CLI ohne Konto ist kein Vault, sondern eine Attrappe.
+   - **Der Schlüsselbund des Rechners** (macOS `security` · Windows Credential Manager/DPAPI) → reicht vollständig.
+   - **Noch nichts** → der Schlüsselbund, ohne Umschweife. Er ist da, kostet nichts und muss nicht eingerichtet werden.
+
+   Kein Produkt empfehlen, das der Nutzer nicht schon hat; kein Konto anlegen lassen. Eine Klartext-Datei ist unter keinen Umständen ein Fallback. Laufzeit-Muster einmal am gewählten Vault zeigen: Secret in die Umgebung der Session laden, nie in eine Datei.
+   Dann, **und nur wenn ein konkretes System benannt wurde**, die zweite Frage: gegen welche Systeme wird gearbeitet (Shop, ERP, Datenbank, API, MCP-Server)? Kommt nichts, entsteht **keine `infra.md`** — ein Gerüst mit leerer Systemtabelle und erfundenem Beispiel-Eintrag verwaist ab dem Tag seiner Entstehung. Stattdessen ein Satz: sobald das erste System dazukommt, entsteht sie.
+
+   Wurde ein System benannt: **`infra.md` anlegen und mit diesem System befüllen** — im Ordner, zu dem es gehört (Dienst-Infra). Existiert dieser Ordner noch nicht (der Regelfall beim Ersteinrichten, weil die Scope-Linie hier endet): im Workspace-Root anlegen und als Zeile in den Offenen Punkten vermerken, dass sie mitwandert, sobald der zugehörige Ordner entsteht. Sektionen: *System & Zugang* (Verweis-Muster: Vault + Eintragsname + Zugriffs-Kommando — nie der Wert), *Eigenheiten*, *Fehlerbilder & Fixes*. Maschinen-Infra (Tools, MCP-Konfig) → `{konfig}/reference/infra.md`.
    3. **Secrets-Block der CLAUDE.md** verifizieren (Baustein 1 legt ihn aus dem Template an; bei Alt-Installationen fehlt er → ergänzen vorschlagen).
    Liegen bereits Zugriffs-Praktiken in flüchtigen Notizen (Scratchpad, temp.md, Chat-Verläufe), werden sie in die `infra.md` **geerntet** — das ist der häufigste Alt-Fall.
 
