@@ -10,7 +10,7 @@
       "name": "denkarbeit",
       "source": "./plugins/denkarbeit",
       "description": "Denkarbeit-Arbeitsweise: Kontext-System und Arbeits-Skills (setup, contextify, remember, cleanup, research)",
-      "version": "0.6.1",
+      "version": "0.6.2",
       "author": {
         "name": "strg+a GmbH"
       }
