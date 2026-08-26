@@ -31,7 +31,7 @@ Fehlende Dateien sind kein Fehler.
 
 ## Dokument-Frontmatter
 
-Jedes Prosa-Markdown, das im Workspace erzeugt oder bearbeitet wird, trägt YAML-Frontmatter mit `created`/`updated` (ISO-Datum, `updated` bei jeder Bearbeitung hochsetzen). Gilt nicht für Code-Dateien und `log.md`.
+Jedes Prosa-Markdown, das im Workspace erzeugt oder bearbeitet wird, trägt YAML-Frontmatter mit `created`/`updated` (ISO-Datum, `updated` bei jeder Bearbeitung hochsetzen). Gilt nicht für Code-Dateien, `log.md` und diese Datei — sie liegt außerhalb des Workspace und ist Konfiguration, kein Dokument.
 
 ## Werkzeug- & Zugriffs-Wissen (infra.md)
 
