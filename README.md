@@ -4,15 +4,21 @@ Marketplace für das Denkarbeit-Plugin: Kontext-System und Arbeits-Skills des Ku
 
 ## Installation (Trainee-Flow)
 
-Ein Prompt an Claude Code genügt:
+Ein Satz an Claude Code genügt — die Kommandos kennt es selbst:
 
-> Installiere bitte das Denkarbeit-Plugin: führe `claude plugin marketplace add <QUELLE>` aus und danach `claude plugin install denkarbeit@denkarbeit`. Starte anschließend das Setup mit /denkarbeit:setup
+> Installier mir bitte das Denkarbeit-Plugin von `<QUELLE>`.
 
 `<QUELLE>` ist der Marketplace-Ort:
 - produktiv: `marvinkassuehlke/denkarbeit-marketplace` (GitHub)
-- lokaler Test: `/Users/Shared/denkarbeit-marketplace`
+- lokaler Test: ein Pfad auf einen Klon dieses Repos
 
-Alternativ interaktiv in Claude Code: `/plugin marketplace add <QUELLE>` → `/plugin install denkarbeit@denkarbeit` → ggf. `/reload-plugins`.
+Claude liest den Marketplace, prüft die Manifeste und fragt einmal nach Freigabe für
+die Installation. Danach kann ein `/reload-plugins` oder ein Neustart der Session
+nötig sein, damit die Skills auftauchen — dann `/denkarbeit:setup`.
+
+Wer die Schritte selbst ausführen will: `claude plugin marketplace add <QUELLE>`,
+dann `claude plugin install denkarbeit@denkarbeit`. Interaktiv geht auch
+`/plugin marketplace add <QUELLE>` → `/plugin install denkarbeit@denkarbeit`.
 
 ## Enthaltene Skills
 
